@@ -9,41 +9,22 @@
 </head>
 
 <body>
-
   <script>
-
-    //Overriding
-    class Human {
-      constructor(weapon) {
-        this.weapon = weapon;
-        this.health = 100;
-      }
-      receiveDamage() {
-        this.health = this.health - 10;
-      }
-    }
-    class Wizard extends Human {
-      receiveDamage() {
-        this.health = this.health - 5;
-      }
-    }
-    const wizard = new Wizard("staff");
-    console.log(wizard.health);
-    wizard.receiveDamage();
-    console.log(wizard.health);
-
-    //overloading
-    console.log('Function overloading');
-    function funcONE(x, y) {
-      console.log(x * y);
-    }
-    function funcONE(z) {
-      console.log(z);
+    //mutable {call by referece}
+    var a = {
+      color: "red",
+      proce : 10
     }
 
-    funcONE(5, 6);
-    funcONE(5, 6);
+    var b = a;
+    a.color = "blue";
+    console.log(b==a);
 
+    //immutable {call by value}
+    var obj1 = "Hello, I am Ayushi";
+    var obj2 = obj1;
+    obj2 = "Hii, I am Ayushi";
+    console.log(obj1 == obj2);
   </script>
 </body>
 
