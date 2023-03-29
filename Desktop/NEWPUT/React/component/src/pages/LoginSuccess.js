@@ -2,15 +2,11 @@ import React from "react";
 
 class LoginSuccess extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {hello: "Ayushi"}; 
-  }
-
   render() {
+    //const { username } = this.props.location.state;
     return(
       <>
-        <h1>welcome, The user is logged in.</h1>
+        <h1>Welcome, The user is logged in with.</h1>
       </>
     )
   }

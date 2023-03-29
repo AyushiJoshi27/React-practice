@@ -363,7 +363,7 @@ class App extends Component {
   }  
 }  
 export default App;
-*/
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StateBlock from './compo/State';
 import Layout from './compo/Layout';
@@ -387,17 +387,26 @@ function App() {
 }
 
 export default App;
-/*
+*/
+
 import LogIn from './pages/LoginForm';
+import { Router, Route } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import LoginSuccess from './pages/LoginSuccess';
+
 class App extends React.Component {  
   render() {  
+    const history = createBrowserHistory();
     return (  
-      <>  
-        <LogIn/>
+      <>
+        <Router history = {history}>
+          <Route path='/' ><LogIn/></Route>
+          <Route path="/link" ><LoginSuccess/>
+          </Route> 
+        </Router>
       </>  
     )  
   }  
 }  
 export default App;
 
-*/

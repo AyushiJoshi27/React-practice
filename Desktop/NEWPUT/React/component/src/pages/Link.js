@@ -5,9 +5,7 @@ import React from "react";
 export default class LinkToAfterLogin extends React.Component {
     render() {
         return (
-            console.log('Hii')
-
-            
+            <h4>Link folder</h4>
         )
     }
 }
