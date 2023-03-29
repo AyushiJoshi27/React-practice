@@ -1,0 +1,56 @@
+.login-form {
+  margin: 0 auto;
+  max-width: 400px;
+  min-width: 390px;
+  text-align: center;
+}
+
+.form-wrap {
+  box-shadow: 1px 5px 9px 0px lightgray;
+  border-radius: 10px;
+  margin: 20px auto;
+  min-width: 350px;
+  max-width: 450px;
+  padding: 10px;
+  text-align: center;
+}
+
+.inner-wrap {
+  margin: 40px 0;
+}
+
+.username {
+  margin: 15px 0;
+  width: 100%;
+}
+
+.name-head, 
+.password-head {
+  display: inline-block;
+  margin-right: 15px;
+  text-align: end;
+  width: 90px;
+}
+
+.inner-wrap input {
+  padding: 8px 5px;
+}
+
+.submit-wrap {
+  margin: 15px 0;
+}
+
+.submit-wrap input {
+  background-color: rgb(21,122,246);
+  border: 2px solid rgb(21,122,246);
+  border-radius: 8px;
+  color: rgb(255 255 255);
+  font-size: 18px;
+  padding: 5px 20px;
+}
+
+.submit-wrap input:hover {
+  background-color: white;
+  color: rgb(21,122,246);
+
+}
