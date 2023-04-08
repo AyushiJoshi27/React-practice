@@ -15,6 +15,10 @@ function LoginForm() {
     setPassword(e.target.value)
   } 
 
+  function GotToLayout() {
+    navigate(`/layout`);
+  }
+
   function handleSubmit(e) {
 
     const validUser = { name: 'Ayushi', pswrd: 'Alpha@123' };
@@ -41,12 +45,13 @@ function LoginForm() {
   }
 
   return (
+    <>
     <form onSubmit={handleSubmit} className="form-wrap">
       <h1>Login Form</h1>
       <div className="inner-wrap">
         <div className="username">
           <div className="name-head">
-            <label htmlFor="username">Username: </label>
+            <label htmlFor="user  name">Username: </label>
           </div>
           <input type="text" name='username' placeholder='Username' value={yourName} onChange={handleNameChange} required />
         </div>
@@ -62,6 +67,8 @@ function LoginForm() {
         <button type="submit">Submit</button>
       </div>
     </form>
+    <h3 style={{color: "red"}} onClick={GotToLayout}>Layout</h3>
+    </>
   );
 }
 
