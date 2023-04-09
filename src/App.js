@@ -15,6 +15,7 @@ import LayoutEffect from './Components/Hooks/UseLayoutEffect/UseLayoutEffect';
 import EventLayout from './Components/Hooks/UseLayoutEffect/EventLayoutEffect';
 import Memo from './Components/Hooks/UseMemo/Memomization';
 import UseMemo from './Components/Hooks/UseMemo/UseMemo';
+import UseCallBack from './Components/Hooks/UseCallback/Usecallback';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path='layout_effect_event' element={ < EventLayout /> } />
           <Route path='requirement_of_memo' element={ < Memo /> }></Route>
           <Route path='use_memo' element={< UseMemo />}></Route>
+          <Route path='use_callback' element={< UseCallBack />}></Route>
         </Route>
       </Routes>
     </Router>

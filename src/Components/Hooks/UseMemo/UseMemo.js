@@ -8,7 +8,7 @@ export default function UseMemo() {
     const Multiplication = useMemo(function Multi() {
         console.log("Multi");
         return add + 100;
-    })
+    }, [add]);
 
     return (
         <>
@@ -20,7 +20,7 @@ export default function UseMemo() {
                 <button onClick={() => setSub(sub - 5 )}>Substraction</button>
                 <label>{sub}</label>
                 <br />
-                <h3>{Multiplication()}</h3>
+                <h3>{Multiplication}</h3>
             </div>
         </>
     )

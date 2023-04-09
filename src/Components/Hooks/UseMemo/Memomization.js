@@ -13,7 +13,7 @@ export default function Memo() {
     return (
         <>
             <div style={{textAlign: "center"}}>
-                <h2>UseMemo</h2>
+                <h2>use of Memomization</h2>
                 <button onClick={() => setAdd(add + 5)}>Addition</button>
                 <label>{add}</label>
                 <br /><br />
