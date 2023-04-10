@@ -45,6 +45,12 @@ const Layout = () => {
           <li>
             <Link to='use_callback'>UseCallback</Link>
           </li>
+          <li>
+            <Link to='way_to_use_context'>Context-Requiremnt</Link>
+          </li>
+          <li>
+            <Link to='context-requiremnt'>Way_to_use Context</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />

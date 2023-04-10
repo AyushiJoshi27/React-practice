@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from "react";
+//import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Components/LoginForm';
 import SuccessLogin from './Components/SuccessLogin';
@@ -16,6 +16,8 @@ import EventLayout from './Components/Hooks/UseLayoutEffect/EventLayoutEffect';
 import Memo from './Components/Hooks/UseMemo/Memomization';
 import UseMemo from './Components/Hooks/UseMemo/UseMemo';
 import UseCallBack from './Components/Hooks/UseCallback/Usecallback';
+import CompoA from './Components/Context/WayToUse/CompoA';
+import AppA from './Components/Context/Requirements/AppA';
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
           <Route path='requirement_of_memo' element={ < Memo /> }></Route>
           <Route path='use_memo' element={< UseMemo />}></Route>
           <Route path='use_callback' element={< UseCallBack />}></Route>
+          <Route path='way_to_use_context' element={ < CompoA />}></Route>
+          <Route path='context-requiremnt' element={ < AppA /> }></Route>
         </Route>
       </Routes>
     </Router>
