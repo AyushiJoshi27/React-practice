@@ -18,6 +18,7 @@ import UseMemo from './Components/Hooks/UseMemo/UseMemo';
 import UseCallBack from './Components/Hooks/UseCallback/Usecallback';
 import CompoA from './Components/Context/WayToUse/CompoA';
 import AppA from './Components/Context/Requirements/AppA';
+import ShowProducts from './Components/ProductStore/ProductsStore';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route path='use_callback' element={< UseCallBack />}></Route>
           <Route path='way_to_use_context' element={ < CompoA />}></Route>
           <Route path='context-requiremnt' element={ < AppA /> }></Route>
+          {/**<Route path='product_store' element={ < ShowProducts />}></Route>**/}
         </Route>
       </Routes>
     </Router>

@@ -1,10 +1,10 @@
 import React from 'react';
 import AppC from './AppC';
 
-const CompoB = () => {
+const AppB = () => {
     return (
         < AppC />
     )
 }
 
-export default CompoB;
+export default AppB;

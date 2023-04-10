@@ -1,4 +1,4 @@
-/*const products = [
+const products = [
   {
     "id": 1,
     "title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
@@ -166,7 +166,8 @@
     "description": "100% Polyester, Machine wash, 100% cationic polyester interlock, Machine Wash & Pre Shrunk for a Great Fit, Lightweight, roomy and highly breathable with moisture wicking fabric which helps to keep moisture away, Soft Lightweight Fabric with comfortable V-neck collar and a slimmer fit, delivers a sleek, more feminine silhouette and Added Comfort",
     "category": "women's clothing", "image": "https://fakestoreapi.com/img/51eg55uWmdL._AC_UX679_.jpg",
     "rating": { "rate": 4.5, "count": 146 }
-  }, {
+  }, 
+  {
     "id": 20,
     "title": "DANVOUY Womens T Shirt Casual Cotton Short",
     "price": 12.99, "description": "95%Cotton,5%Spandex, Features: Casual, Short Sleeve, Letter Print,V-Neck,Fashion Tees, The fabric is soft and has some stretch., Occasion: Casual/Office/Beach/School/Home/Street. Season: Spring,Summer,Autumn,Winter.",
@@ -176,11 +177,28 @@
   }
 ];
 
-function getData() {
+
+export default function ShowProducts() {
+
+  let contentWrapper = document.getElementsByClassName('main-content')
+
+  function getData() {
+    for (let i = 0; i < products.length; i++) {
+      let makeHtml = `<div className="main-wrapper">`;
+        makeHtml += `<img className="img-wrapper" src="${products[i].image}" >`;
+        makeHtml += `<div className="product-details">`;
+        makeHtml += `<p>Title: ${products[i].title}</p>`;
+        makeHtml += `<p>Price: ${products[i].price}</p>`;
+        makeHtml += `<details><summary><b>Description: </b></summary>${products[i].description}</details>`;
+        makeHtml += `</div></div>`;
+        contentWrapper.appendChild(makeHtml);
+    }
+  }
+
+ console.log(products.length);
   return (
     <div className="main-content">
-
+      {getData()}
     </div>
   )
 }
-*/

@@ -51,6 +51,9 @@ const Layout = () => {
           <li>
             <Link to='context-requiremnt'>Way_to_use Context</Link>
           </li>
+          <li>
+            <Link to='product_store'>Product Store</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />
