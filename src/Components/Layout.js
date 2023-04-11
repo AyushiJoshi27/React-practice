@@ -54,6 +54,9 @@ const Layout = () => {
           <li>
             <Link to='product_store'>Product Store</Link>
           </li>
+          <li>
+            <Link to='store_login'>Store Login</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />

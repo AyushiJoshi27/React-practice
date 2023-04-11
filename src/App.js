@@ -1,5 +1,5 @@
 import './App.css';
-//import { useState } from "react";
+import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Components/LoginForm';
 import SuccessLogin from './Components/SuccessLogin';
@@ -19,8 +19,11 @@ import UseCallBack from './Components/Hooks/UseCallback/Usecallback';
 import CompoA from './Components/Context/WayToUse/CompoA';
 import AppA from './Components/Context/Requirements/AppA';
 import ShowProducts from './Components/ProductStore/ProductsStore';
+import ProtectedRoute from './Components/ProductStore/ProtectedRoute';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   return (
     <Router>
       <Routes>
@@ -41,7 +44,10 @@ function App() {
           <Route path='use_callback' element={< UseCallBack />}></Route>
           <Route path='way_to_use_context' element={ < CompoA />}></Route>
           <Route path='context-requiremnt' element={ < AppA /> }></Route>
-          <Route path='product_store' element={ < ShowProducts />}></Route>
+          <Route path='product_store' element={ < ShowProducts />} />
+          {/**<Route path='store_login' element={ < LoginForm setIsAuthenticated={setIsAuthenticated} /> } />
+          <ProtectedRoute exact path="/SuccessLogin/:yourName" element={SuccessLogin} isAuthenticated={isAuthenticated} />
+  <Route path='/login' element={< LoginPage setIsAuthenticated={setIsAuthenticated} />}></Route>**/}
         </Route>
       </Routes>
     </Router>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 
-function LoginForm() {
+function LoginForm(props) {
   let [yourName, setyourName] = useState("");
   let [yourPassword, setPassword] = useState("");
   const [error, setError] = useState('');
@@ -29,6 +29,7 @@ function LoginForm() {
     if (yourName === validUser.name && yourPassword === validUser.pswrd) {
       userName = true;
       userPassword = true;
+      props.setIsAuthenticated(true);
       navigate(`/SuccessLogin/${yourName}/`);
     } 
     if (yourName !== validUser.name) {
