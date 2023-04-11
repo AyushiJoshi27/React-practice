@@ -41,7 +41,7 @@ function App() {
           <Route path='use_callback' element={< UseCallBack />}></Route>
           <Route path='way_to_use_context' element={ < CompoA />}></Route>
           <Route path='context-requiremnt' element={ < AppA /> }></Route>
-          {/**<Route path='product_store' element={ < ShowProducts />}></Route>**/}
+          <Route path='product_store' element={ < ShowProducts />}></Route>
         </Route>
       </Routes>
     </Router>

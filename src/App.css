@@ -59,3 +59,30 @@
 .error-message {
   color: rgb(255, 0, 0);
 }
+
+/*      Product Store     */
+
+.content-wrapper {
+  display: grid;
+  font-size: 14px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-gap: 20px;
+  padding: 30px;
+}
+
+.main-content {
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px 0px lightgray;
+  padding: 15px;
+}
+
+.img-wrap {
+  box-shadow: 0 2px 5px 0 lightgrey;
+  text-align: center;
+}
+
+.main-content img {
+  height: 200px;
+  object-fit: contain;
+  width: 200px;
+}
