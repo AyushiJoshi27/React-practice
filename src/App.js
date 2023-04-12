@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from "react";
+//import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Components/LoginForm';
 import SuccessLogin from './Components/SuccessLogin';
@@ -18,11 +18,12 @@ import UseMemo from './Components/Hooks/UseMemo/UseMemo';
 import UseCallBack from './Components/Hooks/UseCallback/Usecallback';
 import CompoA from './Components/Context/WayToUse/CompoA';
 import AppA from './Components/Context/Requirements/AppA';
-import ShowProducts from './Components/ProductStore/ProductsStore';
-import ProtectedRoute from './Components/ProductStore/ProtectedRoute';
+import DisplayData from './Components/Hooks/UseEffect/RenderJson/Hover';
+import ShowProducts from './Components/ProductStore/ManageProduct';
+import StoreData from './Components/ProductStore/ProductsStore';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  //const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
     <Router>
@@ -33,6 +34,7 @@ function App() {
           <Route index element={< Counter />} />
           <Route path='use_ref' element={< UseRef />} />
           <Route path='count_events' element={<CountEvents/>} />
+          <Route path='render_json' element={ <DisplayData/> }></Route>
           <Route path='login-route' element={< LoginPage />}></Route>
           <Route path='protected_home' element={< Home />}></Route>
           <Route path='protected_profile' element={< Profile />}></Route>
@@ -44,10 +46,11 @@ function App() {
           <Route path='use_callback' element={< UseCallBack />}></Route>
           <Route path='way_to_use_context' element={ < CompoA />}></Route>
           <Route path='context-requiremnt' element={ < AppA /> }></Route>
-          <Route path='product_store' element={ < ShowProducts />} />
-          {/**<Route path='store_login' element={ < LoginForm setIsAuthenticated={setIsAuthenticated} /> } />
+          <Route path='store_data' element={ < StoreData /> } ></Route>
+          {/**<<Route path='store_login' element={ < LoginForm setIsAuthenticated={setIsAuthenticated} /> } />
           <ProtectedRoute exact path="/SuccessLogin/:yourName" element={SuccessLogin} isAuthenticated={isAuthenticated} />
-  <Route path='/login' element={< LoginPage setIsAuthenticated={setIsAuthenticated} />}></Route>**/}
+          <Route path='/login' element={< LoginPage setIsAuthenticated={setIsAuthenticated} />}></Route>**/}
+
         </Route>
       </Routes>
     </Router>
@@ -55,3 +58,9 @@ function App() {
 }
 
 export default App;
+
+
+/*
+
+          
+*/

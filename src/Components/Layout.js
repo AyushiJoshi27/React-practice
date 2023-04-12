@@ -19,6 +19,9 @@ const Layout = () => {
             <Link to='count_events'>CountEvents</Link>
           </li>
           <li>
+            <Link to='render_json'>Render Json</Link>
+          </li>
+          <li>
             <Link to='login-route'>Login</Link>
           </li>
           <li>
@@ -52,7 +55,7 @@ const Layout = () => {
             <Link to='context-requiremnt'>Way_to_use Context</Link>
           </li>
           <li>
-            <Link to='product_store'>Product Store</Link>
+            <Link to='store_data'>store_data</Link>
           </li>
           <li>
             <Link to='store_login'>Store Login</Link>

@@ -1,5 +1,6 @@
 
 //Effect Cleanup
+/*
 import { useState, useEffect } from "react";
 
 export default function CountEvents() {
@@ -15,7 +16,7 @@ export default function CountEvents() {
 
   return <h1>I've rendered {count} times!</h1>;
 }
-/*
+
 import { useState, useEffect } from "react";
 
 export default function CountEvents() {
@@ -24,6 +25,7 @@ export default function CountEvents() {
 
   useEffect(() => {
     setCalculation(() => count * 2);
+    console.log("hii");
   }, [count]); // <- add the count variable here
 
   return (
@@ -35,3 +37,65 @@ export default function CountEvents() {
   );
 }
 */
+import React, { useState, useEffect } from 'react';
+export default function CountEvents() {
+  const arr = [
+    {
+      "id": 0,
+      "a": "button1"
+    },
+    {
+      "id": 1,
+      "a": "button2"
+    },
+    {
+      'id': 2,
+      "a": "button3"
+    },
+    {
+      'id': 3,
+      "a": "button4"
+    }
+  ];
+
+  const [hoveredButtonId, setHoveredButtonId] = useState(null);
+
+  useEffect(() => {
+    const HandleMouseEnter = (e) => {
+      setHoveredButtonId(Number(e.target.id));
+      console.log(e.target.id);
+    }
+
+    const HandleMouseLeave = (e) => {
+      setHoveredButtonId(Number(null));
+      console.log(e.target.id + 1);
+    }
+
+    const buttons = document.querySelectorAll('button');
+
+    buttons.forEach((buttons) => {
+      buttons.addEventListener("mouseenter", HandleMouseEnter);
+      buttons.addEventListener("mouseleave", HandleMouseLeave);
+    });
+
+    return () => {
+      buttons.forEach((button) => {
+        button.removeEventListener("mouseenter", HandleMouseEnter);
+        button.removeEventListener("mouseleave", HandleMouseLeave);
+      });
+    };
+  }, []);
+
+  return (
+    <div>
+      {arr.map((item) => (
+        <div key={item.id}>
+        <button
+          id={item.id}
+          key={item.id}
+          style={{ boxShadow: hoveredButtonId === item.id ?  "1px 2px 5px 0px blue" : "1px 2px 5px 0px black"}}
+        >{item.a}</button></div>
+      ))}
+    </div>
+  )
+}
