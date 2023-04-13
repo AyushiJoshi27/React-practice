@@ -81,6 +81,7 @@ export default function DisplayData({data}) {
             <button id={obj.id} ref={(el) => (buttonRefs.current[index] = el)}>
               {obj.a}
             </button>
+            <button id={obj.id}>add data</button>
           </p>
         </div>
       ))}

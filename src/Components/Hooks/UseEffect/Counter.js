@@ -77,8 +77,6 @@ export default function CountEvents() {
       buttons.addEventListener("mouseenter", HandleMouseEnter);
       buttons.addEventListener("mouseleave", HandleMouseLeave);
     });
-
-    
   }, []);
 
   return (

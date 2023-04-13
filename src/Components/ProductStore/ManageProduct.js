@@ -18,7 +18,7 @@ const ShowProducts = ({products}) => {
   }, []);
 
   const OnHover = (e) => {
-    e.target.closest('.main-content').style.boxShadow = '1px 2px 5px 0px red';
+    e.target.closest('.main-content').style.boxShadow = '1px 2px 15px 0px lightgray';
   }
 
   const OffHover = (e) => {

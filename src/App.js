@@ -20,6 +20,8 @@ import CompoA from './Components/Context/WayToUse/CompoA';
 import AppA from './Components/Context/Requirements/AppA';
 import StoreData from './Components/ProductStore/ProductsStore';
 import ChangeButtons from './Components/Hooks/UseEffect/RenderJson/HoverData';
+import PrHome from './Components/Hooks/Routes/PrivateRoutes/PrHome';
+import PrProfile from './Components/Hooks/Routes/PrivateRoutes/PrProfile';
 
 function App() {
   //const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -49,7 +51,8 @@ function App() {
           {/**<<Route path='store_login' element={ < LoginForm setIsAuthenticated={setIsAuthenticated} /> } />
           <ProtectedRoute exact path="/SuccessLogin/:yourName" element={SuccessLogin} isAuthenticated={isAuthenticated} />
           <Route path='/login' element={< LoginPage setIsAuthenticated={setIsAuthenticated} />}></Route>**/}
-
+          <Route path='pr_home' element={ < PrHome /> }></Route>
+          {false && <Route path='pr_profile' element={ < PrProfile />}></Route>}
         </Route>
       </Routes>
     </Router>

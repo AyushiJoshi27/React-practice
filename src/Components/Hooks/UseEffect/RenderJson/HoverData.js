@@ -22,9 +22,6 @@ export default function ChangeButtons() {
     ];
 
     console.log("JsonData", data);
-    
-    //return <h1>Hello</h1>
-
     return <DisplayData data={data} />
 }
 

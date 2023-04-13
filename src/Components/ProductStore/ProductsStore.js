@@ -181,7 +181,6 @@ export default function StoreData() {
       "rating": { "rate": 3.6, "count": 145 }
     }
   ];
-  console.log(products);
 
   return <ShowProducts products={products}/>
 };
