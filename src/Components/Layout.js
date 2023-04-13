@@ -55,10 +55,7 @@ const Layout = () => {
             <Link to='context-requiremnt'>Way_to_use Context</Link>
           </li>
           <li>
-            <Link to='store_data'>store_data</Link>
-          </li>
-          <li>
-            <Link to='store_login'>Store Login</Link>
+            <Link to='product_store_data'>Product store data</Link>
           </li>
         </ul>
       </nav>

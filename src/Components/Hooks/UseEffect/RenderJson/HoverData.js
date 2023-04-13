@@ -1,7 +1,8 @@
-import DisplayData from "./Hover";
+import React from 'react';
+import DisplayData from './Hover';
 
-export default function ChangeColors() {
-    const jsonData = [
+export default function ChangeButtons() {
+    const data = [
         {
             "id": 0,
             "a": "button1"
@@ -20,9 +21,11 @@ export default function ChangeColors() {
         }
     ];
 
-    console.log("JsonData" ,jsonData);
+    console.log("JsonData", data);
     
-    //return <DisplayData data={jsonData} />
+    //return <h1>Hello</h1>
+
+    return <DisplayData data={data} />
 }
 
 /*import React, {useState, useRef, useEffect} from 'react'; 

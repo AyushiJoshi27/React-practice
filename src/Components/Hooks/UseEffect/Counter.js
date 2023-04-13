@@ -58,17 +58,17 @@ export default function CountEvents() {
     }
   ];
 
-  const [hoveredButtonId, setHoveredButtonId] = useState(null);
+  const [hoveredButtonId, setHoveredButtonId] = useState('');
 
   useEffect(() => {
     const HandleMouseEnter = (e) => {
       setHoveredButtonId(Number(e.target.id));
-      console.log(e.target.id);
+      //console.log(e.target.id);
     }
 
     const HandleMouseLeave = (e) => {
       setHoveredButtonId(Number(null));
-      console.log(e.target.id + 1);
+      //console.log(e.target.id + 1);
     }
 
     const buttons = document.querySelectorAll('button');
@@ -78,12 +78,7 @@ export default function CountEvents() {
       buttons.addEventListener("mouseleave", HandleMouseLeave);
     });
 
-    return () => {
-      buttons.forEach((button) => {
-        button.removeEventListener("mouseenter", HandleMouseEnter);
-        button.removeEventListener("mouseleave", HandleMouseLeave);
-      });
-    };
+    
   }, []);
 
   return (
@@ -94,7 +89,9 @@ export default function CountEvents() {
           id={item.id}
           key={item.id}
           style={{ boxShadow: hoveredButtonId === item.id ?  "1px 2px 5px 0px blue" : "1px 2px 5px 0px black"}}
-        >{item.a}</button></div>
+        >{item.a}</button>
+        <p className={item.id}>{hoveredButtonId === item.id ? "HEyy" : "false"} {hoveredButtonId + "HEyy" + item.id}</p>
+        </div>
       ))}
     </div>
   )
