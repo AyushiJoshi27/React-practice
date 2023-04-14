@@ -182,5 +182,9 @@ export default function StoreData() {
     }
   ];
 
-  return <ShowProducts products={products}/>
+  return (
+    <>
+    <ShowProducts products={products}/>
+    </>
+  )
 };

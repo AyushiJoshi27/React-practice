@@ -29,6 +29,7 @@ const ShowProducts = ({products}) => {
   const onClick = (e) => {
     const id = e.target.id;
     setCartBtnId(id);
+    console.log(e.target.id);
     navigate(`/layout/StoreCart/${id}`)
   }
 
@@ -58,7 +59,7 @@ const ShowProducts = ({products}) => {
             <p><b>Available: </b>{item.rating.count} </p>
             <p><button 
               className="to-add" 
-              id={item.id}>Add to cart</button></p>
+              id={item}>Add to cart</button></p>
           </div>
         </div>
       ))}
