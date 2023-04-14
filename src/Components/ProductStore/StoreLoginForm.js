@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Outlet, useNavigate} from 'react-router-dom';
 
-function LoginForm(props) {
+function StoreLoginForm(props) {
   let [yourName, setyourName] = useState("");
   let [yourPassword, setPassword] = useState("");
   const [error, setError] = useState('');
@@ -15,23 +15,23 @@ function LoginForm(props) {
     setPassword(e.target.value)
   } 
 
-  function GotToLayout() {
-    navigate(`/layout`);
-  }
-
   function handleSubmit(e) {
-
     const validUser = { name: 'Ayushi', pswrd: 'Alpha@123' };
     e.preventDefault();
     let userName = true;
     let userPassword = true;
-
     if (yourName === validUser.name && yourPassword === validUser.pswrd) {
       userName = true;
       userPassword = true;
-      //props.setIsAuthenticated(true);
-      navigate(`/SuccessLogin/${yourName}/`);
-    } 
+      navigate(`/layout/StoreData/${yourName}`)
+      //props.useLogged(true);
+      localStorage.setItem('login', yourName);
+      //localStorage.removeItem('login');
+      //console.log(localStorage.getItem('login') === localStorage.removeItem('login'));
+      var login = localStorage.getItem('login');
+      //navigate(`/layout/show_products`);
+    }
+
     if (yourName !== validUser.name) {
       userName = false
     } else if (yourPassword !== validUser.pswrd) {
@@ -47,6 +47,7 @@ function LoginForm(props) {
 
   return (
     <>
+    <h3 style={{textAlign: "center"}}>Store Login</h3>
     <form onSubmit={handleSubmit} className="form-wrap">
       <h1>Login Form</h1>
       <div className="inner-wrap">
@@ -68,9 +69,9 @@ function LoginForm(props) {
         <button type="submit">Submit</button>
       </div>
     </form>
-    <h3 style={{color: "red"}} onClick={GotToLayout}>Layout</h3>
+    <Outlet/>
     </>
   );
 }
 
-export default LoginForm;
+export default StoreLoginForm;

@@ -58,10 +58,16 @@ const Layout = () => {
             <Link to='product_store_data'>Product store data</Link>
           </li>
           <li>
-            <Link to='pr_home'>Home</Link>
+            <Link to='pr_home'>pr Home</Link>
           </li>
           <li>
-            <Link to='pr_profile'>Pr Profile</Link>
+            <Link to='store_login_page'>Store Login</Link>
+          </li>
+          <li>
+            <Link to='test_route'>Test Route</Link>
+          </li>
+          <li>
+            <Link to='show_products'>Show products</Link>
           </li>
         </ul>
       </nav>

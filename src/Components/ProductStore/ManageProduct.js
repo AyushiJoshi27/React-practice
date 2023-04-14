@@ -1,14 +1,23 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
+import { Navigate, useNavigate } from "react-router";
 
 const ShowProducts = ({products}) => {
+  const [cartBtnId, setCartBtnId] = useState([]);
   const choosenEleRef = useRef([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const elements = document.querySelectorAll('.main-content');
+    const addBtn = document.querySelectorAll('.to-add');
+
+    addBtn.forEach((btn) => {
+      btn.addEventListener('click', onClick); 
+    })
 
     elements.forEach((element) => {
       element.addEventListener('mouseover', OnHover);
       element.addEventListener('mouseout', OffHover);
+
 
       return () => {
         element.removeEventListener('mouseover', OnHover);
@@ -16,6 +25,12 @@ const ShowProducts = ({products}) => {
       }
     })
   }, []);
+
+  const onClick = (e) => {
+    const id = e.target.id;
+    setCartBtnId(id);
+    navigate(`/layout/StoreCart/${id}`)
+  }
 
   const OnHover = (e) => {
     e.target.closest('.main-content').style.boxShadow = '1px 2px 15px 0px lightgray';
@@ -41,6 +56,9 @@ const ShowProducts = ({products}) => {
             <p><b>Price: </b>{item.price}</p>
             <p><b>Rating: </b>{item.rating.rate}</p>
             <p><b>Available: </b>{item.rating.count} </p>
+            <p><button 
+              className="to-add" 
+              id={item.id}>Add to cart</button></p>
           </div>
         </div>
       ))}

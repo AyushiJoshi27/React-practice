@@ -7,7 +7,7 @@
 
 .form-wrap,
 .success-message {
-  box-shadow: 1px 5px 9px 0px lightgray;
+  box-shadow: 1px 5px 9px 0px rgb(211, 211, 211);
   border-radius: 10px;
   margin: 20px auto;
   min-width: 350px;
@@ -51,7 +51,7 @@
 }
 
 .submit-wrap button:hover {
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   color: rgb(21,122,246);
 
 }
@@ -74,7 +74,7 @@
 .main-content {
   background-color: rgb(255 255 255);
   border-radius: 8px;
-  box-shadow: 1px 2px 5px 0px lightgray;
+  box-shadow: 1px 2px 5px 0px rgb(211, 211, 211);
   margin: 8px 0;
   padding: 15px;
 }
@@ -91,4 +91,22 @@
 
 .details p {
   margin: 10px 0;
+}
+
+.to-add {
+  background-color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 0px rgb(211, 211, 211);
+  float: right;
+  padding: 5px 10px;
+}
+
+.to-add:hover {
+  background-color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 2px rgb(211, 211, 211);
+  float: right;
+  padding: 5px 10px;
 }
