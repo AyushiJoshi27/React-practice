@@ -7,20 +7,13 @@ const ShowProducts = ({products}) => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    //const elements = document.querySelectorAll('.main-content');
-    //const addBtn = document.querySelectorAll('.to-add');
-
-    /*addBtn.forEach((btn) => {
-      btn.addEventListener('click', onClick); 
-    })*/
-
+    const elements = document.querySelectorAll('.main-content');
     const addBtn = document.querySelectorAll('.to-add');
-    console.log(addBtn);
-    /*
+
     addBtn.forEach((btn) => {
       btn.addEventListener('click', onClick); 
-    })*/
-    /*
+    })
+
     elements.forEach((element) => {
       element.addEventListener('mouseover', OnHover);
       element.addEventListener('mouseout', OffHover);
@@ -30,16 +23,16 @@ const ShowProducts = ({products}) => {
         element.removeEventListener('mouseover', OnHover);
         element.removeEventListener('mouseout', OffHover);
       }
-    })*/
+    })
   }, []);
-  /*
+  
   const onClick = (e) => {
     const id = e.target.id;
     console.log(id);
     //localStorage.setItem('btnId', id);
-    //navigate(`/layout/StoreCart`)
+    navigate(`/layout/StoreCart/${id}`)
     //navigate(`/layout/cart`)
-  }*/
+  }
 
   const OnHover = (e) => {
     e.target.closest('.main-content').style.boxShadow = '1px 2px 15px 0px lightgray';
@@ -52,17 +45,13 @@ const ShowProducts = ({products}) => {
   return (
     <div className="content-wrapper">
       {products.map((item, index) => {
-        console.log(JSON.stringify(item));
+        //console.log(JSON.stringify(item));
         return (         
           <div className="main-content" key={item.id}>
           <ElementStore propItem={item} propIndex={index} selectedRef={choosenEleRef}/>
             <p>
-              <button 
+              <button className="to-add"
               id={JSON.stringify(item)}>Add to cart</button>
-            </p>
-            <p>
-            <button className="to-add" 
-              >Add to </button>
             </p>
           </div>
         )

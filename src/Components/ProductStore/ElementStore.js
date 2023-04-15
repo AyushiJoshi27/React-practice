@@ -6,9 +6,7 @@ export default function ElementStore({propItem, propIndex, selectedRef}) {
     <div className="content" 
           id={propItem.id}
           ref={(obj) => (selectedRef.current[propIndex] = obj)}>
-          <div className="img-wrap">
-            <img src={propItem.image} alt={propItem.title} className="item-img" />
-          </div>
+          
           <div className="details">
             <p id={propIndex+1}><b>Title: </b>{propItem.title}</p>
             <p><b>Price: </b>{propItem.price}</p>
@@ -20,3 +18,8 @@ export default function ElementStore({propItem, propIndex, selectedRef}) {
     </>
   )
 }
+/*
+<div className="img-wrap">
+            <img src={propItem.image} alt={propItem.title} className="item-img" />
+          </div>
+*/

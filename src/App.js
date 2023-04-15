@@ -85,7 +85,7 @@ function App() {
             <Route path='pr_profile' element={ < PrProfile />}></Route>
           </Route>*/}
           <Route path="StoreData/:yourName" element={ <StoreData/> }></Route>
-          <Route path='StoreCart' element={ < StoreCart /> }></Route>
+          <Route path='StoreCart/:id' element={ < StoreCart /> }></Route>
           <Route path='cart' element={ < ElementStore /> }></Route>
         </Route>
       </Routes>
