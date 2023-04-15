@@ -30,6 +30,7 @@ export default function StorePrivateRoute(props) {
 
   if (!{yourName}) {
     navigate('/layout/store/login/page');
+    
   } else {
     console.log("Route not found");
     console.log({yourName});

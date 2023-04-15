@@ -14,7 +14,7 @@ import About from './Components/Hooks/Routes/BasicRouting/Profile';
 import LayoutEffect from './Components/Hooks/UseLayoutEffect/UseLayoutEffect';
 import EventLayout from './Components/Hooks/UseLayoutEffect/EventLayoutEffect';
 import Memo from './Components/Hooks/UseMemo/Memomization';
-import UseMemo from './Components/Hooks/UseMemo/UseMemo';
+import UseMemo from './Components/Hooks/UseMemo/UseMemo';  
 import UseCallBack from './Components/Hooks/UseCallback/Usecallback';
 import CompoA from './Components/Context/WayToUse/CompoA';
 import AppA from './Components/Context/Requirements/AppA';
@@ -28,6 +28,7 @@ import StorePrivateRoute from './Components/ProductStore/StorePrivateRoute';
 import ShowProducts from './Components/ProductStore/ManageProduct';
 import RouteTest from './Components/ProductStore/RouteTest';
 import StoreCart from './Components/ProductStore/StoreCart';
+import ElementStore from './Components/ProductStore/ElementStore';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -84,7 +85,8 @@ function App() {
             <Route path='pr_profile' element={ < PrProfile />}></Route>
           </Route>*/}
           <Route path="StoreData/:yourName" element={ <StoreData/> }></Route>
-          <Route path='StoreCart/:id' element={ < StoreCart /> }></Route>
+          <Route path='StoreCart' element={ < StoreCart /> }></Route>
+          <Route path='cart' element={ < ElementStore /> }></Route>
         </Route>
       </Routes>
       {/*<Link to='/pr_profile'>Go to pr-profile page</Link>*/}
