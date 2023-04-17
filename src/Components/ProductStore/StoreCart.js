@@ -1,24 +1,29 @@
 import React from 'react'
 import { useParams } from 'react-router'
-import ElementStore from './ElementStore';
 
-export default function StoreCart({data}) {
-    //const {id} = useParams();
-    const id = 3;
-    const btnId = localStorage.getItem('btnId');
-    //console.log({products})
+export default function StoreCart() {
+    const {choosenProduct} = useParams();
+    console.log("Encoded:" + {choosenProduct});
+    //const btnId = localStorage.getItem('btnId');
+    //console.log(imgUrl);
   return (
     <>
         
-        {console.log(data[id].title)}
-        {/*       {data.map((item, index) => {
-            return (
-                <ElementStore propItem={item} propIndex={index} selectedRef={choosenEleRef} />
-            )
-        })}
+        {/*
+        <div className="main-content"
+          key={choosenProduct}
+        >
+           <div className="img-wrap">
+            <img src={choosenProduct.image} alt={choosenProduct.title} className="item-img" />
+          </div>
+          <div className="details">
+            <p id={choosenProduct+1}><b>Title: </b>{choosenProduct.title}</p>
+            <p><b>Price: </b>{choosenProduct.price}</p>
+            
+          </div> 
+        </div>
         */}
-        
-        <h3>COnst Id: {btnId}</h3>
+        <h3>Choosen-product: {choosenProduct}</h3>
         <div>StoreCart</div>
     </>
   )

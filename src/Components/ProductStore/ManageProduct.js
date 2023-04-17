@@ -3,55 +3,31 @@ import { useNavigate } from "react-router";
 import ElementStore from "./ElementStore";
 
 const ShowProducts = ({products}) => {
-  const choosenEleRef = useRef([]);
   const navigate = useNavigate()
-
+/*
   useEffect(() => {
-    const elements = document.querySelectorAll('.main-content');
-    const addBtn = document.querySelectorAll('.to-add');
-
-    addBtn.forEach((btn) => {
-      btn.addEventListener('click', onClick); 
-    })
-
-    elements.forEach((element) => {
-      element.addEventListener('mouseover', OnHover);
-      element.addEventListener('mouseout', OffHover);
-
-
-      return () => {
-        element.removeEventListener('mouseover', OnHover);
-        element.removeEventListener('mouseout', OffHover);
-      }
-    })
-  }, []);
-  
-  const onClick = (e) => {
+  }    
+*/
+  const btnHandle = (e) => {
     const id = e.target.id;
+    const elementId = JSON.parse(id);
+    console.log(elementId);
     console.log(id);
-    //localStorage.setItem('btnId', id);
-    navigate(`/layout/StoreCart/${id}`)
-    //navigate(`/layout/cart`)
-  }
-
-  const OnHover = (e) => {
-    e.target.closest('.main-content').style.boxShadow = '1px 2px 15px 0px lightgray';
-  }
-
-  const OffHover = (e) => {
-    e.target.closest('.main-content').style.boxShadow= '1px 2px 5px 0px lightgray';
+    navigate(`/StoreCart/${id}`);
   }
 
   return (
     <div className="content-wrapper">
       {products.map((item, index) => {
-        //console.log(JSON.stringify(item));
+        var object = JSON.stringify(item);
+        console.log(object);
+        const itemObject = JSON.stringify(encodeURIComponent(object));
+        console.log(itemObject);
         return (         
           <div className="main-content" key={item.id}>
-          <ElementStore propItem={item} propIndex={index} selectedRef={choosenEleRef}/>
+          <ElementStore propItem={item} propIndex={index} />
             <p>
-              <button className="to-add"
-              id={JSON.stringify(item)}>Add to cart</button>
+              <button id={itemObject} onClick={btnHandle} className="to-add">Add to cart</button>
             </p>
           </div>
         )
@@ -61,7 +37,6 @@ const ShowProducts = ({products}) => {
 }
 
 export default ShowProducts;
-
 
 /*<div className="main-content" 
           key={item.id}

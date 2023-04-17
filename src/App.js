@@ -29,6 +29,7 @@ import ShowProducts from './Components/ProductStore/ManageProduct';
 import RouteTest from './Components/ProductStore/RouteTest';
 import StoreCart from './Components/ProductStore/StoreCart';
 import ElementStore from './Components/ProductStore/ElementStore';
+import StateRender from './Components/StateRender/StateRender';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -85,8 +86,10 @@ function App() {
             <Route path='pr_profile' element={ < PrProfile />}></Route>
           </Route>*/}
           <Route path="StoreData/:yourName" element={ <StoreData/> }></Route>
-          <Route path='StoreCart/:id' element={ < StoreCart /> }></Route>
+          {/*<Route path='StoreCart/:id' element={ < StoreCart /> }></Route>*/}
+          <Route path='StoreCart' element={ < StoreCart /> }></Route>
           <Route path='cart' element={ < ElementStore /> }></Route>
+          <Route path='state_render' element={ < StateRender /> }></Route>
         </Route>
       </Routes>
       {/*<Link to='/pr_profile'>Go to pr-profile page</Link>*/}

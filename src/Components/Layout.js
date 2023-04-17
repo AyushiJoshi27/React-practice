@@ -69,6 +69,9 @@ const Layout = () => {
           <li>
             <Link to='show_products'>Show products</Link>
           </li>
+          <li>
+            <Link to='state_render'>Task: change in State on Render between child and parent Component</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />
