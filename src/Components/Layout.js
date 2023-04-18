@@ -72,6 +72,12 @@ const Layout = () => {
           <li>
             <Link to='state_render'>Task: change in State on Render between child and parent Component</Link>
           </li>
+          <li>
+            <Link to='without_provider'>createContext Without Provider:</Link>
+          </li>
+          <li>
+            <Link to='context_with_usecontext'>Context with Usecontext</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />

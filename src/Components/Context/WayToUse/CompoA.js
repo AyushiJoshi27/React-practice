@@ -4,9 +4,10 @@ import CompoB from './CompoB';
 const FirstName = createContext();
 
 const CompoA = () => {
+
     return (
         <>
-            <FirstName.Provider value={"Alpha"}>
+            <FirstName.Provider value={ "Alpha" }>
                 < CompoB />    
             </FirstName.Provider>
         </>

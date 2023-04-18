@@ -5,13 +5,19 @@ function Parent() {
   const [count, setCount] = useState(1);
 
   useEffect(() => {
-    setCount((count) => count + 1);
-  }, [count]);
+    //setCount((count) => count + 1);
+    console.log("parent-useEffect");  
+  }, []);
+
+  //setCount((count) => count + 1);
+  console.log("parent")
 
   return (
     <>
       <div><p>Parent</p></div>
-      <Child counter={count}/>
+      <Child/>
+      <p>value: {count}</p>
+      <button onClick={() => setCount((count) => count + 1) }>Parent: {count}</button>
     </>
   )
 }

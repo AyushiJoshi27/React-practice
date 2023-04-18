@@ -3,9 +3,8 @@ import { useParams } from 'react-router'
 
 export default function StoreCart() {
     const {choosenProduct} = useParams();
-    console.log("Encoded:" + {choosenProduct});
     //const btnId = localStorage.getItem('btnId');
-    //console.log(imgUrl);
+    console.log(choosenProduct);
   return (
     <>
         
