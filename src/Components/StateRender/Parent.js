@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from 'react'
+import Child from './Child';
 
 function Parent() {
   const [count, setCount] = useState(1);
+
   useEffect(() => {
     setCount((count) => count + 1);
   }, [count]);
 
   return (
     <>
-      <div>Parent</div>
-      <p>Count: {count}</p>
+      <div><p>Parent</p></div>
+      <Child counter={count}/>
     </>
   )
 }

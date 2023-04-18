@@ -29,7 +29,8 @@ import ShowProducts from './Components/ProductStore/ManageProduct';
 import RouteTest from './Components/ProductStore/RouteTest';
 import StoreCart from './Components/ProductStore/StoreCart';
 import ElementStore from './Components/ProductStore/ElementStore';
-import StateRender from './Components/StateRender/StateRender';
+import StateRender from './Components/StateRender/Parent';
+import Parent from './Components/StateRender/Parent';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -79,7 +80,6 @@ function App() {
           <Route path='store_login_page' element={ < StoreLoginForm /> }></Route>
           {/*<Route path='show_products' element={ < StorePrivateRoute Component={StoreData}/>} />
           <Route path='test_route' element={< StorePrivateRoute Component={RouteTest} />}></Route>
-
           <Route path='pr_home' element={ < PrHome /> }></Route>
           <Route element={< PrProtectedRoute isLogged={isLogged}/>}>
             {console.log(isLogged)}
@@ -89,7 +89,7 @@ function App() {
           {/*<Route path='StoreCart/:id' element={ < StoreCart /> }></Route>*/}
           <Route path='StoreCart' element={ < StoreCart /> }></Route>
           <Route path='cart' element={ < ElementStore /> }></Route>
-          <Route path='state_render' element={ < StateRender /> }></Route>
+          <Route path='state_render' element={ < Parent /> }></Route>
         </Route>
       </Routes>
       {/*<Link to='/pr_profile'>Go to pr-profile page</Link>*/}

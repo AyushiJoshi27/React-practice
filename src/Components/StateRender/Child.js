@@ -1,17 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 
-export default function Child(props) {
-  const [count, setCount] = useState(1);
+export default function Child({counter}) {
   const [times, setTimes] = useState(1);
   
-  useEffect(() => {
-    setCount((count) => count + 1);
-  }, [count]);
-
   return (
     <>
       <div>Child</div>
-      <button onClick={() => setTimes((times) => times + 1)}></button>
+      <button onClick={() => setTimes((c) => c + 1)}>{times}</button>
+      <p>{counter}</p>
     </>
   )
 }
