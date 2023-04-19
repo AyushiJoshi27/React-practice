@@ -78,6 +78,9 @@ const Layout = () => {
           <li>
             <Link to='context_with_usecontext'>Context with Usecontext</Link>
           </li>
+          <li>
+            <Link to='random_context_example'>Random Context Example</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />

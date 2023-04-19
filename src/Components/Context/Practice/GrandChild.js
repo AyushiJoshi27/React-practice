@@ -4,10 +4,6 @@ import { ContextObj } from './ContParent';
 export default function GrandChild() {
  const {color,setColor} = useContext(ContextObj);
  console.log(setColor)
- //const {color1, }
- //setColor('green')
-  var obj ='green'
-  //setColor(obj);
 
   const newFunc = () => {
     setColor("yellow");

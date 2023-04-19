@@ -1,6 +1,7 @@
 import './App.css';
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React  from 'react';
+//import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Components/LoginForm';
 import SuccessLogin from './Components/SuccessLogin';
 import Layout from './Components/Layout';
@@ -20,25 +21,26 @@ import CompoA from './Components/Context/WayToUse/CompoA';
 import AppA from './Components/Context/Requirements/AppA';
 import StoreData from './Components/ProductStore/ProductsStore';
 import ChangeButtons from './Components/Hooks/UseEffect/RenderJson/HoverData';
-import PrHome from './Components/Hooks/Routes/PrivateRoutes/PrHome';
-import PrProfile from './Components/Hooks/Routes/PrivateRoutes/PrProfile';
-import PrProtectedRoute from './Components/Hooks/Routes/PrivateRoutes/PrProtectedRoute';
+//import PrHome from './Components/Hooks/Routes/PrivateRoutes/PrHome';
+//import PrProfile from './Components/Hooks/Routes/PrivateRoutes/PrProfile';
+//import PrProtectedRoute from './Components/Hooks/Routes/PrivateRoutes/PrProtectedRoute';
 import StoreLoginForm from './Components/ProductStore/StoreLoginForm';
-import StorePrivateRoute from './Components/ProductStore/StorePrivateRoute';
-import ShowProducts from './Components/ProductStore/ManageProduct';
-import RouteTest from './Components/ProductStore/RouteTest';
+//import StorePrivateRoute from './Components/ProductStore/StorePrivateRoute';
+//import ShowProducts from './Components/ProductStore/ManageProduct';
+//import RouteTest from './Components/ProductStore/RouteTest';
 import StoreCart from './Components/ProductStore/StoreCart';
 import ElementStore from './Components/ProductStore/ElementStore';
-import StateRender from './Components/StateRender/Parent';
+//import StateRender from './Components/StateRender/Parent';
 import Parent from './Components/StateRender/Parent';
 import WithoutProvider from './Components/Context/UseWithouProvider/WithoutProvider';
 import ContParent from './Components/Context/Practice/ContParent';
+import DirectProps from './Components/Context/Practice/DirectProps/DirectProps';
 
 function App() {
   const [user, setUser] = React.useState(null);
 
-  const handleLogin = () => setUser({ id: '1', name: 'robin' });
-  const handleLogout = () => setUser(null);
+  //const handleLogin = () => setUser({ id: '1', name: 'robin' });
+  //const handleLogout = () => setUser(null);
 
   return (
     <>
@@ -94,6 +96,7 @@ function App() {
           <Route path='state_render' element={ < Parent /> }></Route>
           <Route path='without_provider' element={ < WithoutProvider /> }></Route>
           <Route path='context_with_usecontext' element={ < ContParent /> }></Route>
+          <Route path='random_context_example' element={ < DirectProps /> }></Route>
         </Route>
       </Routes>
       {/*<Link to='/pr_profile'>Go to pr-profile page</Link>*/}
