@@ -1,29 +1,16 @@
-import React from 'react'
-import { useParams } from 'react-router'
+import React, { useContext } from 'react';
+import { ContextObj } from './ManageProduct';
 
 export default function StoreCart() {
-    const {choosenProduct} = useParams();
-    //const btnId = localStorage.getItem('btnId');
-    console.log(choosenProduct);
+    //const {choosenProduct} = useParams();
+    const {objectValue} = useContext(ContextObj);
+    console.log(objectValue)
+    //const elementId = JSON.parse(id);
+    //console.log(elementId);
+
   return (
     <>
-        
-        {/*
-        <div className="main-content"
-          key={choosenProduct}
-        >
-           <div className="img-wrap">
-            <img src={choosenProduct.image} alt={choosenProduct.title} className="item-img" />
-          </div>
-          <div className="details">
-            <p id={choosenProduct+1}><b>Title: </b>{choosenProduct.title}</p>
-            <p><b>Price: </b>{choosenProduct.price}</p>
-            
-          </div> 
-        </div>
-        */}
-        <h3>Choosen-product: {choosenProduct}</h3>
-        <div>StoreCart</div>
+      <div>StoreCart</div>
     </>
   )
 }

@@ -35,6 +35,7 @@ import Parent from './Components/StateRender/Parent';
 import WithoutProvider from './Components/Context/UseWithouProvider/WithoutProvider';
 import ContParent from './Components/Context/Practice/ContParent';
 import DirectProps from './Components/Context/Practice/DirectProps/DirectProps';
+import ParentCtxt from './Components/Context/Task/Task1WithinCompo/ParentCtxt';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -91,12 +92,13 @@ function App() {
           </Route>*/}
           <Route path="StoreData/:yourName" element={ <StoreData/> }></Route>
           {/*<Route path='StoreCart/:id' element={ < StoreCart /> }></Route>*/}
-          <Route path='StoreCart' element={ < StoreCart /> }></Route>
           <Route path='cart' element={ < ElementStore /> }></Route>
           <Route path='state_render' element={ < Parent /> }></Route>
           <Route path='without_provider' element={ < WithoutProvider /> }></Route>
           <Route path='context_with_usecontext' element={ < ContParent /> }></Route>
           <Route path='random_context_example' element={ < DirectProps /> }></Route>
+          <Route path='change_context_within_compo_without_setter' element={< ParentCtxt />}></Route>
+          <Route path='store_cart' element={ < StoreCart /> }></Route>
         </Route>
       </Routes>
       {/*<Link to='/pr_profile'>Go to pr-profile page</Link>*/}

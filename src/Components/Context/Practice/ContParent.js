@@ -12,10 +12,7 @@ export default function ContParent() {
       <br />
       <div>
         <ContextObj.Provider value={{color, setColor}} >
-
-          
           <GrandChild/>
-          
         </ContextObj.Provider>
       </div>
     </>

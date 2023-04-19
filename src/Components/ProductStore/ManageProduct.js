@@ -1,28 +1,33 @@
-import React, {useEffect, useRef } from "react";
+import React, {createContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import ElementStore from "./ElementStore";
+import StoreCart from "./StoreCart";
+
+const ContextObj = createContext();
 
 const ShowProducts = ({products}) => {
   const navigate = useNavigate()
-/*
-  useEffect(() => {
-  }    
-*/
+  const [objectValue, setObjectValue] = useState(null);
+
   const btnHandle = (e) => {
     const id = e.target.id;
-    const elementId = JSON.parse(id);
-    console.log(elementId);
-    console.log(id);
-    navigate(`/StoreCart/${id}`);
+    setObjectValue(id);
+    //console.log(id);
+    //<ContextObj.Provider value={id} >
+    <ContextObj.Provider value={{objectValue, setObjectValue}} >
+      < StoreCart />
+    </ContextObj.Provider>
+    //console.log(id);
+    navigate('/layout/store_cart');
   }
 
   return (
     <div className="content-wrapper">
       {products.map((item, index) => {
         var object = JSON.stringify(item);
-        console.log(object);
+        //console.log(object);
         const itemObject = JSON.stringify(encodeURIComponent(object));
-        console.log(itemObject);
+        //console.log(itemObject);
         return (         
           <div className="main-content" key={item.id}>
           <ElementStore propItem={item} propIndex={index} />
@@ -37,7 +42,7 @@ const ShowProducts = ({products}) => {
 }
 
 export default ShowProducts;
-
+export {ContextObj};
 /*<div className="main-content" 
           key={item.id}
           id={item.id}
