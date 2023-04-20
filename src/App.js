@@ -36,6 +36,7 @@ import WithoutProvider from './Components/Context/UseWithouProvider/WithoutProvi
 import ContParent from './Components/Context/Practice/ContParent';
 import DirectProps from './Components/Context/Practice/DirectProps/DirectProps';
 import ParentCtxt from './Components/Context/Task/Task1WithinCompo/ParentCtxt';
+import Mains from './Components/Context/Practice/MultipleContext/Mains';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -99,6 +100,7 @@ function App() {
           <Route path='random_context_example' element={ < DirectProps /> }></Route>
           <Route path='change_context_within_compo_without_setter' element={< ParentCtxt />}></Route>
           <Route path='store_cart' element={ < StoreCart /> }></Route>
+          <Route path='multiple_context' element={ < Mains /> }></Route>
         </Route>
       </Routes>
       {/*<Link to='/pr_profile'>Go to pr-profile page</Link>*/}

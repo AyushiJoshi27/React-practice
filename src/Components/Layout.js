@@ -87,6 +87,9 @@ const Layout = () => {
           <li>
             <Link to='store_cart'>Store cart</Link>
           </li>
+          <li>
+            <Link to='multiple_context'>Multiple context</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />
