@@ -37,6 +37,11 @@ import ContParent from './Components/Context/Practice/ContParent';
 import DirectProps from './Components/Context/Practice/DirectProps/DirectProps';
 import ParentCtxt from './Components/Context/Task/Task1WithinCompo/ParentCtxt';
 import Mains from './Components/Context/Practice/MultipleContext/Mains';
+import { products } from './ProductStore';
+
+export const ContextData = React.createContext();
+
+const data = products;
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -55,12 +60,12 @@ function App() {
       onClick={() => setIsLogged(false)}
       style={{marginLeft: "20px"}}>
       Log out
-  </button>*/}
+  </button>
   {user ? (
         <button onClick={setUser}>Sign Out</button>
       ) : (
         <div><button onClick={setUser}>Sign In</button></div>
-      )}
+      )}*/}
   <div><button onClick={() => localStorage.removeItem('login')}>Logoff</button></div>  
     <Router>
       <Routes>
@@ -91,7 +96,7 @@ function App() {
             {console.log(isLogged)}
             <Route path='pr_profile' element={ < PrProfile />}></Route>
           </Route>*/}
-          <Route path="StoreData/:yourName" element={ <StoreData/> }></Route>
+          {/*<Route path="StoreData/:yourName" element={ <StoreData/> }></Route>*/}
           {/*<Route path='StoreCart/:id' element={ < StoreCart /> }></Route>*/}
           <Route path='cart' element={ < ElementStore /> }></Route>
           <Route path='state_render' element={ < Parent /> }></Route>
@@ -99,8 +104,24 @@ function App() {
           <Route path='context_with_usecontext' element={ < ContParent /> }></Route>
           <Route path='random_context_example' element={ < DirectProps /> }></Route>
           <Route path='change_context_within_compo_without_setter' element={< ParentCtxt />}></Route>
-          <Route path='store_cart' element={ < StoreCart /> }></Route>
+          {/*<Route path='store_cart' element={ < StoreCart /> }></Route>*/}
           <Route path='multiple_context' element={ < Mains /> }></Route>
+          <Route
+            path="StoreData"
+            element={
+              <ContextData.Provider value={{data}}>
+                <StoreData/>
+              </ContextData.Provider>
+            }
+          />
+          <Route
+            path="storeCart/:id"
+            element={
+              <ContextData.Provider value={{data}}>
+                <StoreCart/>
+              </ContextData.Provider>
+            }
+          />
         </Route>
       </Routes>
       {/*<Link to='/pr_profile'>Go to pr-profile page</Link>*/}

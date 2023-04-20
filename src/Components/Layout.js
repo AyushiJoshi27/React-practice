@@ -84,12 +84,11 @@ const Layout = () => {
           <li>
             <Link to='change_context_within_compo_without_setter'>Change Context Within Compo Without Setter</Link>
           </li>
-          <li>
-            <Link to='store_cart'>Store cart</Link>
-          </li>
+
           <li>
             <Link to='multiple_context'>Multiple context</Link>
           </li>
+
         </ul>
       </nav>
       <Outlet />

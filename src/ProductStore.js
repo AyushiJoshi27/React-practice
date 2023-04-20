@@ -1,10 +1,4 @@
-import React from 'react';
-import ShowProducts from './ManageProduct';
-import StoreCart from './StoreCart';
-
-export default function StoreData() {
-
-  const products = [
+export const products = [
     {
       id: 1,
       title: "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
@@ -182,7 +176,3 @@ export default function StoreData() {
       rating: { "rate": 3.6, "count": 145 }
     }
   ];
-
-  //return <ShowProducts products={products}/> 
-  return <ShowProducts /> 
-};

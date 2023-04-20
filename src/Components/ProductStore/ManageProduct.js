@@ -1,29 +1,33 @@
-import React, {createContext, useEffect, useRef, useState } from "react";
+import React, {createContext, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import { ContextData } from "../../App";
 import ElementStore from "./ElementStore";
 import StoreCart from "./StoreCart";
 
-const ContextObj = createContext();
+//const ContextObj = createContext();
 
-const ShowProducts = ({products}) => {
+const ShowProducts = () => {
   const navigate = useNavigate()
   const [objectValue, setObjectValue] = useState(null);
+  const {data} = useContext(ContextData);
 
-  const btnHandle = (e) => {
-    const id = e.target.id;
-    setObjectValue(id);
-    //console.log(id);
+  console.log("Data" , data);
+
+  const btnHandle = (id) => {
+    //const id = e.target;
+    //setObjectValue(id);
+    console.log("Hii");
     //<ContextObj.Provider value={id} >
-    <ContextObj.Provider value={{objectValue, setObjectValue}} >
-      < StoreCart />
-    </ContextObj.Provider>
     //console.log(id);
-    navigate('/layout/store_cart');
+    navigate(`/layout/storeCart/${id}`);
   }
 
   return (
     <div className="content-wrapper">
-      {products.map((item, index) => {
+      {/*<ContextObj.Provider value={{products[objectValue]}} >
+          < StoreCart />
+      </ContextObj.Provider>*/}
+      {data.map((item, index) => {
         var object = JSON.stringify(item);
         //console.log(object);
         const itemObject = JSON.stringify(encodeURIComponent(object));
@@ -32,17 +36,18 @@ const ShowProducts = ({products}) => {
           <div className="main-content" key={item.id}>
           <ElementStore propItem={item} propIndex={index} />
             <p>
-              <button id={itemObject} onClick={btnHandle} className="to-add">Add to cart</button>
+              <button onClick={() => btnHandle(item.id)} className="to-add">Add to cart</button>
             </p>
           </div>
         )
       })}
+      Manager: List of products
     </div>
   );
 }
 
 export default ShowProducts;
-export {ContextObj};
+//export {ContextObj};
 /*<div className="main-content" 
           key={item.id}
           id={item.id}
@@ -61,3 +66,4 @@ export {ContextObj};
             </p>
           </div>
         </div>*/
+/////////context creation in loop????????
