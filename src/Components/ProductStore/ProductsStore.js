@@ -1,6 +1,5 @@
 import React from 'react';
 import ShowProducts from './ManageProduct';
-import StoreCart from './StoreCart';
 
 export default function StoreData() {
 

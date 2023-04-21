@@ -23,13 +23,8 @@ function StoreLoginForm(props) {
     if (yourName === validUser.name && yourPassword === validUser.pswrd) {
       userName = true;
       userPassword = true;
-      navigate(`/layout/StoreData/${yourName}`)
-      //props.useLogged(true);
+      navigate('/layout/StoreData');
       localStorage.setItem('login', yourName);
-      //localStorage.removeItem('login');
-      //console.log(localStorage.getItem('login') === localStorage.removeItem('login'));
-      var login = localStorage.getItem('login');
-      //navigate(`/layout/show_products`);
     }
 
     if (yourName !== validUser.name) {
