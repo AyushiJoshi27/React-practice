@@ -1,5 +1,5 @@
 import './App.css';
-import React  from 'react';
+import React, { useEffect, useState }  from 'react';
 //import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Components/LoginForm';
@@ -32,9 +32,21 @@ import ParentCtxt from './Components/Context/Task/Task1WithinCompo/ParentCtxt';
 import Mains from './Components/Context/Practice/MultipleContext/Mains';
 import { products } from './ProductStore';
 export const ContextData = React.createContext();
+
 const data = products;
 
 function App() {
+  const [products, setProducts] = useState([]);
+
+  const fetchData = () => {
+    return fetch("https://fakestoreapi.com/products")
+          .then((response) => response.json())
+          .then((data) => setProducts(data));
+  }
+
+  useEffect(() => {
+    fetchData();
+  },[])
 
   return (
     <>
