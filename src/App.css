@@ -7,10 +7,6 @@
   pointer-events: none;
 }
 
-.App-logo-paused {
-  animation-play-state: paused;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
