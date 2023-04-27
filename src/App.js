@@ -89,11 +89,13 @@ import GetData from './ProductStore/GetData';
 
 const App = () => {
   return (
-    <div style={{display: "flex", justifyContent: "space-evenly"}}>
-      <Counter />
-      <User />
-      <GetData/>
-    </div>
+    <>
+      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+        <Counter />
+        <User />
+      </div>
+      <GetData />
+    </>
   );
 };
 

@@ -9,7 +9,7 @@ function configureStore(state = {rotating: true}) {
 export default configureStore;*/
 
 import { combineReducers, createStore } from "redux";
-import { itemCount } from "./reducers/StoreReducer";
+import { ApiReducer } from "./reducers/StoreReducer";
 
 const initialState = { counter: 0 };
 
@@ -38,7 +38,8 @@ const userReducer = ( state= initialUserName, action) => {
 
 const rootReducer = combineReducers({
   counterReducer: counterReducer,
-  user: userReducer
+  user: userReducer,
+  ApiReducer,
 })
 
 const store = createStore(rootReducer);
