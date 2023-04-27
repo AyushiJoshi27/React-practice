@@ -1,4 +1,4 @@
-export const chnageColor = color => ({
+export const changeColor = color => ({
     type: 'CHANGE_COLOR',
     payload: color
-  });
+});
