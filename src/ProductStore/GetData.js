@@ -26,7 +26,7 @@ export default function GetData() {
     console.log(product);
     //dispatch(AddToCartAction())
     //dispatch(CartDataAction())
-      console.log(cartData);
+      //console.log(cartData);
       if (cartData.length === 0) {
         cartData.push(product);
         //console.log(dispatch(CartDataAction(cartData)));
@@ -70,8 +70,8 @@ export default function GetData() {
                 </div>
               </div>
             </div>
-          );
-        })};
+          )
+        })}
       </div>
     </div>
   )
