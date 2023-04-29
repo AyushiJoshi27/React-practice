@@ -10,6 +10,8 @@ export default configureStore;*/
 
 import { combineReducers, createStore } from "redux";
 import { ApiReducer } from "./reducers/StoreReducer";
+import { AddToCartReducer } from "./reducers/AddToCartReducer";
+import { CartDataReducer } from "./reducers/CartDataReducer";
 
 const initialState = { counter: 0 };
 
@@ -26,35 +28,24 @@ const counterReducer = (state = initialState, action) => {
   }
 };
 
-const userReducer = ( state= initialUserName, action) => {
-  switch(action.type) {
+const userReducer = (state = initialUserName, action) => {
+  switch (action.type) {
     case "CHANGE_NAME":
-      return { ...state, name: action.payload};
+      return { ...state, name: action.payload };
     default:
       return state;
   }
 }
 
-
 const rootReducer = combineReducers({
   counterReducer: counterReducer,
   user: userReducer,
   ApiReducer,
+  AddToCartReducer,
+  CartDataReducer
 })
 
 const store = createStore(rootReducer);
 
 export default store;
 
-
-/*import { createStore, combineReducers } from "redux";
-import { incrementReducer, decrementReducer } from "./reducers";
-
-const rootReducer = combineReducers({
-  increment: incrementReducer,
-  decrement: decrementReducer,
-});
-
-const store = createStore(rootReducer);
-
-export default store;*/

@@ -12,10 +12,3 @@ export function decrementCount() {
     type: DECREMENT_COUNT,
   };
 }
-
-export const AddToCartAction = () => {
-  return {
-    type: "ADD_TO_CART",
-    //payload
-  }
-}

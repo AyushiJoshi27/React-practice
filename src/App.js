@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 //import { connect } from 'react-redux';
 //import { StartAction } from './actions/StartAction';
@@ -85,7 +85,7 @@ export default App;
 import React from "react";
 import Counter from "./Counter";
 import User from './User';
-import GetData from './ProductStore/GetData';
+import ProductStore from './ProductStore/ProductStore';
 
 const App = () => {
   return (
@@ -94,7 +94,7 @@ const App = () => {
         <Counter />
         <User />
       </div>
-      <GetData />
+      <ProductStore />
     </>
   );
 };
