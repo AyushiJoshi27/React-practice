@@ -1,4 +1,7 @@
-export const CartDataAction = data => ({
-  type: "CART_DATA_ACTION",
-  payload: data,
-});
+export const CartDataAction = data => {
+  return {
+
+    type: "CART_DATA_ACTION",
+    payload: data,
+  }
+};

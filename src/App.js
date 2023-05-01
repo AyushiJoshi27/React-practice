@@ -100,17 +100,3 @@ const App = () => {
 };
 
 export default App;
-
-/*import React from 'react'
-import Increment from './increment';
-import Decrement from './decrement';
-
-export default function App() {
-  return (
-    <div>
-      <Increment/>
-      <Decrement/>
-    </div>
-  )
-}
-*/
