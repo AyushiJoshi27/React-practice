@@ -7,6 +7,7 @@ export default function GetData() {
   const dispatch = useDispatch();
   const storeData = useSelector((state) => state.ApiReducer);
   const cartData = useSelector((state) => state.CartDataReducer.cartItemCount);
+  console.log(cartData);
 
   useEffect(() => {
     getData();
@@ -37,17 +38,16 @@ export default function GetData() {
                 id={item.id}>
                 <div className="img-wrap">
                   <img src={item.image} className="item-img" alt={item.title} />
-                  <button className="to-add" onClick={() => CartCount(item)}>Liked</button>
+                </div>
+                <div className='add-to-cart'>
+                  <button className="to-add" onClick={() => CartCount(item)}>Add to cart</button>
                 </div>
                 <div className="details">
                   <p><b>Title: </b>{item.title}</p>
-                  <p><b>Price: </b>{item.price}</p>   
+                  <p><b>Price: </b>{item.price}</p>
                   <p><b>Rating: </b>{item.rating.rate}</p>
                   <p><b>Available: </b>{item.rating.count} </p>
                 </div>
-                {/*<div className='add-to-cart'>
-                  <button className="to-add" onClick={() => CartCount(item)}>Add to cart</button>
-          </div>*/}
               </div>
             </div>
           )
