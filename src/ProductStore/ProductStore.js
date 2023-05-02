@@ -1,11 +1,11 @@
-import React from 'react'
-import CartCompo from './CartCompo'
-import GetData from './GetData'
+import React from 'react';
+import GetData from './GetData';
+import Header from './Header';
 
 export default function ProductStore() {
   return (
     <>
-      < CartCompo />
+      < Header />
       < GetData />
     </>
   )

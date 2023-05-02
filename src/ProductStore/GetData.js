@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDataAction } from '../actions/GetDataAction';
+//import { AddToCartAction } from '../actions/AddToCartAction';
 import { CartDataAction } from '../actions/CartDataAction';
 
 export default function GetData() {
   const dispatch = useDispatch();
   const storeData = useSelector((state) => state.ApiReducer);
   const cartData = useSelector((state) => state.CartDataReducer.cartItemCount);
-  console.log(cartData);
 
   useEffect(() => {
     getData();

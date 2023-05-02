@@ -128,14 +128,14 @@
   padding: 10px 0;
 }
 
-.cart-block p {
+.cart-block .cart-count {
   font-weight: bold;
   margin: 0;
   padding: 0 40px;
   text-align: end;
 }
 
-.cart-block b {
+.cart-block .cart-count b {
   background: red;
   margin-right: 1px;
   padding: 1px 6px;

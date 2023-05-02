@@ -83,18 +83,25 @@ function App() {
 export default App;
 */
 import React from "react";
-import Counter from "./Counter";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+//import Counter from "./Counter";
 import User from './User';
 import ProductStore from './ProductStore/ProductStore';
+import GoToCart from './ProductStore/CartCompo';
+import Counter from './StateMutation/Counter';
+
 
 const App = () => {
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-        <Counter />
-        <User />
-      </div>
-      <ProductStore />
+    {/*<Counter />*/}
+    <Router>
+      <Routes>
+        <Route path='/' element={ <ProductStore /> } />
+        <Route path='counter' element={ <Counter/> }></Route>
+        <Route path='go-to-cart' element={ < GoToCart /> }></Route>
+      </Routes>
+    </Router>
     </>
   );
 };

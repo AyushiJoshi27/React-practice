@@ -4,10 +4,8 @@ import RotateReducer from './Reducers/RotateReducer';
 function configureStore(state = {rotating: true}) {
     return createStore(RotateReducer, state);
 }
-
-
-export default configureStore;*/
-
+export default configureStore;
+*/
 import { combineReducers, createStore } from "redux";
 import { ApiReducer } from "./reducers/StoreReducer";
 import { AddToCartReducer } from "./reducers/AddToCartReducer";
@@ -46,6 +44,14 @@ const rootReducer = combineReducers({
 })
 
 const store = createStore(rootReducer);
-
 export default store;
 
+/*
+import { configureStore } from '@reduxjs/toolkit';
+import counterReducer from './StateMutation/counterSlice';
+
+export default configureStore({
+  reducer: {
+    counter: counterReducer
+  },
+});*/
