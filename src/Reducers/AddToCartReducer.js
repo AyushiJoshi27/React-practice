@@ -1,5 +1,6 @@
 export const initialState = {
-  itemsCount: 0
+  itemsCount: 0,
+  
 };
 
 export const AddToCartReducer = (state = initialState, action) => {

@@ -1,13 +1,23 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import Header from './Header';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteCartItemIndex } from '../actions/GetDataAction';
+import { CartDataReducer, RemoveDataReducer } from '../reducers/CartDataReducer';
 
 export default function GoToCart() {
+  const dispatch = useDispatch();
   const cartData = useSelector((state) => state.CartDataReducer.cartItemCount);
+  console.log(cartData)
+
+  const removeItem = item => {
+    //console.log(cartData.findIndex((element) => element === item));
+    //let a = cartData.findIndex((element) => element === item)
+    dispatch(deleteCartItemIndex(item));
+  }
+
   return (
     <div>
       <div className='cart-block'>
-        <i style={{float: 'left', marginLeft:"30px"}}><b>Product Store</b></i>
+        <i style={{ float: 'left', marginLeft: "30px" }}><b>Product Store</b></i>
         <p className='cart-count'><b>{cartData.length}</b>  Cart</p>
       </div>
       <div className="content-wrapper">
@@ -18,6 +28,9 @@ export default function GoToCart() {
                 id={item.id}>
                 <div className="img-wrap">
                   <img src={item.image} className="item-img" alt={item.title} />
+                </div>
+                <div className="item-remove">
+                  <button onClick={() => removeItem(item)}>Delete</button>
                 </div>
                 <div className="details">
                   <p><b>Title: </b>{item.title}</p>
@@ -30,6 +43,6 @@ export default function GoToCart() {
           )
         })}
       </div>
-      </div>
-      )
+    </div>
+  )
 }

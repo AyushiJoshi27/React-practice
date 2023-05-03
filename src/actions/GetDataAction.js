@@ -4,3 +4,10 @@ export const getDataAction = data => {
     payload: data,
   }
 }
+
+export const deleteCartItemIndex = dataIndex => {
+  return {
+    type: "REMOVE_DATA_INDEX",
+    payload: dataIndex,
+  }
+}

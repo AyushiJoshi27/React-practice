@@ -10,6 +10,7 @@ import { combineReducers, createStore } from "redux";
 import { ApiReducer } from "./reducers/StoreReducer";
 import { AddToCartReducer } from "./reducers/AddToCartReducer";
 import { CartDataReducer } from "./reducers/CartDataReducer";
+import { RemoveDataReducer } from "./reducers/CartDataReducer";
 
 const initialState = { counter: 0 };
 
@@ -40,7 +41,8 @@ const rootReducer = combineReducers({
   user: userReducer,
   ApiReducer,
   AddToCartReducer,
-  CartDataReducer
+  CartDataReducer,
+  RemoveDataReducer
 })
 
 const store = createStore(rootReducer);

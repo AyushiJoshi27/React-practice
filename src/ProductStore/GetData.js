@@ -1,23 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDataAction } from '../actions/GetDataAction';
-//import { AddToCartAction } from '../actions/AddToCartAction';
 import { CartDataAction } from '../actions/CartDataAction';
 
 export default function GetData() {
   const dispatch = useDispatch();
   const storeData = useSelector((state) => state.ApiReducer);
+  console.log(storeData);
   const cartData = useSelector((state) => state.CartDataReducer.cartItemCount);
 
   useEffect(() => {
-    getData();
-  }, []);
 
-  const getData = async () => {
-    const res = await fetch('https://fakestoreapi.com/products')
-    const data = await res.json();
-    dispatch(getDataAction(data))
-  };
+    if (!storeData.length) {
+      fetch('https://fakestoreapi.com/products')
+        .then(res => res.json())
+        .then(data => dispatch(getDataAction(data)));
+    }
+  }, [dispatch, storeData]);
+
+  
+
 
   const CartCount = (product) => {
     let obj = cartData.find((data) => parseInt(data.id) === parseInt(product.id))
