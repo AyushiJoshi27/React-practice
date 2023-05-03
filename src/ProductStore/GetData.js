@@ -18,9 +18,6 @@ export default function GetData() {
     }
   }, [dispatch, storeData]);
 
-  
-
-
   const CartCount = (product) => {
     let obj = cartData.find((data) => parseInt(data.id) === parseInt(product.id))
     if (obj) {

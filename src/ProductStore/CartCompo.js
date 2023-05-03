@@ -1,23 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCartItemIndex } from '../actions/GetDataAction';
-import { CartDataReducer, RemoveDataReducer } from '../reducers/CartDataReducer';
+import { CartDataAction } from '../actions/CartDataAction';
 
 export default function GoToCart() {
   const dispatch = useDispatch();
   const cartData = useSelector((state) => state.CartDataReducer.cartItemCount);
-  console.log(cartData)
+  console.log("cartState:", cartData)
 
   const removeItem = item => {
     //console.log(cartData.findIndex((element) => element === item));
     //let a = cartData.findIndex((element) => element === item)
-    dispatch(deleteCartItemIndex(item));
+    //dispatch(deleteCartItemIndex(item));
+    dispatch(CartDataAction(item));
   }
 
   return (
     <div>
       <div className='cart-block'>
-        <i style={{ float: 'left', marginLeft: "30px" }}><b>Product Store</b></i>
+        <i className='store-title'>Product Store</i>
         <p className='cart-count'><b>{cartData.length}</b>  Cart</p>
       </div>
       <div className="content-wrapper">

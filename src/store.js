@@ -42,7 +42,6 @@ const rootReducer = combineReducers({
   ApiReducer,
   AddToCartReducer,
   CartDataReducer,
-  RemoveDataReducer
 })
 
 const store = createStore(rootReducer);
