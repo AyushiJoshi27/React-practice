@@ -53,20 +53,20 @@ const rootReducer = combineReducers({
   ApiReducer,
   AddToCartReducer,
   CartDataReducer,
-  reducer
 })
 
 const loggerMiddleware = (store) => (next) => (action) => {
   console.log("action", action);
   console.log("reducer: ", action.payload )
-  //action.payload = 3;
+  action.payload = 3;
   //console.log("updated state for middleware", store.getState());
   next(action);
 };
 
 export const middleware = applyMiddleware(loggerMiddleware);
 
-const store = createStore(rootReducer, middleware);
+//const store = createStore(rootReducer, middleware);
+const store = createStore(rootReducer);
 export default store;
 
 store.subscribe(() => {
