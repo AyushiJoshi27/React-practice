@@ -6,11 +6,11 @@ function configureStore(state = {rotating: true}) {
 }
 export default configureStore;
 */
-import { combineReducers, createStore } from "redux";
+import { combineReducers, createStore, applyMiddleware } from "redux";
 import { ApiReducer } from "./reducers/StoreReducer";
 import { AddToCartReducer } from "./reducers/AddToCartReducer";
 import { CartDataReducer } from "./reducers/CartDataReducer";
-import { RemoveDataReducer } from "./reducers/CartDataReducer";
+//import { RemoveDataReducer } from "./reducers/CartDataReducer";
 
 const initialState = { counter: 0 };
 
@@ -36,23 +36,58 @@ const userReducer = (state = initialUserName, action) => {
   }
 }
 
+const reducer = (state = 0, action) => {
+  switch (action.type) {
+    case "INCREMENT":
+      return state + action.payload;
+    case "DECREMENT":
+      return state - action.payload;
+    default:
+      return state;
+  }
+};
+
 const rootReducer = combineReducers({
   counterReducer: counterReducer,
   user: userReducer,
   ApiReducer,
   AddToCartReducer,
   CartDataReducer,
+  reducer
 })
 
-const store = createStore(rootReducer);
+const loggerMiddleware = (store) => (next) => (action) => {
+  console.log("action", action);
+  console.log("reducer: ", action.payload )
+  //action.payload = 3;
+  //console.log("updated state for middleware", store.getState());
+  next(action);
+};
+
+export const middleware = applyMiddleware(loggerMiddleware);
+
+const store = createStore(rootReducer, middleware);
 export default store;
 
-/*
-import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from './StateMutation/counterSlice';
+store.subscribe(() => {
+  console.log("current state", store.getState());
+});
 
-export default configureStore({
-  reducer: {
-    counter: counterReducer
-  },
-});*/
+store.dispatch({
+  type: "INCREMENT",
+  payload: 1
+});
+
+store.dispatch({
+  type: "INCREMENT",
+  payload: 5
+});
+
+store.dispatch({
+  type: "DECREMENT",
+  payload: 2
+});
+
+
+
+
