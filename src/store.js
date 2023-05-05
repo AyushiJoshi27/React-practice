@@ -11,9 +11,10 @@ import { ApiReducer } from "./reducers/StoreReducer";
 import { AddToCartReducer } from "./reducers/AddToCartReducer";
 import { CartDataReducer } from "./reducers/CartDataReducer";
 //import { RemoveDataReducer } from "./reducers/CartDataReducer";
+import usersReducer from "./Thunk2/TReducers";
+import reduxThunk from 'redux-thunk';
 
 const initialState = { counter: 0 };
-
 const initialUserName = { name: 'John' };
 
 const counterReducer = (state = initialState, action) => {
@@ -53,6 +54,8 @@ const rootReducer = combineReducers({
   ApiReducer,
   AddToCartReducer,
   CartDataReducer,
+  reducer,
+  users: usersReducer,
 })
 
 const loggerMiddleware = (store) => (next) => (action) => {
@@ -66,7 +69,8 @@ const loggerMiddleware = (store) => (next) => (action) => {
 export const middleware = applyMiddleware(loggerMiddleware);
 
 //const store = createStore(rootReducer, middleware);
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(reduxThunk));
+//const store = createStore(rootReducer);
 export default store;
 
 store.subscribe(() => {
@@ -87,7 +91,3 @@ store.dispatch({
   type: "DECREMENT",
   payload: 2
 });
-
-
-
-

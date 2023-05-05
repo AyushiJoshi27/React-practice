@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import List from '../presentational/List.jsx';
-import { fetchHello } from '../../actions';
+import List from '../../reducers/list.js';
+import { fetchHello } from '../../actions/index.js';
 import isEmpty from 'lodash.isempty';
 
 class Example extends Component {
