@@ -1,4 +1,4 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from './actionTypes';
+/*import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from './actionTypes';
 
 const initialState = {
   loading: false,
@@ -32,4 +32,4 @@ const authReducer = (state = initialState, action) => {
   }
 };
 
-export default authReducer;
+export default authReducer;*/

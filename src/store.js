@@ -13,9 +13,11 @@ import { CartDataReducer } from "./reducers/CartDataReducer";
 //import { RemoveDataReducer } from "./reducers/CartDataReducer";
 import usersReducer from "./Thunk2/TReducers";
 import reduxThunk from 'redux-thunk';
+import { TokenReducer } from "./reducers/TokenReducer";
 
 const initialState = { counter: 0 };
-const initialUserName = { name: 'John' };
+const initialUserName = { name: 'alpha' };
+export const baseUrl = 'https://fakestoreapi.com/';
 
 const counterReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -54,13 +56,14 @@ const rootReducer = combineReducers({
   ApiReducer,
   AddToCartReducer,
   CartDataReducer,
-  reducer,
-  users: usersReducer,
+  //reducer,
+  //users: usersReducer,
+  tokenReducer: TokenReducer
 })
 
 const loggerMiddleware = (store) => (next) => (action) => {
-  console.log("action", action);
-  console.log("reducer: ", action.payload )
+  //console.log("action", action);
+  //console.log("reducer: ", action.payload )
   action.payload = 3;
   //console.log("updated state for middleware", store.getState());
   next(action);
@@ -72,9 +75,10 @@ export const middleware = applyMiddleware(loggerMiddleware);
 const store = createStore(rootReducer, applyMiddleware(reduxThunk));
 //const store = createStore(rootReducer);
 export default store;
-
+/*
 store.subscribe(() => {
-  console.log("current state", store.getState());
+  //console.log("current state", store.getState());
+  console.log('subs');
 });
 
 store.dispatch({
@@ -90,4 +94,4 @@ store.dispatch({
 store.dispatch({
   type: "DECREMENT",
   payload: 2
-});
+});*/

@@ -1,18 +1,25 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { CartDataAction } from '../actions/CartDataAction';
 
 export default function GoToCart() {
   const dispatch = useDispatch();
   const cartData = useSelector((state) => state.CartDataReducer.cartItemCount);
-  console.log("cartState:", cartData)
 
   const removeItem = item => {
-    //console.log(cartData.findIndex((element) => element === item));
-    //let a = cartData.findIndex((element) => element === item)
-    //dispatch(deleteCartItemIndex(item));
     dispatch(CartDataAction(item));
   }
+
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  console.log("token: ", token);
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/');
+    }
+  }, [token, navigate])
 
   return (
     <div>

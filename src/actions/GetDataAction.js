@@ -11,3 +11,10 @@ export const deleteCartItemIndex = dataIndex => {
     payload: dataIndex,
   }
 }
+
+export const tokenAction = data => {
+  return {
+    type: "TOKEN_DATA",
+    payload: data
+  }
+}

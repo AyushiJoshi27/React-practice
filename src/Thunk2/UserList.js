@@ -4,10 +4,7 @@ import { fetchUsers } from "./TActions";
 
 const UserList = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state);
-  console.log("name:", useSelector((state) => state.user.name))
-  console.log(useSelector((state) => state.user.data))
-  console.log("user: ", user);
+  const {error, data, loading} = useSelector((state) => state.users)
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -16,10 +13,12 @@ const UserList = () => {
   return (
     <div>
       <h2>User List</h2>
-      {/*{loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}*/}
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
       <ul>
-        <li>Hii, {useSelector((state) => state.user.name)}</li>
+        {data.map((user, index) => (
+        <li key={index}>Hii, {user.username}</li>
+        ))}
       </ul>
     </div>
   );

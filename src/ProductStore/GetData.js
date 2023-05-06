@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDataAction } from '../actions/GetDataAction';
 import { CartDataAction } from '../actions/CartDataAction';
+import { baseUrl } from '../store';
 
 export default function GetData() {
   const dispatch = useDispatch();
@@ -9,12 +10,12 @@ export default function GetData() {
   const cartData = useSelector((state) => state.CartDataReducer.cartItemCount);
 
   useEffect(() => {
-      if (!storeData.length) {
-        fetch('https://fakestoreapi.com/products')
+    if (!storeData.length) {
+      fetch(`${baseUrl}products`)
         .then(res => res.json())
         .then(data => dispatch(getDataAction(data)));
-      }
-  }, []);
+    }
+  }, [dispatch, storeData]);
 
   const CartCount = (product) => {
     let obj = cartData.find((data) => parseInt(data.id) === parseInt(product.id))

@@ -85,10 +85,11 @@ export default App;
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 //import Counter from "./Counter";
-import User from './User';
+//import User from './User';
 import ProductStore from './ProductStore/ProductStore';
 import GoToCart from './ProductStore/CartCompo';
 import Counter from './StateMutation/Counter';
+import StoreAuthenticator from './ProductStore/LoginAuth/StoreLogin';
 
 const App = () => {
   return (
@@ -96,7 +97,8 @@ const App = () => {
     {/*<Counter />*/}
     <Router>
       <Routes>
-        <Route path='/' element={ <ProductStore /> } />
+        <Route path='/' element={ < StoreAuthenticator /> }></Route>
+        <Route path='store' element={<ProductStore />}></Route>
         <Route path='counter' element={ <Counter/> }></Route>
         <Route path='go-to-cart' element={ < GoToCart /> }></Route>
       </Routes>
