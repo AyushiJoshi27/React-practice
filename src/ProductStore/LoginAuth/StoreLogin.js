@@ -8,31 +8,12 @@ export default function StoreAuthenticator() {
   const [username, setUsername] = useState("")
   const [userpassword, setUserpassword] = useState("");
   const [error, setError] = useState("");
-  //const [users, setUsers] = useState("");
 
-  /*
-  useEffect(() => {
-    fetch(`${baseUrl}users`)
-      .then(res => res.json())
-      .then(data => setUsers(data))
-  }, []);
-  */
+  //localStorage.removeItem('token');
+
   const loginHandler = (e) => {
     e.preventDefault();
     console.log("login page")
-
-    /*
-    const a = {
-      "username: ": username,
-      "userpassword: ": userpassword
-    }
-    if (users) {
-      console.log(users)
-      const obj = users.find(data => data.username === a.username && data.password === a.password)
-      console.log("obj: ", obj);
-      console.log(users.find(data => data.username && data.password))
-    }
-    */
 
     axios({
       url: `${baseUrl}auth/login`,
@@ -46,32 +27,35 @@ export default function StoreAuthenticator() {
       localStorage.setItem("token", res.data.token);
       console.log(localStorage.getItem("token"));
       navigate('/store');
+
+      setTimeout(() => {
+        navigate('/');
+      }, 10000)
     }).catch((err) => {
-      console.log(err.response.data);
       setError(err.response.data)
     })
-  }
+  };
 
   return (
     <>
       <h3 style={{textAlign: "center"}}>Store Login</h3>
-      <form className="form-wrap" onClick={loginHandler}>
+      <form className="form-wrap" >
         <div className='login-input'>
           <div className="username">
             <div className="name-head">
               <label htmlFor="user  name">Username: </label>
             </div>
-            <input type="text" onChange={(e) => setUsername(e.target.value)} placeholder='your username' /><br /><br />
+            <input type="text" onChange={(e) => setUsername(e.target.value)} placeholder='your username' />
           </div>
           <div className="password">
             <div className="password-head">
               <label htmlFor="password">Password: </label>
             </div>
-            <input type='password' onChange={(e) => setUserpassword(e.target.value)} placeholder='your userpassword' /><br /><br />
+            <input type='password' onChange={(e) => setUserpassword(e.target.value)} placeholder='your userpassword' />
           </div>
           {error && <p className="error-message"> {error} </p>}
           <div className="submit-wrap">
-            <button>Login</button>
+            <button onClick={loginHandler}>Login</button>
           </div>
         </div>
       </form>

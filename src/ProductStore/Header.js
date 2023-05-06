@@ -1,21 +1,9 @@
-import React, {useEffect} from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
+import { useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 export default function Header() {
   const navigate = useNavigate()
-  const dispatch = useDispatch();
   const cartData = useSelector((state) => state.CartDataReducer);
-  //console.log(token);
-
-  // if (!token) {
-  //   navigate('/');
-  // }
-
-  useEffect(() => {
-    setTimeout(() => {
-      localStorage.removeItem("token");
-    }, 15000);
-  }, [])
 
   const GoToCart = () => {
     navigate('/go-to-cart');
