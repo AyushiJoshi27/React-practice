@@ -58,7 +58,7 @@ const rootReducer = combineReducers({
   CartDataReducer,
   //reducer,
   //users: usersReducer,
-  tokenReducer: TokenReducer
+  //tokenReducer: TokenReducer
 })
 
 const loggerMiddleware = (store) => (next) => (action) => {

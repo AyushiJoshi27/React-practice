@@ -84,27 +84,55 @@ export default App;
 */
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-//import Counter from "./Counter";
+import StoreAuthenticator from './ProductStore/LoginAuth/StoreLogin';
+import Counter from "./Counter";
 //import User from './User';
 import ProductStore from './ProductStore/ProductStore';
 import GoToCart from './ProductStore/CartCompo';
-import Counter from './StateMutation/Counter';
-import StoreAuthenticator from './ProductStore/LoginAuth/StoreLogin';
+//import LazyCounter from './ProductStore/LazyLoader/LazyCounter';
+//const GoToCart = React.lazy(() => import('./ProductStore/CartCompo'));
+//import Counter from './StateMutation/Counter';
 
+const App = () => {
+  //const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
+  const isAuthenticated = token !== null;
+  
+  return (
+    <>
+      <Router>
+        <Routes>
+          <Route path='/' element={< StoreAuthenticator />}></Route>
+          <Route path='store'
+            element={<ProductStore />} isAuthenticated={isAuthenticated} />
+          <Route path='counter'
+            element={<Counter />} isAuthenticated={isAuthenticated}
+          />
+          <Route path='go_to_cart'
+            element={<GoToCart />} isAuthenticated={isAuthenticated}
+          />
+        </Routes>
+      </Router>
+    </>
+  );
+};
+
+/*
 const App = () => {
   return (
     <>
-    {/*<Counter />*/}
+    <Counter />
     <Router>
       <Routes>
         <Route path='/' element={ < StoreAuthenticator /> }></Route>
         <Route path='store' element={<ProductStore />}></Route>
         <Route path='counter' element={ <Counter/> }></Route>
         <Route path='go-to-cart' element={ < GoToCart /> }></Route>
+        <Route path='go-to-cart' element={ < LazyCounter /> }></Route>
       </Routes>
     </Router>
     </>
   );
 };
-
+*/
 export default App;

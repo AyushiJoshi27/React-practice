@@ -6,7 +6,7 @@ export default function Header() {
   const cartData = useSelector((state) => state.CartDataReducer);
 
   const GoToCart = () => {
-    navigate('/go-to-cart');
+    navigate('/go_to_cart');
   }
 
   return (
