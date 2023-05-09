@@ -92,6 +92,7 @@ import ProductStore from './ProductStore/ProductStore';
 import GoToCart from './ProductStore/CartCompo';
 import MemoryLeak from './BrowserMemory/MemoryLeak';
 import MemoryCleanUp from './BrowserMemory/MemoryCleanUp';
+import { WithFunction } from './Thunk2/WithFunctions/WithFunctions';
 //import LazyCounter from './ProductStore/LazyLoader/LazyCounter';
 //const GoToCart = React.lazy(() => import('./ProductStore/CartCompo'));
 //import Counter from './StateMutation/Counter';
@@ -115,6 +116,7 @@ const App = () => {
           <Route path='go_to_cart'
             element={<GoToCart />} isAuthenticated={isAuthenticated}
           /> 
+          <Route path='thunk_with_functions' element={<WithFunction/>}></Route>
         </Routes>
       </Router>
     </>

@@ -14,6 +14,7 @@ import { CartDataReducer } from "./reducers/CartDataReducer";
 import usersReducer from "./Thunk2/TReducers";
 import reduxThunk from 'redux-thunk';
 import { TokenReducer } from "./reducers/TokenReducer";
+import { dataReducer } from "./Thunk2/WithFunctions/WithFunctions";
 
 const initialState = { counter: 0 };
 const initialUserName = { name: 'alpha' };
@@ -58,7 +59,8 @@ const rootReducer = combineReducers({
   CartDataReducer,
   //reducer,
   //users: usersReducer,
-  //tokenReducer: TokenReducer
+  //tokenReducer: TokenReducer,
+  withFunctions: dataReducer,
 })
 
 const loggerMiddleware = (store) => (next) => (action) => {
