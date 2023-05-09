@@ -4,6 +4,8 @@ import { baseUrl } from '../../store';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import { tokenAction } from '../../actions/GetDataAction';
+import MemoryCleanUp from '../../BrowserMemory/MemoryCleanUp';
+import MemoryLeak from '../../BrowserMemory/MemoryLeak';
 
 export default function StoreAuthenticator() {
   const navigate = useNavigate();
@@ -39,6 +41,8 @@ export default function StoreAuthenticator() {
 
   return (
     <>
+    <MemoryLeak />
+    <MemoryCleanUp />
       <h3 style={{textAlign: "center"}}>Store Login</h3>
       <form className="form-wrap" >
         <div className='login-input'>

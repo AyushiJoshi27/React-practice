@@ -82,16 +82,20 @@ function App() {
 
 export default App;
 */
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import StoreAuthenticator from './ProductStore/LoginAuth/StoreLogin';
 import Counter from "./Counter";
+import SecureRoute from './ProtectedRoute/SecureRoute';
 //import User from './User';
 import ProductStore from './ProductStore/ProductStore';
 import GoToCart from './ProductStore/CartCompo';
+import MemoryLeak from './BrowserMemory/MemoryLeak';
+import MemoryCleanUp from './BrowserMemory/MemoryCleanUp';
 //import LazyCounter from './ProductStore/LazyLoader/LazyCounter';
 //const GoToCart = React.lazy(() => import('./ProductStore/CartCompo'));
 //import Counter from './StateMutation/Counter';
+//import {ProtectedRoute} from './ProtectedRoute/ProtectedRoute'
 
 const App = () => {
   //const token = localStorage.getItem('token');
@@ -102,7 +106,7 @@ const App = () => {
     <>
       <Router>
         <Routes>
-          <Route path='/' element={< StoreAuthenticator />}></Route>
+          <Route path='/login' element={< StoreAuthenticator/>}></Route>
           <Route path='store'
             element={<ProductStore />} isAuthenticated={isAuthenticated} />
           <Route path='counter'
@@ -110,7 +114,7 @@ const App = () => {
           />
           <Route path='go_to_cart'
             element={<GoToCart />} isAuthenticated={isAuthenticated}
-          />
+          /> 
         </Routes>
       </Router>
     </>
@@ -130,6 +134,10 @@ const App = () => {
         <Route path='go-to-cart' element={ < GoToCart /> }></Route>
         <Route path='go-to-cart' element={ < LazyCounter /> }></Route>
       </Routes>
+
+      {/*<SecureRoute path='store' element={<ProductStore isAuthenticated={isAuthenticated}/>} />
+          <SecureRoute path='counter' element={<Counter  isAuthenticated={isAuthenticated}/>} />
+          <SecureRoute path='go_to_cart' element={<GoToCart  isAuthenticated={isAuthenticated}/>} />
     </Router>
     </>
   );
