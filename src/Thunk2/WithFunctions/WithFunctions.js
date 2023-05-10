@@ -79,8 +79,9 @@ export const WithFunction = () => {
   }, []);
 
   const username = useSelector(state => state.dataReducer.data.username);
-  //console.log(useSelector(state => state.dataReducer.data))
-  //console.log(username);
+  console.log("selector: ", useSelector(state => state.dataReducer.data.username));
+  console.log(useSelector(state => state.dataReducer.data))
+  console.log(username);
   const isLoading = useSelector(state => state.dataReducer.isLoading);
   const error = useSelector(state => state.dataReducer.isLoading);
 
