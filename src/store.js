@@ -12,9 +12,10 @@ import { AddToCartReducer } from "./reducers/AddToCartReducer";
 import { CartDataReducer } from "./reducers/CartDataReducer";
 //import { RemoveDataReducer } from "./reducers/CartDataReducer";
 import usersReducer from "./Thunk2/TReducers";
-import reduxThunk from 'redux-thunk';
+import thunk from 'redux-thunk';
 import { TokenReducer } from "./reducers/TokenReducer";
 import { dataReducer } from "./Thunk2/WithFunctions/WithFunctions";
+//import {Thunk3Red} from "./Thunk2/ThunkCompoRed";
 
 const initialState = { counter: 0 };
 const initialUserName = { name: 'alpha' };
@@ -60,7 +61,7 @@ const rootReducer = combineReducers({
   //reducer,
   //users: usersReducer,
   //tokenReducer: TokenReducer,
-  withFunctions: dataReducer,
+  dataReducer: dataReducer,
 })
 
 const loggerMiddleware = (store) => (next) => (action) => {
@@ -74,7 +75,7 @@ const loggerMiddleware = (store) => (next) => (action) => {
 export const middleware = applyMiddleware(loggerMiddleware);
 
 //const store = createStore(rootReducer, middleware);
-const store = createStore(rootReducer, applyMiddleware(reduxThunk));
+const store = createStore(rootReducer, applyMiddleware(thunk));
 //const store = createStore(rootReducer);
 export default store;
 /*
