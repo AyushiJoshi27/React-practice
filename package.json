@@ -1,10 +1,11 @@
 {
-  "name": "material-ui-app",
+  "name": "material-ui-app-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
+    "@material-ui/icons": "^4.11.3",
     "@mui/material": "^5.13.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -20,7 +21,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "NODE_ENV=production node_modules/react-scripts/bin/react-scripts.js start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
