@@ -1,0 +1,40 @@
+import { Outlet, Link } from "react-router-dom";
+
+
+const Layout = () => {
+  return (
+    <>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="button">Button</Link>
+          </li>
+          <li>
+            <Link to='group-orient'>Group Orient</Link>
+          </li>
+          <li>
+            <Link to='form-props'>Form props</Link>
+          </li>
+          <li>
+            <Link to='post-container'>Post Container</Link>
+          </li>
+          <li>
+            <Link to='img-list'>Image list</Link>
+          </li>
+          <li>
+            <Link to='standard-title-bar-img'>standard-title-bar-img</Link>
+          </li>
+          <li>
+            <Link to='custom-img-list'>Custom Image list</Link>
+          </li>
+        </ul>
+      </nav>
+      <Outlet />
+    </>
+  )
+};
+
+export default Layout;
