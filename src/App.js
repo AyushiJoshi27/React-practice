@@ -10,6 +10,8 @@ import PostContainer from './Components/Layout/Box/Box';
 import StandardImageList from './Components/Assignment/PostUi';
 import TitlebarBelowImageList from './Components/Layout/Grid/StandardTitleBarImg';
 import CustomImageListCompo from './Components/Layout/Grid/CustomImgList';
+import ResponsiveAppBar from './Components/Navbar/Navbar';
+import PrimarySearchAppBar from './Components/Navbar/MenuNavbar';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
             <Route path='img-list' element={ <StandardImageList />} />
             <Route path='standard-title-bar-img' element={< TitlebarBelowImageList />}></Route>
             <Route path='custom-img-list' element={ <CustomImageListCompo/> } />
+            <Route path='basic-navbar' element={ <ResponsiveAppBar /> } />
+            <Route path='menu-navbar' element={ <PrimarySearchAppBar /> } />
           </Route>
         </Routes>
       </Router>

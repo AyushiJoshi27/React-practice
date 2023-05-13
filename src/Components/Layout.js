@@ -30,6 +30,12 @@ const Layout = () => {
           <li>
             <Link to='custom-img-list'>Custom Image list</Link>
           </li>
+          <li>
+            <Link to='basic-navbar'>Basic navbar</Link>
+          </li>
+          <li>
+            <Link to='menu-navbar'>Menu navbar</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />
