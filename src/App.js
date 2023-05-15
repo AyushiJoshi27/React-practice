@@ -12,6 +12,9 @@ import TitlebarBelowImageList from './Components/Layout/Grid/StandardTitleBarImg
 import CustomImageListCompo from './Components/Layout/Grid/CustomImgList';
 import ResponsiveAppBar from './Components/Navbar/Navbar';
 import PrimarySearchAppBar from './Components/Navbar/MenuNavbar';
+import SimpleContainer from './Components/Layout/Container/Container';
+import ApiContent from './Components/Layout/Container/Api';
+import AccessibleBadges from './Components/CheckBox/Badge';
 
 function App() {
   return (
@@ -31,6 +34,9 @@ function App() {
             <Route path='custom-img-list' element={ <CustomImageListCompo/> } />
             <Route path='basic-navbar' element={ <ResponsiveAppBar /> } />
             <Route path='menu-navbar' element={ <PrimarySearchAppBar /> } />
+            <Route path='SimpleContainer' element={<SimpleContainer/>} />
+            <Route path='api-content' element={<ApiContent/>} />
+            <Route path='badge' element={<AccessibleBadges />} />
           </Route>
         </Routes>
       </Router>

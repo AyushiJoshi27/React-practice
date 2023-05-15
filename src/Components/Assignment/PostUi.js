@@ -4,12 +4,12 @@ import ImageListItem from '@mui/material/ImageListItem';
 
 export default function StandardImageList() {
   return (
-    <ImageList sx={{ width: 500, height: 450 }} cols={3} >
+    <ImageList sx={{ height: 450, margin: 2 }} cols={3} >
       {itemData.map((item) => (
         <ImageListItem key={item.img}>
           <img
-            src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-            srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+            src={`${item.img}?w=400&h=164&fit=crop&auto=format`}
+            srcSet={`${item.img}?w=400&h=164&fit=crop&auto=format&dpr=2 2x`}
             alt={item.title}
             loading="lazy"
           />
@@ -55,17 +55,5 @@ const itemData = [
   {
     img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
     title: 'Mushrooms',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-    title: 'Tomato basil',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-    title: 'Sea star',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-    title: 'Bike',
   },
 ];

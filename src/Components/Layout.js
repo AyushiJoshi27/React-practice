@@ -36,6 +36,15 @@ const Layout = () => {
           <li>
             <Link to='menu-navbar'>Menu navbar</Link>
           </li>
+          <li>
+            <Link to='SimpleContainer'>SimpleContainer</Link>
+          </li>
+          <li>
+            <Link to='api-content'>Api Content</Link>
+          </li>
+          <li>
+            <Link to='badge'>Badge</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />
