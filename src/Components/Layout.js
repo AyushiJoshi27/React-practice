@@ -45,6 +45,12 @@ const Layout = () => {
           <li>
             <Link to='badge'>Badge</Link>
           </li>
+          <li>
+            <Link to='albums'>Albums</Link>
+          </li>
+          <li>
+            <Link to='photos'>Photos</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />

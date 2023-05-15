@@ -7,7 +7,7 @@ import GroupOrientation from './Components/Buttons/VerticalGroup';
 import FormPropsTextFields from './Components/TextFields/FormProps';
 import Checkboxes from './Components/CheckBox/CheckboxCompo';
 import PostContainer from './Components/Layout/Box/Box';
-import StandardImageList from './Components/Assignment/PostUi';
+import StandardImageList from './Components/Layout/PostUi';
 import TitlebarBelowImageList from './Components/Layout/Grid/StandardTitleBarImg';
 import CustomImageListCompo from './Components/Layout/Grid/CustomImgList';
 import ResponsiveAppBar from './Components/Navbar/Navbar';
@@ -15,6 +15,8 @@ import PrimarySearchAppBar from './Components/Navbar/MenuNavbar';
 import SimpleContainer from './Components/Layout/Container/Container';
 import ApiContent from './Components/Layout/Container/Api';
 import AccessibleBadges from './Components/CheckBox/Badge';
+import Albums from './Components/Assignment/Albums';
+import Photos from './Components/Assignment/Photos';
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
             <Route path='SimpleContainer' element={<SimpleContainer/>} />
             <Route path='api-content' element={<ApiContent/>} />
             <Route path='badge' element={<AccessibleBadges />} />
+            <Route path='albums' element={ <Albums/> } />
+            <Route path='photos' element={ <Photos/> }></Route>
           </Route>
         </Routes>
       </Router>
