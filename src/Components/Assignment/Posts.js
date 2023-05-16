@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
+import React, { useState, useEffect, useCallback } from 'react';
+//import { useParams } from 'react-router';
 import axios from 'axios';
 //import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
@@ -28,51 +28,64 @@ const ExpandMore = styled((props) => {
   marginTop: '10px',
 }));
 
-export default function RecipeReviewCard() {
+export default function Posts() {
   const [expanded, setExpanded] = React.useState(false);
   const [posts, setPosts] = useState(null);
-  const [user, setUser] = useState(null)
-  const { param } = useParams();
-  console.log(param);
+  const [user, setUser] = useState(null);
+  const [initials, setInitials] = useState(null);
+  //const { param } = useParams();
+  //console.log(param);
+  var options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const currentDate = new Date();
+  //const dateFormate = format(currentDate, "dd/mm/yyyy")
+  const dateFormate = currentDate.toLocaleDateString("en-US", options);
 
-  const fetchPosts = () => {
-    return axios
-      .get('http://localhost:3000/posts?userId=1')
-      .then((response) => setPosts(response.data));
-  };
-
-  const fetchUser = () => {
-    return axios
-      .get('http://localhost:3000/users?userId=1')
-      .then((response) => setUser(response.data));
-  }
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
+  // eslint-disable-next-line
   useEffect(() => {
     fetchPosts();
     fetchUser();
   }, []);
 
-  console.log(posts);
-  console.log(user);
+  // eslint-disable-next-line
+  const fetchUser = useCallback(() => {
+    return axios
+      .get('http://localhost:3000/users?id=1')
+      .then((response) => {
+        setUser(response.data[0].name);
+        setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
+      });
+  });
+
+  // eslint-disable-next-line
+  const fetchPosts = useCallback(() => {
+    return axios
+      .get('http://localhost:3000/posts?userId=1')
+      .then((response) => setPosts(response.data));
+  });
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
   return (
     <div style={{ float: "right" }}>
       {posts && posts.map((post, index) => (
-        <Card key={post.id} sx={{ maxWidth: 500, marginTop: 2, padding: 5 }}>
+        <Card key={index} sx={{ maxWidth: 500, marginTop: 2, padding: 0 }}>
+          <div sx={{padding: 2}}>
           <CardHeader
-            avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">RA</Avatar>}
-            title="Username"
-            subheader={post.date}
-          />
-          <CardContent>
-            <Typography variant="body2">
-              {post.title}
-            </Typography>
-          </CardContent>
+              sx={{ padding: 0 }}
+              avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="user">
+                {initials}
+                </Avatar>}
+              title={user}
+              subheader={dateFormate}
+            />
+            <CardContent sx={{ padding: 0 }}>
+              <Typography variant="body2" sx={{ padding: 0 }}>
+                {post.title}
+              </Typography>
+            </CardContent>
+          </div>
           <CardMedia
             component="img"
             height="194"

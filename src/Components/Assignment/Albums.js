@@ -22,7 +22,8 @@ export default function Albums() {
     <>
       {itemData && itemData.map((item, index) => (
         <CardHeader
-        avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">RA</Avatar>}
+        key={index}
+        avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="comment-avatar">RA</Avatar>}
         subheader={item.title}
         />
       ))}

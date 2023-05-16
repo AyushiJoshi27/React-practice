@@ -16,9 +16,8 @@ import SimpleContainer from './Components/Layout/Container/Container';
 import ApiContent from './Components/Layout/Container/Api';
 import AccessibleBadges from './Components/CheckBox/Badge';
 import Albums from './Components/Assignment/Albums';
-import Photos from './Components/Assignment/Photos';
 import ProfilePage from './Components/Assignment/ProfilePage';
-import RecipeReviewCard from './Components/Assignment/Photos';
+import Posts from './Components/Assignment/Posts';
 import Comments from './Components/Assignment/Comments';
 
 function App() {
@@ -43,10 +42,9 @@ function App() {
             <Route path='api-content' element={<ApiContent/>} />
             <Route path='badge' element={<AccessibleBadges />} />
             <Route path='albums' element={ <Albums/> } />
-            <Route path='photos' element={ <Photos/> }></Route>
             <Route path='facebook' element={ <ProfilePage/> } />
-            <Route path='user-photo' element={ <RecipeReviewCard /> } />
-            <Route path="user-photo/:param" element={ <RecipeReviewCard /> } />
+            <Route path='user-photo' element={ <Posts /> } />
+            <Route path="user-photo/:param" element={ <Posts /> } />
             <Route path='comment' element={<Comments/>} />
           </Route>
         </Routes>
