@@ -49,7 +49,10 @@ const Layout = () => {
             <Link to='albums'>Albums</Link>
           </li>
           <li>
-            <Link to='photos'>Photos</Link>
+            <Link to='facebook'>Facebook profile page</Link>
+          </li>
+          <li>
+              <Link to='comment'>Comment</Link>
           </li>
         </ul>
       </nav>

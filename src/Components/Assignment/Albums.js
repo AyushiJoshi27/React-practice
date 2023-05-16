@@ -1,46 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { experimentalStyled as styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: 'blue',
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: 'center',
-}));
+import CardHeader from '@mui/material/CardHeader';
+import Avatar from '@mui/material/Avatar';
+import { red } from '@mui/material/colors';
 
 export default function Albums() {
-    const [itemData, setitemData] = useState();
+  const [itemData, setitemData] = useState();
 
-    const fetchInfo = () => {
-        return fetch('http://localhost:3000/albums?userId=1')
-          .then((res) => res.json())
-          .then((json) => setitemData(json))
-      }
-    
-      useEffect(() => {
-        fetchInfo();
-      }, []);
+  const fetchInfo = () => {
+    return fetch('http://localhost:3000/albums?userId=1')
+      .then((res) => res.json())
+      .then((json) => setitemData(json))
+  }
 
-      console.log(itemData);
-    
+  useEffect(() => {
+    fetchInfo();
+  }, []);
+
+  console.log(itemData);
+
   return (
-    <div>
-        <p>item</p>
-    </div>
+    <>
+      {itemData && itemData.map((item, index) => (
+        <CardHeader
+        avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">RA</Avatar>}
+        subheader={item.title}
+        />
+      ))}
+    </>
   )
 }
-
-/*<ImageList sx={{ height: 450, margin: 2 }} cols={3} >
-      {itemData.map((item) => (
-        <ImageListItem key={item.img}>
-          <img
-            src={`${item.img}`}
-            alt={item.title}
-            loading="lazy"
-          />
-        </ImageListItem>
-      ))}
-      </ImageList>*/

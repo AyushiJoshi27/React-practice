@@ -17,6 +17,9 @@ import ApiContent from './Components/Layout/Container/Api';
 import AccessibleBadges from './Components/CheckBox/Badge';
 import Albums from './Components/Assignment/Albums';
 import Photos from './Components/Assignment/Photos';
+import ProfilePage from './Components/Assignment/ProfilePage';
+import RecipeReviewCard from './Components/Assignment/Photos';
+import Comments from './Components/Assignment/Comments';
 
 function App() {
   return (
@@ -41,6 +44,10 @@ function App() {
             <Route path='badge' element={<AccessibleBadges />} />
             <Route path='albums' element={ <Albums/> } />
             <Route path='photos' element={ <Photos/> }></Route>
+            <Route path='facebook' element={ <ProfilePage/> } />
+            <Route path='user-photo' element={ <RecipeReviewCard /> } />
+            <Route path="user-photo/:param" element={ <RecipeReviewCard /> } />
+            <Route path='comment' element={<Comments/>} />
           </Route>
         </Routes>
       </Router>
