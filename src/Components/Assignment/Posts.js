@@ -16,14 +16,6 @@ import { red } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Comments from './Comments';
 
-const PostHeaderWrapper = styled('div')({
-  root: {
-    borderBottom: "1px solid lightGrey",
-    padding: 2,
-    backgroundColor: "grey"
-  },
-});
-
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -41,7 +33,8 @@ export default function Posts() {
   const [posts, setPosts] = useState(null);
   const [user, setUser] = useState(null);
   const [initials, setInitials] = useState(null);
-  const [photo, setPhoto] = useState({url: ""});
+  const [photo, setPhoto] = useState({ url: "" });
+  const a = 1;
   var options = { year: 'numeric', month: 'long', day: 'numeric' };
   const currentDate = new Date();
   //const dateFormate = format(currentDate, "dd/mm/yyyy")
@@ -58,7 +51,7 @@ export default function Posts() {
   // eslint-disable-next-line
   const fetchUser = useCallback(() => {
     return axios
-      .get(`http://localhost:3000/users?id=${1}`)
+      .get(`http://localhost:3000/users?id=${a}`)
       .then((response) => {
         setUser(response.data[0].name);
         setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
@@ -68,16 +61,16 @@ export default function Posts() {
   // eslint-disable-next-line
   const fetchPosts = useCallback(() => {
     return axios
-      .get(`http://localhost:3000/posts?userId=${1}`)
+      .get(`http://localhost:3000/posts?userId=${a}`)
       .then((response) => setPosts(response.data));
   });
 
   // eslint-disable-next-line
-   const fetchPhoto = useCallback(() => {
-     return axios
-       .get(`http://localhost:3000/photos?albumId=${1}`)
-       .then((response) => setPhoto(response.data[0]));
-   })
+  const fetchPhoto = useCallback(() => {
+    return axios
+      .get(`http://localhost:3000/photos?albumId=${a}`)
+      .then((response) => setPhoto(response.data[0]));
+  })
 
   // eslint-disable-next-line
   //  const fetchAlbums = () => {
@@ -94,26 +87,28 @@ export default function Posts() {
   return (
     <div style={{ float: "right" }}>
       {posts && posts.map((post, index) => (
-        <Card key={index} sx={{ maxWidth: 500, marginTop: 2, padding: 0 }}>
-          <PostHeaderWrapper>
-            <CardHeader
-              sx={{ padding: 0 }}
-              avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="user">
-                {initials}
-              </Avatar>}
-              title={user}
-              subheader={dateFormate}
-            />
-            <CardContent sx={{ padding: 0, paddingBottom: 1 }}>
-              {post.title}
-            </CardContent>
-          </PostHeaderWrapper>
+        <Card key={index} sx={{ maxWidth: 644, marginTop: 2, padding: 0 }}>
+          <CardHeader
+            sx={{ padding: "16px 16px 8px 16px" }}
+            avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="user">
+              {initials}
+            </Avatar>}
+            title={user}
+            subheader={dateFormate}
+          />
+          <CardContent 
+            style={{ 
+              padding: "0 16px 16px 16px",
+              fontWeight: "500"
+              }}>
+            {post.title}
+          </CardContent>
+          <Typography style={{fontSize: "14px", padding: "0px 16px 16px 16px" }}>{post.body}</Typography>
           <CardMedia
             component="img"
             image={photo.url}
             alt={post.userId}
           />
-          <Typography>{post.body}</Typography>
           <CardActions disableSpacing>
             <ExpandMore
               expand={expanded}
