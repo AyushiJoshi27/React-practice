@@ -4,18 +4,19 @@ import Avatar from '@mui/material/Avatar';
 import { Paper, Grid, Divider } from '@mui/material';
 import { red } from '@mui/material/colors';
 
-export default function Comments() {
+export default function Comments({props}) {
   const [commentId, setCommentId] = useState();
 
   const fetchUser = () => {
     return axios
-      .get(`http://localhost:3000/comments?userId=${commentId}`)
+      .get(`http://localhost:3000/comments?postId=${props}`)
       .then((response) => setCommentId(response.data));
   }
 
   useEffect(() => {
     fetchUser();
   }, [])
+  console.log(commentId);
 
   return (
     <>
@@ -23,10 +24,16 @@ export default function Comments() {
         <Paper key={index} style={{ padding: "5px 16px" }}>
         <Grid container wrap="nowrap" spacing={2}>
           <Grid item>
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="user">A</Avatar>
+          <Avatar sx={{ bgcolor: red[500] }} aria-label="user">
+            {/*item.name.match(/(\b\S)?/g).join("").toUpperCase()*/}
+            {/*item.name.match(/\b\w/g).join('').slice(0, 2)*/}
+            {item.name.split('').slice(0, 2).map(word => word[0]).join('')}
+          </Avatar>
           </Grid>
           <Grid justifyContent="left" item xs zeroMinWidth>
-            <h4 style={{ margin: 0, textAlign: "left" }}>{item.name}</h4>
+            <h4 style={{ margin: 0, textAlign: "left" }}>
+              {item.name}
+            </h4>
             <p style={{ textAlign: "left", margin: 5, marginLeft: 0 }}>
             {item.body}
             </p>
@@ -37,22 +44,3 @@ export default function Comments() {
     </>
   )
 }
-/*
-  return (
-    <>
-      {commentId && commentId.map((itme, index) => (
-        <CardContent key={index}>
-          <Avatar sx={{ bgcolor: deepPurple[500] }}>OP</Avatar>
-          <Typography 
-            sx={{ marginBottom: 1, display: 'inline'}} 
-            avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">RA</Avatar>}
-            paragraph><b>{itme.name}</b>
-          </Typography>
-          <Typography sx={{ marginBottom: 1}} paragraph>{itme.body}</Typography>
-        </CardContent>
-      ))}
-    </>
-  )
-}
-*/
-

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-//import { useParams } from 'react-router';
+import { useParams } from 'react-router';
 import axios from 'axios';
 //import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
@@ -15,6 +15,14 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Comments from './Comments';
+
+const PostHeaderWrapper = styled('div')({
+  root: {
+    borderBottom: "1px solid lightGrey",
+    padding: 2,
+    backgroundColor: "grey"
+  },
+});
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -33,8 +41,7 @@ export default function Posts() {
   const [posts, setPosts] = useState(null);
   const [user, setUser] = useState(null);
   const [initials, setInitials] = useState(null);
-  //const { param } = useParams();
-  //console.log(param);
+  const [photo, setPhoto] = useState({url: ""});
   var options = { year: 'numeric', month: 'long', day: 'numeric' };
   const currentDate = new Date();
   //const dateFormate = format(currentDate, "dd/mm/yyyy")
@@ -44,12 +51,14 @@ export default function Posts() {
   useEffect(() => {
     fetchPosts();
     fetchUser();
+    fetchPhoto()
+    //fetchAlbums();
   }, []);
 
   // eslint-disable-next-line
   const fetchUser = useCallback(() => {
     return axios
-      .get('http://localhost:3000/users?id=1')
+      .get(`http://localhost:3000/users?id=${1}`)
       .then((response) => {
         setUser(response.data[0].name);
         setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
@@ -59,9 +68,24 @@ export default function Posts() {
   // eslint-disable-next-line
   const fetchPosts = useCallback(() => {
     return axios
-      .get('http://localhost:3000/posts?userId=1')
+      .get(`http://localhost:3000/posts?userId=${1}`)
       .then((response) => setPosts(response.data));
   });
+
+  // eslint-disable-next-line
+   const fetchPhoto = useCallback(() => {
+     return axios
+       .get(`http://localhost:3000/photos?albumId=${1}`)
+       .then((response) => setPhoto(response.data[0]));
+   })
+
+  // eslint-disable-next-line
+  //  const fetchAlbums = () => {
+  //     return axios
+  //       .get('http://localhost:3000/albums?userId=1')
+  //       .then((response) => console.log("Albums", response.data));
+  //   };
+
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -71,25 +95,22 @@ export default function Posts() {
     <div style={{ float: "right" }}>
       {posts && posts.map((post, index) => (
         <Card key={index} sx={{ maxWidth: 500, marginTop: 2, padding: 0 }}>
-          <div sx={{padding: 2}}>
-          <CardHeader
+          <PostHeaderWrapper>
+            <CardHeader
               sx={{ padding: 0 }}
               avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="user">
                 {initials}
-                </Avatar>}
+              </Avatar>}
               title={user}
               subheader={dateFormate}
             />
-            <CardContent sx={{ padding: 0 }}>
-              <Typography variant="body2" sx={{ padding: 0 }}>
-                {post.title}
-              </Typography>
+            <CardContent sx={{ padding: 0, paddingBottom: 1 }}>
+              {post.title}
             </CardContent>
-          </div>
+          </PostHeaderWrapper>
           <CardMedia
             component="img"
-            height="194"
-            image="/static/images/cards/paella.jpg"
+            image={photo.url}
             alt={post.userId}
           />
           <Typography>{post.body}</Typography>

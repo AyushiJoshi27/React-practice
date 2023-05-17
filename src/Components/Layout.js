@@ -49,7 +49,7 @@ const Layout = () => {
             <Link to='albums'>Albums</Link>
           </li>
           <li>
-            <Link to='facebook'>Facebook profile page</Link>
+            <Link to='facebook/1'>Facebook profile page</Link>
           </li>
           <li>
               <Link to='comment'>Comment</Link>

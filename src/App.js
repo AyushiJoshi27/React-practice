@@ -19,6 +19,7 @@ import Albums from './Components/Assignment/Albums';
 import ProfilePage from './Components/Assignment/ProfilePage';
 import Posts from './Components/Assignment/Posts';
 import Comments from './Components/Assignment/Comments';
+import { Params } from './Components/Assignment/Params';
 
 function App() {
   return (
@@ -42,10 +43,11 @@ function App() {
             <Route path='api-content' element={<ApiContent/>} />
             <Route path='badge' element={<AccessibleBadges />} />
             <Route path='albums' element={ <Albums/> } />
-            <Route path='facebook' element={ <ProfilePage/> } />
+            <Route path='facebook/1' element={ <ProfilePage/> } />
             <Route path='user-photo' element={ <Posts /> } />
             <Route path="user-photo/:param" element={ <Posts /> } />
             <Route path='comment' element={<Comments/>} />
+            <Route path='param' element={<Params/>} />
           </Route>
         </Routes>
       </Router>
