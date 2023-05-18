@@ -87,23 +87,31 @@ export default function Posts() {
   return (
     <div style={{ float: "right" }}>
       {posts && posts.map((post, index) => (
-        <Card key={index} sx={{ maxWidth: 644, marginTop: 2, padding: 0 }}>
+        <Card key={index} sx={{ maxWidth: 596, marginTop: 2, padding: 0 }}>
           <CardHeader
             sx={{ padding: "16px 16px 8px 16px" }}
             avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="user">
               {initials}
             </Avatar>}
-            title={user}
+            title={<b>{user}</b>}
             subheader={dateFormate}
           />
           <CardContent 
             style={{ 
-              padding: "0 16px 16px 16px",
+              padding: "0 16px 6px 16px",
               fontWeight: "500"
               }}>
             {post.title}
           </CardContent>
-          <Typography style={{fontSize: "14px", padding: "0px 16px 16px 16px" }}>{post.body}</Typography>
+          <Typography sx={{
+            fontSize: "14px", 
+            padding: "0px 16px 16px 16px",
+            fontSize: "13px",
+            padding: "0px 16px 16px",
+            lineHeight: 1
+            }}>
+            {post.body}
+          </Typography>
           <CardMedia
             component="img"
             image={photo.url}
@@ -116,7 +124,7 @@ export default function Posts() {
               aria-expanded={expanded}
               aria-label="show more"
             >
-              <ExpandMoreIcon />
+              <b><ExpandMoreIcon /></b>
             </ExpandMore>
           </CardActions>
           <Collapse in={expanded} timeout="auto" unmountOnExit>

@@ -28,10 +28,10 @@ export default function UserInfo() {
                   width: 180, 
                   height: 180,
                   border:  4,
-                  borderColor: 'white'
+                  borderColor: 'rgb(76,167,70)'
                 }}
               />}
-              title={<b>User Name</b>}
+              title={<b className='userName'>User Name</b>}
               sx={{
                 position: "relative",
                 top: "400px",
@@ -41,14 +41,21 @@ export default function UserInfo() {
           </Box>
         </Container>
       </div>
-      <Container>
-        <Box sx={{width: "490px", display: 'inline-block', marginTop: "16px"}}>
-          <AboutUser/>
-        </Box>
-        <Box sx={{float: "right", marginLeft: "14px"}}>
-          <Posts />
-        </Box>
-      </Container>
+      <div className='userActivity'>
+        <Container sx={{backgroundColor: "rgb(240,242,245)"}}>
+          <Box sx={{
+            width: "490px", 
+            display: 'inline-block', 
+            marginTop: "16px", 
+            paddingLeft: "25px",
+            }}>
+            <AboutUser/>
+          </Box>
+          <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
+            <Posts />
+          </Box>
+        </Container>
+      </div>
     </>
   )
 }
