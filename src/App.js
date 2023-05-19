@@ -24,23 +24,6 @@ import { RoutesManipulator } from './Components/Assignment/ApisExport';
 import MediaCard from './Components/Card/Card';
 
 function App() {
-  // const navigation = useNavigate();
-
-  // const navigate = () => {
-  //   navigation(`facebook/${1}`)
-  // }
-
-  // const [params, setParams] = useState();
-  // eslint-disable-next-line
-
-  // if(params) {
-  //   console.log(params[0].userId)
-  // }
-
-  // useEffect(() => {
-  //   fetchPosts();
-  // }, [])
-
   return (
     <>
       <Router>

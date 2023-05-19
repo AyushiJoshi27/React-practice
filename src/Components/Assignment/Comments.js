@@ -29,13 +29,13 @@ export default function Comments({props}) {
           wrap="nowrap" 
           spacing={2}
           sx={{ 
-            margin: "10px 0",
+            margin: "8px 0",
             paddingLeft: 0 
            }}
         >
-          <Grid item style={{paddingLeft: 0}}>
+          <Grid item style={{paddingLeft: 0, marginLeft: 0}}>
           <Avatar sx={{ 
-            bgcolor: red[500]
+            bgcolor: red[500],
             }} 
             aria-label="user">
             {/*item.name.match(/(\b\S)?/g).join("").toUpperCase()*/}
@@ -45,13 +45,13 @@ export default function Comments({props}) {
           </Grid>
           <Grid justifyContent="left" item xs zeroMinWidth sx={{
             backgroundColor: "rgb(240,242,245)",
-            borderRadius: "10px",
+            borderRadius: "16px",
             margin: "0 16px 0 10px"
           }}>
-            <h4 style={{ margin: 0, fontSize: "12px", textAlign: "left" }}>
+            <h4 style={{ margin: 0, fontSize: "13px", textAlign: "left" }}>
               {item.name}
             </h4>
-            <p style={{ fontSize: "14px", textAlign: "left", margin: "5px 0" }}>
+            <p style={{ fontSize: "14px", textAlign: "left", margin: "5px 0", paddingRight: "8px" }}>
             {item.body}
             </p>
           </Grid>

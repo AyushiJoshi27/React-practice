@@ -46,50 +46,31 @@ export default function UserAlbum() {
     {albums ? 
       <Grid container 
         rowSpacing={1} 
-        columnSpacing={{ xs: 1, sm: 1}}
+        columnSpacing={{ xs: 1, sm: 1, md: 1}}
         sx={{
           lineHeight: 2,
           marginBottom: "16px",
           paddingTop: 1,
-          columnGap: "8px",
         }}
       >
         {albums && albums.map((items, index) => (
           <Grid item 
             xs={4} 
             key={index} 
-
-            sx={{
-              paddingLeft:"5px",
-            }}>
+            width={127}
+            sx={{marginRight: 0, paddingLeft: 0, paddingRight: 0}}
+          >
             <Item style={{
-              paddingLeft: "5px",
+              boxShadow: "none",
               fontSize: "12px",
               fontWeight: 800,
+              padding: 0
             }}>
-              <div style={{marginBottom: "5px"}}><AlbumPhoto albumId={items.id} /></div>
+              <AlbumPhoto albumId={items.id} />
               <p className='albumTitle'>{items.title}</p>
             </Item>
           </Grid>
         ))}
-    {/* <Grid item xs={4}>
-      <Item>1</Item>
-    </Grid>
-    <Grid item xs={4}>
-      <Item>2</Item>
-    </Grid>
-    <Grid item xs={4}>
-      <Item>3</Item>
-    </Grid>
-    <Grid item xs={4}>
-      <Item>4</Item>
-    </Grid>
-    <Grid item xs={4}>
-      <Item>5</Item>
-    </Grid>
-    <Grid item xs={4}>
-      <Item>6</Item>
-    </Grid> */}
     </Grid>
     : ''}
     </Paper>

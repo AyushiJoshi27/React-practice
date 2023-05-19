@@ -1,4 +1,5 @@
 .bgBlock {
+    background-color: rgb(255, 255, 255);
     border-bottom: 1px solid lightgrey;
 }
 
@@ -16,10 +17,17 @@
 
 .MuiTypography-root.MuiTypography-body1 {
     text-transform: capitalize;
-
 }
 
 .albumTitle {
-    margin: 0;
+    color: rgb(0, 0, 0);
+    font-weight: 800;
     line-height: 1;
+    margin: 0;
+    padding: 0 10px 0 0;
+    text-align: start;
+}
+
+.fbMainContainer {
+    background-color: rgb(240,242,245);
 }

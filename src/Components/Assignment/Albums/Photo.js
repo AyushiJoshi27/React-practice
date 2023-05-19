@@ -25,7 +25,17 @@ export default function AlbumPhoto({albumId}) {
   return (
     <>  
         {/* <h6>Photo</h6> */}
-        {photo ? <img src={photo.thumbnailUrl} alt={photo.id} style={{height:"130px", width:"120px"}}/> : ''}
+        {photo ? 
+            <img 
+                src={photo.thumbnailUrl} 
+                alt={photo.id} 
+                style={{
+                    borderRadius: "10px", 
+                    height:"148px", 
+                    width:"145px"
+                }}
+            />
+        : ''}
     </>
   )
 }

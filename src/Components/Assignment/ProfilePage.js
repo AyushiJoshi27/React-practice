@@ -4,7 +4,7 @@ import UserInfo from './UserInfo'
 
 export default function ProfilePage() {
   return (
-    <div>
+    <div className='fbMainContainer'>
         <FbNavBarCompo  />
         <UserInfo />
     </div>

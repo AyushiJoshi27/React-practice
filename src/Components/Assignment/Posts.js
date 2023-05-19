@@ -46,8 +46,6 @@ export default function Posts() {
     fetchPosts();
     fetchUser();
     fetchPhoto();
-    //FetchPostsIds();
-    //fetchAlbums();
   }, []);
 
   // eslint-disable-next-line
@@ -74,14 +72,6 @@ export default function Posts() {
       .then((response) => setPhoto(response.data[0]));
   })
 
-  // eslint-disable-next-line
-  //  const fetchAlbums = () => {
-  //     return axios
-  //       .get('http://localhost:3000/albums?userId=1')
-  //       .then((response) => console.log("Albums", response.data));
-  //   };
-
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -100,17 +90,14 @@ export default function Posts() {
           />
           <CardContent 
             style={{ 
-              padding: "0 16px 6px 16px",
+              padding: "16px 16px 6px 16px",
               fontWeight: "500"
               }}>
             {post.title}
           </CardContent>
           <Typography sx={{
-            fontSize: "14px", 
+            fontSize: "13px", 
             padding: "0px 16px 16px 16px",
-            fontSize: "13px",
-            padding: "0px 16px 16px",
-            lineHeight: 1
             }}>
             {post.body}
           </Typography>
