@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Comments from './Comments';
+//import { FetchPostsIds } from './ApisExport';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -34,7 +35,7 @@ export default function Posts() {
   const [user, setUser] = useState(null);
   const [initials, setInitials] = useState(null);
   const [photo, setPhoto] = useState({ url: "" });
-  const a = 1;
+  const {param} = useParams();
   var options = { year: 'numeric', month: 'long', day: 'numeric' };
   const currentDate = new Date();
   //const dateFormate = format(currentDate, "dd/mm/yyyy")
@@ -44,14 +45,15 @@ export default function Posts() {
   useEffect(() => {
     fetchPosts();
     fetchUser();
-    fetchPhoto()
+    fetchPhoto();
+    //FetchPostsIds();
     //fetchAlbums();
   }, []);
 
   // eslint-disable-next-line
   const fetchUser = useCallback(() => {
     return axios
-      .get(`http://localhost:3000/users?id=${a}`)
+      .get(`http://localhost:3000/users?id=${param}`)
       .then((response) => {
         setUser(response.data[0].name);
         setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
@@ -61,14 +63,14 @@ export default function Posts() {
   // eslint-disable-next-line
   const fetchPosts = useCallback(() => {
     return axios
-      .get(`http://localhost:3000/posts?userId=${a}`)
+      .get(`http://localhost:3000/posts?userId=${1}`)
       .then((response) => setPosts(response.data));
   });
 
   // eslint-disable-next-line
   const fetchPhoto = useCallback(() => {
     return axios
-      .get(`http://localhost:3000/photos?albumId=${a}`)
+      .get(`http://localhost:3000/photos?albumId=${1}`)
       .then((response) => setPhoto(response.data[0]));
   })
 

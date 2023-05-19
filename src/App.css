@@ -13,3 +13,13 @@
 /* .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1ps6pg7-MuiPaper-root {
     background-color: #ff0000;
 } */
+
+.MuiTypography-root.MuiTypography-body1 {
+    text-transform: capitalize;
+
+}
+
+.albumTitle {
+    margin: 0;
+    line-height: 1;
+}

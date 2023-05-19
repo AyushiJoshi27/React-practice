@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Layout from './Components/Layout';
 import Buttons from './Components/Buttons/Buttons';
 import ButtonGroupCompo from './Components/Buttons/ButtonGroup';
@@ -20,8 +20,27 @@ import ProfilePage from './Components/Assignment/ProfilePage';
 import Posts from './Components/Assignment/Posts';
 import Comments from './Components/Assignment/Comments';
 import { Params } from './Components/Assignment/Params';
+import { RoutesManipulator } from './Components/Assignment/ApisExport';
+import MediaCard from './Components/Card/Card';
 
 function App() {
+  // const navigation = useNavigate();
+
+  // const navigate = () => {
+  //   navigation(`facebook/${1}`)
+  // }
+
+  // const [params, setParams] = useState();
+  // eslint-disable-next-line
+
+  // if(params) {
+  //   console.log(params[0].userId)
+  // }
+
+  // useEffect(() => {
+  //   fetchPosts();
+  // }, [])
+
   return (
     <>
       <Router>
@@ -43,14 +62,17 @@ function App() {
             <Route path='api-content' element={<ApiContent/>} />
             <Route path='badge' element={<AccessibleBadges />} />
             <Route path='albums' element={ <Albums/> } />
-            <Route path='facebook/1' element={ <ProfilePage/> } />
+            <Route path='facebook/:param' element={ <ProfilePage/> } />
             <Route path='user-photo' element={ <Posts /> } />
             <Route path="user-photo/:param" element={ <Posts /> } />
             <Route path='comment' element={<Comments/>} />
             <Route path='param' element={<Params/>} />
+            <Route path='route-manipulator' element={ <RoutesManipulator /> } />
+            <Route path='media-card' element={ <MediaCard /> } />
           </Route>
         </Routes>
       </Router>
+      
     </>
   );
 }

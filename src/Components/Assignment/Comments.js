@@ -17,15 +17,14 @@ export default function Comments({props}) {
   useEffect(() => {
     fetchUser();
   }, [])
-  console.log(commentId);
+  //console.log(commentId);
 
   return (
     <>
       {commentId && commentId.map((item, index) => (
         <Paper key={index} style={{ 
           boxShadow: "none",
-          marginTop: "10px", 
-          padding: "5px 16px" }}>
+          padding: "0px 16px" }}>
         <Grid container 
           wrap="nowrap" 
           spacing={2}
