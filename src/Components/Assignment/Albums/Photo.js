@@ -5,8 +5,6 @@ export default function AlbumPhoto({albumId}) {
 
     const [photo, setPhoto] = useState();
 
-  //albums ? console.log("userintro:", albums) : console.log("none");
-
   // eslint-disable-next-line
   const fetchAlbums = useCallback(() => {
     return axios
@@ -16,11 +14,7 @@ export default function AlbumPhoto({albumId}) {
 
   useEffect(() => {
     fetchAlbums();
-  }, [])
-
-  if(photo) {
-    console.log(photo);
-  }
+  }, []);
 
   return (
     <>  
@@ -32,6 +26,7 @@ export default function AlbumPhoto({albumId}) {
                 style={{
                     borderRadius: "10px", 
                     height:"148px", 
+                    marginBottom: "5px",
                     width:"145px"
                 }}
             />
@@ -39,10 +34,3 @@ export default function AlbumPhoto({albumId}) {
     </>
   )
 }
-
-/* <img
-           src={`${Photo.img}?w=148&fit=crop&auto=format`}
-             srcSet={`${item.img}?w=148&fit=crop&auto=format&dpr=2 2x`}
-             alt={item.title}
-             loading="lazy"
-           /> */

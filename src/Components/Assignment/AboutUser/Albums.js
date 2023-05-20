@@ -34,6 +34,8 @@ export default function UserAlbum() {
     <>
     <Paper
       sx={{ 
+        borderRadius: "5px",
+        boxShadow: "rgb(211, 211, 211) 0px 2px 3px 0px",
         lineHeight: 2,
         marginBottom: "16px",
         padding: 2,
@@ -77,68 +79,3 @@ export default function UserAlbum() {
     </>
   )
 }
-
-/* <img
-              src={`${item.img}?w=148&fit=crop&auto=format`}
-              srcSet={`${item.img}?w=148&fit=crop&auto=format&dpr=2 2x`}
-              alt={item.title}
-              loading="lazy"
-            /> */
-
-// <img
-//             src={`${item.img}?w=148&fit=crop&auto=format`}
-//             srcSet={`${item.img}?w=148&fit=crop&auto=format&dpr=2 2x`}
-//             alt={item.title}
-//             loading="lazy"
-//           />
-
-// import React, { useCallback, useEffect, useState } from 'react';
-// import axios from 'axios';
-// import { Paper } from '@mui/material'
-// import { useParams } from 'react-router';
-// import ImageList from '@mui/material/ImageList';
-// import ImageListItem from '@mui/material/ImageListItem';
-// import ImageListItemBar from '@mui/material/ImageListItemBar';
-// import Typography from '@mui/material/Typography';
-
-// export default function UserAlbums() {
-//   const [albums, setAlbums] = useState();
-//   const { param } = useParams();
-
-//   //albums ? console.log("userintro:", albums) : console.log("none");
-
-//   // eslint-disable-next-line
-//   const fetchAlbums = useCallback(() => {
-//     return axios
-//       .get(`http://localhost:3000/posts?userId=${param}`)
-//       .then((response) => setAlbums(response.data));
-//   })
-
-//   useEffect(() => {
-//     fetchAlbums();
-//   }, [])
-
-//   return (
-//     <Paper
-//       sx={{ 
-//         lineHeight: 2,
-//         marginBottom: "16px",
-//         padding: 2,
-//         width: "459px", 
-//       }} 
-//       elevation={2}
-//       className='albums'
-//       >
-        
-//         <Typography variant='h6'><b>Albums</b></Typography>
-//       {albums && albums.map((item, index) => (
-//         <Typography 
-//           sx={{fontSize: "14px"}}
-//           key={index}
-//         >
-//         <span><b>{index+1}. </b></span>{item.title}
-//         </Typography>
-//       ))}
-//     </Paper>
-//   )
-// }

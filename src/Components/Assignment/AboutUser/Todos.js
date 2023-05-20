@@ -16,8 +16,6 @@ export default function Todos() {
     setUserTodos(response.data);
   })
 
-  //userTodos ? console.log("userTodos:", userTodos) : console.log("none");
-
   useEffect(() => {
     FetchTodos();
   }, [])
@@ -26,6 +24,8 @@ export default function Todos() {
   return (
     <Paper
       sx={{
+        borderRadius: "5px",
+        boxShadow: "rgb(211, 211, 211) 0px 2px 3px 0px",
         fontSize: "14px",
         lineHeight: 2,
         marginBottom: "16px",

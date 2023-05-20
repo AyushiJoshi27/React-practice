@@ -16,8 +16,6 @@ export default function Albums() {
     fetchInfo();
   }, []);
 
-  console.log(itemData);
-
   return (
     <>
       {itemData && itemData.map((item, index) => (

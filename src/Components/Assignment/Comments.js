@@ -3,7 +3,6 @@ import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
 import { Paper, Grid } from '@mui/material';
 import { red } from '@mui/material/colors';
-import styled from '@emotion/styled';
 
 export default function Comments({props}) {
   const [commentId, setCommentId] = useState();
@@ -17,7 +16,6 @@ export default function Comments({props}) {
   useEffect(() => {
     fetchUser();
   }, [])
-  //console.log(commentId);
 
   return (
     <>

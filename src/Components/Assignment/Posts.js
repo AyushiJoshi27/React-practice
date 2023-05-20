@@ -12,9 +12,9 @@ import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Comments from './Comments';
+
 //import { FetchPostsIds } from './ApisExport';
 
 const ExpandMore = styled((props) => {
@@ -30,11 +30,12 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function Posts() {
-  const [expanded, setExpanded] = React.useState(false);
-  const [posts, setPosts] = useState(null);
-  const [user, setUser] = useState(null);
-  const [initials, setInitials] = useState(null);
-  const [photo, setPhoto] = useState({ url: "" });
+  const [expanded, setExpanded] = React.useState("");
+  const [posts, setPosts] = useState("");
+  const [user, setUser] = useState("");
+  const [initials, setInitials] = useState("");
+  const [albumId, setAlbumId] = useState({ url: "" });
+  const [photo, setPhoto] = useState("");
   const {param} = useParams();
   var options = { year: 'numeric', month: 'long', day: 'numeric' };
   const currentDate = new Date();
@@ -43,8 +44,9 @@ export default function Posts() {
 
   // eslint-disable-next-line
   useEffect(() => {
-    fetchPosts();
     fetchUser();
+    fetchPosts();
+    fetchAlbums();
     fetchPhoto();
   }, []);
 
@@ -58,17 +60,24 @@ export default function Posts() {
       });
   });
 
-  // eslint-disable-next-line
-  const fetchPosts = useCallback(() => {
+  //eslint-disable-next-line
+  const fetchAlbums = useCallback(() => {
     return axios
-      .get(`http://localhost:3000/posts?userId=${1}`)
-      .then((response) => setPosts(response.data));
-  });
+      .get(`http://localhost:3000/albums?userId=${param}`)
+      .then((response) => setAlbumId(response.data));
+  })
+
+  // eslint-disable-next-line
+    const fetchPosts = useCallback(() => {
+      return axios
+        .get(`http://localhost:3000/posts?userId=${param}`)
+        .then((response) => setPosts(response.data));
+    });
 
   // eslint-disable-next-line
   const fetchPhoto = useCallback(() => {
-    return axios
-      .get(`http://localhost:3000/photos?albumId=${1}`)
+      return axios
+      .get(`http://localhost:3000/photos?albumId=${param}`)
       .then((response) => setPhoto(response.data[0]));
   })
 
@@ -79,10 +88,19 @@ export default function Posts() {
   return (
     <div style={{ float: "right" }}>
       {posts && posts.map((post, index) => (
-        <Card key={index} sx={{ maxWidth: 596, marginTop: 2, padding: 0 }}>
+        <Card 
+          key={index} 
+          sx={{ 
+            borderRadius: "5px",
+            boxShadow: "rgb(211, 211, 211) 0px 2px 3px 0px",
+            maxWidth: 596, 
+            marginTop: 2, 
+            padding: 0 
+          }}
+        >
           <CardHeader
             sx={{ padding: "16px 16px 8px 16px" }}
-            avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label="user">
+            avatar={<Avatar sx={{ bgcolor: 'rgb(244 67 54)' }} aria-label="user">
               {initials}
             </Avatar>}
             title={<b>{user}</b>}
@@ -113,7 +131,7 @@ export default function Posts() {
               aria-expanded={expanded}
               aria-label="show more"
             >
-              <b><ExpandMoreIcon /></b>
+              <b><ExpandMoreIcon sx={{"&:hover": {backgroundColor: 'none' }}}/></b>
             </ExpandMore>
           </CardActions>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
