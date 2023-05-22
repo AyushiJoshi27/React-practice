@@ -49,9 +49,9 @@ export default function Intro() {
                 "&:hover": { backgroundColor: "transparent" },
                 fontSize: "16px"
               }}>
-                <span style={{ textAlign: "left", width: "35px" }} >
+                <s  pan style={{ textAlign: "left", width: "35px" }} >
                   <PhoneIcon />
-                </span>
+                </s>
                 <span className='introInfo'>
                   {userIntro.phone}
                 </span>

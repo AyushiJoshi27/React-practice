@@ -54,6 +54,12 @@ const Layout = () => {
           <li>
               <Link to='comment'>Comment</Link>
           </li>
+          <li>
+            <Link to='profile_page/1'>Fb Profile page with redux</Link>
+          </li>
+          <li>
+            <Link to='list_control'>List Control</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />
