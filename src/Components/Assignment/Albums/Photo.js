@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import axios from 'axios';
 
-export default function AlbumPhoto({albumId}) {
+export default function AlbumPhoto({albumId, itemKey}) {
 
     const [photo, setPhoto] = useState();
 
@@ -29,6 +29,7 @@ export default function AlbumPhoto({albumId}) {
                     marginBottom: "5px",
                     width:"145px"
                 }}
+                key={photo.thumbnailUrl}
             />
         : ''}
     </>

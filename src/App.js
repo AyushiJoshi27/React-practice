@@ -23,6 +23,7 @@ import { Params } from './Components/Assignment/Params';
 import { RoutesManipulator } from './Components/Assignment/ApisExport';
 import MediaCard from './Components/Card/Card';
 import FbLayout from './Components/AssignmnetWithRedux/FbLayout/FbLayout';
+import ResponsiveDialog from './Components/Layout/Dialog/Dialog';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
             <Route path='media-card' element={ <MediaCard /> } />
             <Route path='profile_page/:param' element={ <FbLayout /> } />
             <Route path='list_control' element={< Checkboxes />} />
+            <Route path='dialog' element={ <ResponsiveDialog /> } />
           </Route>
         </Routes>
       </Router>

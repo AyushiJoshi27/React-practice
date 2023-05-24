@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import Button from '@mui/material/Button';
 import { useParams } from 'react-router';
 import axios from 'axios';
 //import Box from '@mui/material/Box';
@@ -14,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Comments from './Comments';
+import SendIcon from '@mui/icons-material/Send';
 
 //import { FetchPostsIds } from './ApisExport';
 
@@ -30,17 +32,19 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function Posts() {
-  const [expanded, setExpanded] = React.useState("");
+  const [expanded, setExpanded] = React.useState(false);
   const [posts, setPosts] = useState("");
   const [user, setUser] = useState("");
   const [initials, setInitials] = useState("");
   const [albumId, setAlbumId] = useState({ url: "" });
   const [photo, setPhoto] = useState("");
-  const {param} = useParams();
+  const { param } = useParams();
   var options = { year: 'numeric', month: 'long', day: 'numeric' };
   const currentDate = new Date();
-  //const dateFormate = format(currentDate, "dd/mm/yyyy")
   const dateFormate = currentDate.toLocaleDateString("en-US", options);
+
+  const commentRef = useRef();
+  const nameRef = useRef("");
 
   // eslint-disable-next-line
   useEffect(() => {
@@ -49,6 +53,11 @@ export default function Posts() {
     fetchAlbums();
     fetchPhoto();
   }, []);
+
+  useEffect(() => {
+    // console.log(commentRef.current);
+    // console.log(nameRef.current);
+  }, [nameRef.current.value]);
 
   // eslint-disable-next-line
   const fetchUser = useCallback(() => {
@@ -68,15 +77,15 @@ export default function Posts() {
   })
 
   // eslint-disable-next-line
-    const fetchPosts = useCallback(() => {
-      return axios
-        .get(`http://localhost:3000/posts?userId=${param}`)
-        .then((response) => setPosts(response.data));
-    });
+  const fetchPosts = useCallback(() => {
+    return axios
+      .get(`http://localhost:3000/posts?userId=${param}`)
+      .then((response) => setPosts(response.data));
+  });
 
   // eslint-disable-next-line
   const fetchPhoto = useCallback(() => {
-      return axios
+    return axios
       .get(`http://localhost:3000/photos?albumId=${param}`)
       .then((response) => setPhoto(response.data[0]));
   })
@@ -85,17 +94,32 @@ export default function Posts() {
     setExpanded(!expanded);
   };
 
+
+  //add a comment
+  const myFunction = () => {
+    setTimeout(() => {
+      console.log(commentRef.current.value);
+      // console.log(nameRef.current.value);
+    }, 3000);
+
+    // axios
+    //   .post(`http://localhost:3000/comments?userId=${param}`, data);
+  }
+
   return (
     <div style={{ float: "right" }}>
+        <input type="text" ref={nameRef} className='nameInput' />
+        <input type="text" ref={commentRef} className='commentInput' />
+        <Button onClick={myFunction} autoFocus>Save</Button>
       {posts && posts.map((post, index) => (
-        <Card 
-          key={index} 
-          sx={{ 
+        <Card
+          key={index}
+          sx={{
             borderRadius: "5px",
             boxShadow: "rgb(211, 211, 211) 0px 2px 3px 0px",
-            maxWidth: 596, 
-            marginTop: 2, 
-            padding: 0 
+            maxWidth: 596,
+            marginTop: 2,
+            padding: 0
           }}
         >
           <CardHeader
@@ -106,17 +130,17 @@ export default function Posts() {
             title={<b>{user}</b>}
             subheader={dateFormate}
           />
-          <CardContent 
-            style={{ 
+          <CardContent
+            style={{
               padding: "16px 16px 6px 16px",
               fontWeight: "500"
-              }}>
+            }}>
             {post.title}
           </CardContent>
           <Typography sx={{
-            fontSize: "13px", 
+            fontSize: "13px",
             padding: "0px 16px 16px 16px",
-            }}>
+          }}>
             {post.body}
           </Typography>
           <CardMedia
@@ -124,6 +148,7 @@ export default function Posts() {
             image={photo.url}
             alt={post.userId}
           />
+          {/* <SendIcon onClick={myFunction} sx={{padding: "0 15px"}}/> */}
           <CardActions disableSpacing>
             <ExpandMore
               expand={expanded}
@@ -131,7 +156,7 @@ export default function Posts() {
               aria-expanded={expanded}
               aria-label="show more"
             >
-              <b><ExpandMoreIcon sx={{"&:hover": {backgroundColor: 'none' }}}/></b>
+              <b><ExpandMoreIcon sx={{ "&:hover": { backgroundColor: 'transparent' } }} /></b>
             </ExpandMore>
           </CardActions>
           <Collapse in={expanded} timeout="auto" unmountOnExit>

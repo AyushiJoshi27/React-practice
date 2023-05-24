@@ -8,7 +8,6 @@ import AlbumPhoto from '../Albums/Photo';
 export function Photo() {
   const { param } = useParams();
   const [albumId, setAlbumId] = useState('');
-  const [photo, setPhoto] = useState('');
 
   useEffect(() => {
     fetchAlbums();
@@ -19,7 +18,6 @@ export function Photo() {
     return axios
       .get(`http://localhost:3000/albums?userId=${param}`)
       .then((response) => {
-        console.log("AlbumId: ", response.data)
         setAlbumId(response.data)
       });
   });
