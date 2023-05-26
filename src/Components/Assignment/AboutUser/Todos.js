@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import axios from 'axios';
-import { Paper } from '@mui/material'
+import { Paper, Typography } from '@mui/material'
 import { useParams } from 'react-router';
 import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List';
@@ -36,6 +36,10 @@ export default function Todos() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openMenu = Boolean(anchorEl);
 
+  useEffect(() => {
+    FetchTodos();
+  }, [])
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
     //console.log(todoId);
@@ -67,14 +71,13 @@ export default function Todos() {
 
   const AddNewTodos = () => {
     const data = {
-      "userId": param,
-      "title": newTodo.current.value,
-      "completed": status.current.value
+      userId: Number(param),
+      title: newTodo.current.value,
+      completed: Boolean(status.current.value)
     }
     // console.log(data);
 
-    axios
-      .post(`http://localhost:3000/todos?userId=${param}`, data);
+    axios.post(`http://localhost:3000/todos?userId=${param}`, data);
     FetchTodos();
     setOpen(false);
   }
@@ -85,9 +88,7 @@ export default function Todos() {
     setUserTodos(response.data);
   })
 
-  useEffect(() => {
-    FetchTodos();
-  }, [])
+
 
   return (
     <>
@@ -145,7 +146,7 @@ export default function Todos() {
                         MenuListProps={{
                           'aria-labelledby': 'basic-button',
                         }}
-                        style={{ boxShadow: "0px 0px 3px 1px lightgrey"}}
+                        style={{ boxShadow: "0px 0px 3px 1px lightgrey" }}
                       >
                         <MenuItem onClick={() => TodoHandler(item.id)}>Update</MenuItem>
                         <MenuItem onClick={() => TodoDeleteHandler(item.id)}>Delete</MenuItem>
@@ -155,7 +156,7 @@ export default function Todos() {
                 </>
               }
             >
-              <ListItemButton
+              <ListItem
                 dense
                 sx={{ "&:hover": { backgroundColor: "#ffffff" } }}
               >
@@ -163,9 +164,10 @@ export default function Todos() {
                 <ListItemText primary={item.title} />
                 <Checkbox
                   edge="start"
+                  sx={{ paddingLeft: 2 }}
                   checked={item.completed === true ? true : false}
                 />
-              </ListItemButton>
+              </ListItem>
             </ListItem>
           ))}
         </List>
@@ -180,17 +182,34 @@ export default function Todos() {
         <DialogTitle id="responsive-dialog-title" variant='h4'>
           {"Add a todo"}
         </DialogTitle>
-        <DialogContent>
+        <DialogContent
+          sx={{ width: 500 }}
+        >
           <DialogContentText sx={{ marginTop: "20px" }}>
-            <label for="html">Status: </label>
-            <input type='text' ref={status} style={{ marginBottom: "20px" }} /><br />
-            {/* <TextField id="standard-basic" label="UserName" ref={username} variant="standard" style={{margin: "20px 0"}} /><br/> */}
-            <label for="html">Add a Todo: </label>
-            <input type='text' ref={newTodo} style={{ marginBottom: "20px" }} /><br />
+            <Typography sx={{
+              display: "inline-block",
+              width: "180px",
+              textAlign: "end",
+              paddingRight: "10px"
+            }}
+            >
+              <label for="html">Status: </label>
+            </Typography>
+            <input type='text' ref={status} style={{ marginBottom: "20px", width: 200}} /><br />
+            <Typography sx={{
+              display: "inline-block",
+              width: "180px",
+              textAlign: "end",
+              paddingRight: "10px"
+            }}
+            >
+              <label for="html">Add a Todo: </label>
+            </Typography>
+            <input type='text' ref={newTodo} style={{ marginBottom: "20px", width: 200}} /><br />
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>Calcel</Button>
+          <Button autoFocus onClick={handleClose}>Cancel</Button>
           <Button onClick={AddNewTodos} autoFocus>Save</Button>
         </DialogActions>
       </Dialog>

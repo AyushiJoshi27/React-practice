@@ -13,17 +13,17 @@ import { useParams } from 'react-router';
 
 export default function ResponsiveDialog() {
   const {param} = useParams();
-  const [open, setOpen] = React.useState(false);
+  const [createPost, setCreatePost] = React.useState(false);
   const [newTodo, setNewTodo] = useState('');
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const postCreationHandler = () => {
+    setCreatePost(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const postCreationClose = () => {
+    setCreatePost(false);
   };
 
   const AddNewTodos = () => {
@@ -34,18 +34,18 @@ export default function ResponsiveDialog() {
     //   body: newTodo
     // })
 
-    setOpen(false);
+    setCreatePost(false);
   }
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button variant="outlined" onClick={postCreationHandler}>
         Open responsive dialog
       </Button>
       <Dialog
         fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
+        open={createPost}
+        onClose={postCreationClose}
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title" variant='h4'>
@@ -61,8 +61,8 @@ export default function ResponsiveDialog() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Calcel
+          <Button autoFocus onClick={postCreationClose}>
+            Cancel
           </Button>
           <Button onClick={AddNewTodos} autoFocus>
             Save
