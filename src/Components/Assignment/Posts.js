@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import axios from 'axios';
 //import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
+import { Paper } from '@mui/material'
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -16,6 +17,13 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Comments from './Comments';
 import SendIcon from '@mui/icons-material/Send';
+import Input from '@mui/material/Input';
+import TextareaAutosize from '@mui/base/TextareaAutosize';
+import List from '@mui/material/List';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListSubheader from '@mui/material/ListSubheader';
 
 //import { FetchPostsIds } from './ApisExport';
 
@@ -30,6 +38,8 @@ const ExpandMore = styled((props) => {
   }),
   marginTop: '10px',
 }));
+
+const ariaLabel = { 'aria-label': 'description' };
 
 export default function Posts() {
   const [expanded, setExpanded] = React.useState(false);
@@ -94,23 +104,116 @@ export default function Posts() {
     setExpanded(!expanded);
   };
 
-
   //add a comment
   const myFunction = () => {
-    setTimeout(() => {
-      console.log(commentRef.current.value);
-      // console.log(nameRef.current.value);
-    }, 3000);
-
+    console.log(commentRef);
     // axios
     //   .post(`http://localhost:3000/comments?userId=${param}`, data);
   }
 
+  //add a post style and functionality
+  const blue = {
+    100: '#DAECFF',
+    200: '#b6daff',
+    400: '#3399FF',
+    500: '#007FFF',
+    600: '#0072E5',
+    900: '#003A75',
+  };
+
+  const grey = {
+    50: '#f6f8fa',
+    100: '#eaeef2',
+    200: '#d0d7de',
+    300: '#afb8c1',
+    400: '#8c959f',
+    500: '#6e7781',
+    600: '#57606a',
+    700: '#424a53',
+    800: '#32383f',
+    900: '#24292f',
+  };
+
+  const StyledTextarea = styled(TextareaAutosize)(
+    ({ theme }) => `
+    max-width: 596px;
+    font-family: IBM Plex Sans, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 12px;
+    border-radius: 12px 12px 0 12px;
+    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+    background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+  
+    &:hover {
+      border-color: ${blue[400]};
+    }
+  
+    &:focus {
+      border-color: ${blue[400]};
+    }
+  
+    // firefox
+    &:focus-visible {
+      outline: 0;
+    }
+  `,
+  );
+
+
   return (
     <div style={{ float: "right" }}>
-        <input type="text" ref={nameRef} className='nameInput' />
-        <input type="text" ref={commentRef} className='commentInput' />
-        <Button onClick={myFunction} autoFocus>Save</Button>
+      <Paper
+        sx={{
+          borderRadius: "5px",
+          boxShadow: "rgb(211, 211, 211) 0px 2px 3px 0px",
+          fontSize: "14px",
+          lineHeight: 2,
+          marginBottom: "16px",
+          padding: 2,
+          marginTop: "16px"
+        }}
+        elevation={2}
+      >
+        <List
+          sx={{ 
+            width: '100%', 
+            bgcolor: 'background.paper', 
+            "&:hover": { backgroundColor: "white" },
+            padding: 0
+          }}
+          component="nav"
+          aria-labelledby="nested-list-subheader"
+          subheader={
+            <Typography variant='h6'><b>Add a post</b></Typography>
+          }
+        >
+          <ListItemButton sx={{
+                "&:hover": { backgroundColor: "white" },
+                padding: "5px 0"
+              }}>
+            <ListItemIcon>
+              <Avatar sx={{ bgcolor: 'rgb(244 67 54)' }} aria-label="user">
+                {initials}
+              </Avatar>
+            </ListItemIcon>
+            <ListItemText 
+              primary={
+              <StyledTextarea
+                sx={{
+                  "&:hover": { backgroundColor: "white" },
+                  width: "400px"
+                }}
+                maxRows={4}
+                aria-label="maximum height"
+                placeholder="Add a post"
+              />
+            } />
+          </ListItemButton>
+        </List>
+      </Paper>
       {posts && posts.map((post, index) => (
         <Card
           key={index}
@@ -148,7 +251,10 @@ export default function Posts() {
             image={photo.url}
             alt={post.userId}
           />
-          {/* <SendIcon onClick={myFunction} sx={{padding: "0 15px"}}/> */}
+          <Input type="text" disableUnderline inputRef={nameRef} className='nameInput' />
+          <Input type="text" disableUnderline inputRef={commentRef} className='commentInput' />
+          {/* <Input placeholder="Placeholder" inputProps={ariaLabel} /> */}
+          <SendIcon onClick={myFunction} sx={{ padding: "0 15px" }} />
           <CardActions disableSpacing>
             <ExpandMore
               expand={expanded}

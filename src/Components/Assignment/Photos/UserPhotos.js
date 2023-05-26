@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { useParams } from 'react-router';
 import axios from 'axios';
-import { ImageList, ImageListItem, Paper, Typography } from '@mui/material';
+import { ImageList, Paper, Typography } from '@mui/material';
 import AlbumPhoto from '../Albums/Photo';
 // import PhotoId from './PhotoId';
 

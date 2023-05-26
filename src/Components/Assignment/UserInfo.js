@@ -74,7 +74,6 @@ export default function UserInfo() {
             <Intro />
             <Todos />
             <UserAlbum />
-            <Photo />
           </Box>
           <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
             <Posts />

@@ -1,37 +1,43 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import axios from 'axios';
+import React from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-export default function AlbumPhoto({albumId, itemKey}) {
-
-    const [photo, setPhoto] = useState();
-
-  // eslint-disable-next-line
-  const fetchAlbums = useCallback(() => {
-    return axios
-      .get(`http://localhost:3000/photos?albumId=${albumId}`)
-      .then((response) => setPhoto(response.data[0]));
-  })
-
-  useEffect(() => {
-    fetchAlbums();
-  }, []);
+export default function AlbumPhoto({ album, photos }) {
+  // album ? console.log(album) : console.log("alpha");
+  // photos ? console.log(photos) : console.log("Photos");
 
   return (
-    <>  
-        {/* <h6>Photo</h6> */}
-        {photo ? 
-            <img 
-                src={photo.thumbnailUrl} 
-                alt={photo.id} 
-                style={{
-                    borderRadius: "10px", 
-                    height:"148px", 
-                    marginBottom: "5px",
-                    width:"145px"
-                }}
-                key={photo.thumbnailUrl}
+    <>
+      <>
+        {album ?
+          <img
+            src={album.thumbnailUrl}
+            alt={album.id}
+            style={{
+              borderRadius: "10px",
+              height: "148px",
+              marginBottom: "5px",
+              width: "145px"
+            }}
+          />
+          : ''}
+      </>
+      <>
+        {photos ?
+          photos && photos.map((image, index) => (
+            <LazyLoadImage
+              key={index + 5}
+              alt={image.thumbnailUrl}
+              src={image.thumbnailUrl}
+              style={{
+                borderRadius: "10px",
+                height: "148px",
+                marginBottom: "5px",
+                width: "145px"
+              }}
             />
-        : ''}
+          ))
+          : ''}
+      </>
     </>
   )
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import axios from 'axios';
-import { Paper} from '@mui/material'
+import { Paper } from '@mui/material'
 import { useParams } from 'react-router';
 import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List';
@@ -9,6 +9,11 @@ import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemButton from '@mui/material/ListItemButton';
+//Todo update/dalete
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 //dialog
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -18,6 +23,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+// import BasicMenu from './TodoModal';
+
 
 export default function Todos() {
   const [userTodos, setUserTodos] = useState([]);
@@ -25,6 +32,26 @@ export default function Todos() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  //Todos update/delete
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openMenu = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    //console.log(todoId);
+  };
+
+  const TodoDeleteHandler = () => {
+    const confirm = window.confirm('Are you sure you want to deleteit?');
+
+    if (confirm) {
+      axios.delete('https://reqres.in/api/posts/1');
+    }
+  }
+
+  const TodoHandler = () => {
+    setAnchorEl(null);
+  };
 
   const status = useRef("");
   const newTodo = useRef("");
@@ -64,49 +91,87 @@ export default function Todos() {
 
   return (
     <>
-    <Paper
-      sx={{
-        borderRadius: "5px",
-        boxShadow: "rgb(211, 211, 211) 0px 2px 3px 0px",
-        fontSize: "14px",
-        lineHeight: 2,
-        marginBottom: "16px",
-        padding: 2,
-        width: "459px",
-      }}
-      elevation={2}
-    >
-      <List>
-        <ListItem
-          secondaryAction={
-            <IconButton edge="end" aria-label="addTodo" onClick={handleClickOpen}>
-              <AddCircleIcon />
-            </IconButton>
-          }
-        >
-          <ListItemText
-            primary={<b>Todos</b>}
-          />
-        </ListItem>
-        {userTodos.map((item, index) => (
-        <ListItem
-          secondaryAction={
-            <IconButton edge="end" aria-label="checkbox">
-              <Checkbox checked={item.completed === true ? true : false} />
-            </IconButton>
-          }
-          key={item.id}
-        >
-          <ListItemIcon>{index + 1}.</ListItemIcon>
-          <ListItemText
-            primary={item.title}
-          />
-        </ListItem>
-        ))}
-      </List>
-    </Paper>
-    {/* Modal */}
-    <Dialog
+      <Paper
+        sx={{
+          borderRadius: "5px",
+          boxShadow: "rgb(211, 211, 211) 0px 2px 3px 0px",
+          fontSize: "14px",
+          lineHeight: 2,
+          marginBottom: "16px",
+          padding: 2,
+          width: "459px",
+        }}
+        elevation={2}
+      >
+        <List>
+          <ListItem
+            secondaryAction={
+              <IconButton edge="end" aria-label="addTodo" onClick={handleClickOpen}>
+                <AddCircleIcon />
+              </IconButton>
+            }
+          >
+            <ListItemText
+              primary={<b>Todos</b>}
+            />
+          </ListItem>
+          {userTodos.map((item, index) => (
+            <ListItem
+              sx={{ paddingLeft: 0 }}
+              key={item.title}
+              secondaryAction={
+                <>
+                  <IconButton
+                    edge="end"
+                    aria-label="changes"
+                    sx={{ "&:hover": { backgroundColor: "#ffffff" } }}
+                  >
+                    <div>
+                      <Button
+                        sx={{ paddingRight: 0, float: "right" }}
+                        id="basic-button"
+                        aria-controls={openMenu ? 'basic-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={openMenu ? 'true' : undefined}
+                        onClick={handleClick}
+                      >
+                        <MoreVertRoundedIcon />
+                      </Button>
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={openMenu}
+                        onClose={TodoHandler}
+                        MenuListProps={{
+                          'aria-labelledby': 'basic-button',
+                        }}
+                        style={{ boxShadow: "0px 0px 3px 1px lightgrey"}}
+                      >
+                        <MenuItem onClick={() => TodoHandler(item.id)}>Update</MenuItem>
+                        <MenuItem onClick={() => TodoDeleteHandler(item.id)}>Delete</MenuItem>
+                      </Menu>
+                    </div>
+                  </IconButton>
+                </>
+              }
+            >
+              <ListItemButton
+                dense
+                sx={{ "&:hover": { backgroundColor: "#ffffff" } }}
+              >
+                <ListItemIcon sx={{ width: "50px" }}>{index + 1}.</ListItemIcon>
+                <ListItemText primary={item.title} />
+                <Checkbox
+                  edge="start"
+                  checked={item.completed === true ? true : false}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+      {/* Modal */}
+      <Dialog
         fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
@@ -118,10 +183,10 @@ export default function Todos() {
         <DialogContent>
           <DialogContentText sx={{ marginTop: "20px" }}>
             <label for="html">Status: </label>
-            <input type='text' ref={status}  style={{marginBottom: "20px"}} /><br/>
+            <input type='text' ref={status} style={{ marginBottom: "20px" }} /><br />
             {/* <TextField id="standard-basic" label="UserName" ref={username} variant="standard" style={{margin: "20px 0"}} /><br/> */}
             <label for="html">Add a Todo: </label>
-            <input type='text' ref={newTodo}  style={{marginBottom: "20px"}} /><br/>
+            <input type='text' ref={newTodo} style={{ marginBottom: "20px" }} /><br />
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -129,6 +194,6 @@ export default function Todos() {
           <Button onClick={AddNewTodos} autoFocus>Save</Button>
         </DialogActions>
       </Dialog>
-</>
+    </>
   )
 }
