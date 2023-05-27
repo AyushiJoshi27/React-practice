@@ -8,6 +8,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import Link from '@mui/material/Link';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function Intro() {
   const [userIntro, setUserIntro] = useState('');
