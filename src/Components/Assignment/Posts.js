@@ -55,7 +55,7 @@ export default function Posts() {
   const [expanded, setExpanded] = React.useState(false);
   const [posts, setPosts] = useState("");
   const [user, setUser] = useState("");
-  const [initials, setInitials] = useState("");
+  const [initials, setInitials] = useState("Alpha");
   const [albumId, setAlbumId] = useState({ url: "" });
   const [photo, setPhoto] = useState("");
   const { param } = useParams();
@@ -65,9 +65,6 @@ export default function Posts() {
 
   const commentRef = useRef();
   const nameRef = useRef("");
-
-  //post creation input value
-  const textareaRef = useRef('');
 
   //post dialog
   const theme = useTheme();
@@ -94,7 +91,7 @@ export default function Posts() {
       .get(`http://localhost:3000/users?id=${param}`)
       .then((response) => {
         setUser(response.data[0].name);
-        setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
+        // setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
       });
   });
 
@@ -337,7 +334,6 @@ export default function Posts() {
               }}
               maxRows={4}
               multiline
-              rows={4}
               placeholder="write something..."
             />
           </DialogContentText>

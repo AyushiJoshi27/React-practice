@@ -33,7 +33,7 @@ export default function Posts() {
   const [expanded, setExpanded] = React.useState("");
   const [posts, setPosts] = useState("");
   const [user, setUser] = useState("");
-  const [initials, setInitials] = useState("");
+  const [initials, setInitials] = useState("Alpha");
   const [albumId, setAlbumId] = useState({ url: "" });
   const [photo, setPhoto] = useState("");
   const {param} = useParams();
@@ -56,7 +56,7 @@ export default function Posts() {
       .get(`http://localhost:3000/users?id=${param}`)
       .then((response) => {
         setUser(response.data[0].name);
-        setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
+        // setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
       });
   });
 

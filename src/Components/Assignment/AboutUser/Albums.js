@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import { Typography, ImageList } from '@mui/material';
+import { Typography, ImageList, InputLabel, Divider } from '@mui/material';
 import AlbumPhoto from '../Albums/Photo';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -23,6 +23,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { FormControl } from '@mui/base';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -36,6 +37,7 @@ export default function UserAlbum() {
   const [albums, setAlbums] = useState();
   const [photoList, setPhotoList] = useState('');
   const [combinedList, setCombinedList] = useState('');
+  const [albumId, setAalbumId] = React.useState('');
   const { param } = useParams();
   // modal state
   const [open, setOpen] = React.useState(false);
@@ -54,13 +56,21 @@ export default function UserAlbum() {
   if (albums) {
     (
       albums && albums.map((data) => {
-        const str1 = "albumId=" + data.id + "&";
+        var str1 = "albumId=" + data.id + "&";
         str += str1;
       })
     )
-    var sortStr = "_sort=albumId"
-    str += sortStr
+    var sortStr = "_sort=albumId";
+    str += sortStr;
   }
+
+  // str ? console.log("200:", str) : console.log("404: ", str);
+
+  useEffect(() => {
+    if (str) {
+      fetchPhotos();
+    }
+  }, [str]);
 
   // eslint-disable-next-line
   const fetchPhotos = useCallback(() => {
@@ -93,12 +103,11 @@ export default function UserAlbum() {
 
   }, [albums, photoList])
 
-  combinedList ? console.log(combinedList) : console.log("combinedList");
-
   useEffect(() => {
     fetchAlbums2();
-    fetchPhotos();
-  }, []);
+  }, [])
+
+  // combinedList ? console.log(combinedList) : console.log("combinedList");
 
   //modal controllers
   const handleClickOpen = () => {
@@ -111,8 +120,15 @@ export default function UserAlbum() {
   };
 
   const ImageUploader = () => {
-    console.log(imgUrl.current.value);
+    albumId ? console.log(albumId)  : console.log("age");
+    setOpen(false);
   }
+
+  //event on change
+  const handleChange = (event) => {
+    setAalbumId(event.target.value);
+    console.log(typeof(event.target.value));
+  };
 
   return (
     <>
@@ -128,7 +144,17 @@ export default function UserAlbum() {
         elevation={2}
         className='albums'
       >
-        <Typography variant='h6'><b>Albums</b></Typography>
+        <List>
+          <ListItem
+            secondaryAction={
+              <AddCircleIcon edge="end" aria-label="addTodo" onClick={handleClickOpen} />
+            }
+          >
+            <ListItemText
+              primary={<b>Albums</b>}
+            />
+          </ListItem>
+        </List>
         {combinedList ?
           <Grid container
             rowSpacing={1}
@@ -145,11 +171,11 @@ export default function UserAlbum() {
               if (image) {
                 obj = image[0]
               }
-              obj ? console.log(obj) : console.log("obj");
+              // obj ? console.log(obj) : console.log("obj");
               return (
                 <Grid item
                   xs={4}
-                  key={items.title}
+                  key={items.id}
                   width={127}
                   sx={{ marginRight: 0, paddingLeft: 0, paddingRight: 0 }}
                 >
@@ -186,9 +212,7 @@ export default function UserAlbum() {
         <List>
           <ListItem
             secondaryAction={
-              <IconButton edge="end" aria-label="addTodo" onClick={handleClickOpen}>
-                <AddCircleIcon />
-              </IconButton>
+            <AddCircleIcon aria-label="addTodo" onClick={handleClickOpen}/>
             }
           >
             <ListItemText
@@ -219,28 +243,33 @@ export default function UserAlbum() {
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title" variant='h4'>
-          {"Add a todo"}
+        <DialogTitle id="responsive-dialog-title" variant='h5'>
+          {<b>Album</b>}
         </DialogTitle>
-        <DialogContent>
+        <Divider />
+        <DialogContent sx={{width: 400}}>
           <DialogContentText sx={{ marginTop: "20px", maxWidth: "400px" }}>
             <List>
               <ListItem
                 secondaryAction={
-                  <Select
-                    labelId="demo-select-small-label"
-                    id="demo-select-small"
-                    value={''}
-                    label="Age"
-                  // onChange={handleChange}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {combinedList && combinedList.map((item) => (
+                  <FormControl size="small">
+                    <InputLabel id="demo-select-small-label">Age</InputLabel>
+                    <Select
+                      labelId="demo-select-small-label"
+                      id="demo-select-small"
+                      value={albumId}
+                      label="Age"
+                     onChange={handleChange}
+                    sx={{height: 40, minWidth: 120}}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {combinedList && combinedList.map((item) => (
                       <MenuItem value={item.id}>{item.id}</MenuItem>
                     ))}
-                  </Select>
+                    </Select>
+                  </FormControl>
                 }
               >
                 <ListItemText
@@ -248,12 +277,15 @@ export default function UserAlbum() {
                 />
               </ListItem>
             </List>
-            <label>Image url: </label>
-            <input type='text' ref={imgUrl} style={{ marginBottom: "20px" }} /><br />
+            <Typography sx={{margin: "20px 0"}}>
+              <label>Image url: </label>
+              <input type='text' ref={imgUrl} style={{ marginBottom: "20px" }} required/>
+            </Typography>
           </DialogContentText>
         </DialogContent>
+        <Divider/>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>Calcel</Button>
+          <Button autoFocus onClick={handleClose}>Cancel</Button>
           <Button autoFocus onClick={ImageUploader}>Save</Button>
         </DialogActions>
       </Dialog>

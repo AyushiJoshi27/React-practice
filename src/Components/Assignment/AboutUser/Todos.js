@@ -44,7 +44,6 @@ export default function Todos() {
   const [checked, setChecked] = useState(false);
 
   const titleRef = useRef('');
-  const checkRef = useRef(false);
 
   useEffect(() => {
     FetchTodos();
@@ -124,7 +123,6 @@ export default function Todos() {
     setAnchorEl(null);
 
     if (titleRef) {
-      // console.log(title);
       const data = {
         userId: Number(param),
         title: titleRef.current.value,
@@ -316,12 +314,6 @@ export default function Todos() {
                 multiline
                 rows={2}
               />
-              {/* <Checkbox
-                  sx={{"&:hover": {backgroundColor: "white"},  paddingLeft: 2 }}
-                  edge="start"
-                  checked={ checkRef === true ? true : false}
-
-                /> */}
               <FormControlLabel
                 control={<Checkbox checked={checked} onChange={CheckboxHandler} />}
               />

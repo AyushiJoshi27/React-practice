@@ -11,7 +11,7 @@ import { Photo } from './Photos/UserPhotos';
 export default function UserInfo() {
   const {param} = useParams('');
   const [user, setUser] = useState("");
-  const [initials, setInitials] = useState("");
+  const [initials, setInitials] = useState("Alpha");
 
   useEffect(() => {
     fetchUser();
@@ -23,9 +23,19 @@ export default function UserInfo() {
       .get(`http://localhost:3000/users?id=${param}`)
       .then((response) => {
         setUser(response.data[0].name);
-        setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
+        // setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
       });
   });
+
+  // function stringAvatar(name) {
+  //   return {
+  //     sx: {
+  //       bgcolor: "red",
+  //     },
+  //     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+  //   };
+  // }
+
   return (
     <>
       <div className='bgBlock'>
@@ -42,8 +52,8 @@ export default function UserInfo() {
                 position: 'absolute',
               }}
             />
-            <CardHeader
-              avatar={<Avatar
+          
+          <CardHeader avatar={<Avatar
                 alt="Remy Sharp"
                 sx={{ 
                   width: 180, 
@@ -51,15 +61,17 @@ export default function UserInfo() {
                   border:  5,
                   backgroundColor: 'rgb(244 67 54)',
                   borderColor: 'rgb(255,255,255)',
-                }}
-              >{initials}</Avatar>}
+                }}>
+                {initials}
+              </Avatar>
+              }
               title={<b className='userName'>{user}</b>}
               sx={{
                 position: "relative",
                 top: "400px",
                 left: "50px"
               }}
-            />
+            /> 
           </Box>
         </Container>
       </div>
