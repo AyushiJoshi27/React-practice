@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import { Typography, ImageList, InputLabel, Divider } from '@mui/material';
+import { Typography, ImageList, InputLabel, Divider, TextField } from '@mui/material';
 import AlbumPhoto from '../Albums/Photo';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -43,7 +43,7 @@ export default function UserAlbum() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const imgUrl = useRef('');
+  const titleRef = useRef('');
 
   // eslint-disable-next-line
   const fetchAlbums2 = useCallback(() => {
@@ -51,6 +51,8 @@ export default function UserAlbum() {
       .get(`http://localhost:3000/albums?userId=${param}`)
       .then((response) => setAlbums(response.data));
   })
+
+  combinedList ? console.log(combinedList) : console.log("combinedList");
 
   var str = "";
   if (albums) {
@@ -120,15 +122,21 @@ export default function UserAlbum() {
   };
 
   const ImageUploader = () => {
-    albumId ? console.log(albumId)  : console.log("age");
+    albumId ? console.log(albumId) : console.log("age");
+    const data = {
+      "userId": param,
+      "title": titleRef.current.value
+    }
+    console.log("data: ", data);
+    axios.post(`http://localhost:3000/albums?userId=${param}`, data);
     setOpen(false);
   }
 
   //event on change
-  const handleChange = (event) => {
-    setAalbumId(event.target.value);
-    console.log(typeof(event.target.value));
-  };
+  // const handleChange = (event) => {
+  //   setAalbumId(event.target.value);
+  //   console.log(typeof (event.target.value));
+  // };
 
   return (
     <>
@@ -167,10 +175,10 @@ export default function UserAlbum() {
           >
             {combinedList && combinedList.map((items) => {
               var image = items.photos;
-              var obj = ''
+              var obj = "";
               if (image) {
                 obj = image[0]
-              }
+              } 
               // obj ? console.log(obj) : console.log("obj");
               return (
                 <Grid item
@@ -212,7 +220,7 @@ export default function UserAlbum() {
         <List>
           <ListItem
             secondaryAction={
-            <AddCircleIcon aria-label="addTodo" onClick={handleClickOpen}/>
+              <AddCircleIcon aria-label="addTodo" onClick={handleClickOpen} />
             }
           >
             <ListItemText
@@ -247,14 +255,45 @@ export default function UserAlbum() {
           {<b>Album</b>}
         </DialogTitle>
         <Divider />
-        <DialogContent sx={{width: 400}}>
+        <DialogContent sx={{ height: 500, width: 600 }}>
           <DialogContentText sx={{ marginTop: "20px", maxWidth: "400px" }}>
             <List>
               <ListItem
                 secondaryAction={
                   <FormControl size="small">
-                    <InputLabel id="demo-select-small-label">Age</InputLabel>
-                    <Select
+                    <TextField
+                      id="outlined-update-input"
+                      placeholder='Title of the album...'
+                      InputProps={{
+                        readOnly: false,
+                      }}
+                      sx={{height: 20}}
+                      inputRef={titleRef}
+                      label="title"
+                      multiline
+                    />
+                  </FormControl>
+                }
+              >
+                <ListItemText
+                  primary={<label>Album title: </label>}
+                />
+              </ListItem>
+            </List>
+          </DialogContentText>
+        </DialogContent>
+        <Divider />
+        <DialogActions>
+          <Button autoFocus onClick={handleClose}>Cancel</Button>
+          <Button autoFocus onClick={ImageUploader}>Save</Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  )
+}
+
+
+{/* <Select
                       labelId="demo-select-small-label"
                       id="demo-select-small"
                       value={albumId}
@@ -268,27 +307,4 @@ export default function UserAlbum() {
                       {combinedList && combinedList.map((item) => (
                       <MenuItem value={item.id}>{item.id}</MenuItem>
                     ))}
-                    </Select>
-                  </FormControl>
-                }
-              >
-                <ListItemText
-                  primary={<label>Selected album: </label>}
-                />
-              </ListItem>
-            </List>
-            <Typography sx={{margin: "20px 0"}}>
-              <label>Image url: </label>
-              <input type='text' ref={imgUrl} style={{ marginBottom: "20px" }} required/>
-            </Typography>
-          </DialogContentText>
-        </DialogContent>
-        <Divider/>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>Cancel</Button>
-          <Button autoFocus onClick={ImageUploader}>Save</Button>
-        </DialogActions>
-      </Dialog>
-    </>
-  )
-}
+                    </Select> */}
