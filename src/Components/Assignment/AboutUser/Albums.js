@@ -2,15 +2,17 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router';
 import { styled } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
+// import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import { Typography, ImageList, InputLabel, Divider, TextField } from '@mui/material';
+import { ImageList, Divider, TextField, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
 import AlbumPhoto from '../Albums/Photo';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 //import ListItemIcon from '@mui/material/ListItemIcon';
 //dialog
 import Button from '@mui/material/Button';
@@ -21,17 +23,17 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+// import MenuItem from '@mui/material/MenuItem';
+// import Select from '@mui/material/Select';
 import { FormControl } from '@mui/base';
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+// const Item = styled(Paper)(({ theme }) => ({
+//   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+//   ...theme.typography.body2,
+//   padding: theme.spacing(1),
+//   textAlign: 'center',
+//   color: theme.palette.text.secondary,
+// }));
 
 export default function UserAlbum() {
   const [albums, setAlbums] = useState();
@@ -44,6 +46,12 @@ export default function UserAlbum() {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const titleRef = useRef('');
+  const [openD, setOpenD] = useState(false);
+  const [dltAlbumId, setDltAlbumId] = useState('');
+  const [updateAlbum, setUpdateAlbum] = useState('');
+  const [title, setTitle] = useState('');
+  const [openU, setOpenU] = useState(false);
+  const editTitleRef = useRef('');
 
   // eslint-disable-next-line
   const fetchAlbums2 = useCallback(() => {
@@ -52,7 +60,7 @@ export default function UserAlbum() {
       .then((response) => setAlbums(response.data));
   })
 
-  combinedList ? console.log(combinedList) : console.log("combinedList");
+  // combinedList ? console.log(combinedList) : console.log("combinedList");
 
   var str = "";
   if (albums) {
@@ -122,24 +130,65 @@ export default function UserAlbum() {
   };
 
   const ImageUploader = () => {
-    albumId ? console.log(albumId) : console.log("age");
+    // albumId ? console.log(albumId) : console.log("age");
     const data = {
       "userId": param,
       "title": titleRef.current.value
     }
-    console.log("data: ", data);
+    // console.log("data: ", data);
     axios.post(`http://localhost:3000/albums?userId=${param}`, data);
     setOpen(false);
   }
 
-  //event on change
-  // const handleChange = (event) => {
-  //   setAalbumId(event.target.value);
-  //   console.log(typeof (event.target.value));
-  // };
+  //Dlt Album 
+  const AlbumDltHandler = (albumId) => {
+    setDltAlbumId(albumId);
+    setOpenD(true);
+  }
+  
+  const DeleteTodos = () => {
+    if (dltAlbumId) {
+      axios.delete(`http://localhost:3000/albums/${dltAlbumId}`)
+    }
+    fetchAlbums2();
+    setOpenD(false);
+  }
+ 
+  const handleCloseD = () => {
+    setOpenD(false);
+  };
+
+  //update handler
+  const AlbumEdtHandler = (id, title) => {
+    // id ? console.log("Update: ", id) : console.log("id");
+    console.log(id, title);
+    setTitle(title);
+    setUpdateAlbum(id);
+    setOpenU(true);
+  }
+
+  const updateAlbumHandler = () => {
+    if (updateAlbum && title) {
+      const data = {
+        userId: Number(updateAlbum),
+        title: title
+      }
+      console.log(data);
+
+      // axios.put(`http://localhost:3000/albums?userId=${updateAlbum}`, data);
+    }
+
+    // fetchAlbums2();
+      setOpenU(false);
+  }
+
+  const handleCloseU = () => {
+    setOpenU(false);
+  }
 
   return (
     <>
+      {/* with img list */}
       <Paper
         sx={{
           borderRadius: "5px",
@@ -164,46 +213,59 @@ export default function UserAlbum() {
           </ListItem>
         </List>
         {combinedList ?
-          <Grid container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 1, md: 1 }}
-            sx={{
-              lineHeight: 2,
-              marginBottom: "16px",
-              paddingTop: 1,
-            }}
-          >
-            {combinedList && combinedList.map((items) => {
-              var image = items.photos;
+          <ImageList sx={{ width: 465, height: 450 }} cols={3} rowHeight={164}>
+            {combinedList.map((item) => {
+              var image = item.photos;
               var obj = "";
               if (image) {
                 obj = image[0]
-              } 
-              // obj ? console.log(obj) : console.log("obj");
+              } else {
+                obj = {
+                  thumbnailUrl: "https://images.unsplash.com/photo-1522770179533-24471fcdba45"
+                }
+              }
               return (
-                <Grid item
-                  xs={4}
-                  key={items.id}
-                  width={127}
-                  sx={{ marginRight: 0, paddingLeft: 0, paddingRight: 0 }}
-                >
-                  <Item style={{
-                    boxShadow: "none",
-                    fontSize: "12px",
-                    fontWeight: 800,
-                    padding: 0
-                  }}>
-                    {/* { obj ? <AlbumPhoto album={obj} /> : ""} */}
-                    <AlbumPhoto album={obj} />
-                    <p className='albumTitle'>{items.title}</p>
-                  </Item>
-                </Grid>
+                <ImageListItem key={item.albumId} sx={{ width: 145 }}>
+                  <AlbumPhoto album={obj} />
+                  <ImageListItemBar
+                    sx={{
+                      background:
+                        'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+                        'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                      borderRadius: "10px 10px 0 0"
+                    }}
+
+                    position="top"
+                    actionIcon={
+                      <>
+                        <IconButton
+                          sx={{ color: 'white' }}
+                          aria-label={`star ${item.title}`}
+                          onClick={() => AlbumEdtHandler(item.id, item.title)}
+                        >
+                          <EditIcon sx={{ fontSize: "15px", marginRight: "5px" }} />
+                        </IconButton>
+                        <IconButton
+                          sx={{ color: 'white' }}
+                          aria-label={`star ${item.title}`}
+                          onClick={() => AlbumDltHandler(item.id)}
+                        >
+                          <DeleteIcon sx={{ fontSize: "15px" }} />
+                        </IconButton>
+                      </>
+                    }
+                    actionPosition="right"
+                  />
+                  <ImageListItemBar
+                    sx={{ fontSize: 14 }}
+                    title={item.title}
+                    position="below"
+                  />
+                </ImageListItem>
               )
             })}
-          </Grid>
-          : ''
-        }
-      </Paper>
+          </ImageList> : ""}
+      </Paper >
       {/* Photos section */}
       <Paper
         sx={{
@@ -213,7 +275,8 @@ export default function UserAlbum() {
           marginBottom: "16px",
           padding: 2,
           width: "459px",
-        }}
+        }
+        }
         elevation={2}
         className='albums'
       >
@@ -223,9 +286,7 @@ export default function UserAlbum() {
               <AddCircleIcon aria-label="addTodo" onClick={handleClickOpen} />
             }
           >
-            <ListItemText
-              primary={<b>Photos</b>}
-            />
+            <ListItemText primary={<b>Photos</b>} />
           </ListItem>
         </List>
         <ImageList
@@ -243,9 +304,9 @@ export default function UserAlbum() {
             <AlbumPhoto photos={photoList} />
             : ''}
         </ImageList>
-      </Paper>
+      </Paper >
       {/* Modal */}
-      <Dialog
+      < Dialog
         fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
@@ -255,7 +316,7 @@ export default function UserAlbum() {
           {<b>Album</b>}
         </DialogTitle>
         <Divider />
-        <DialogContent sx={{ height: 500, width: 600 }}>
+        <DialogContent sx={{ height: 350, width: 300 }}>
           <DialogContentText sx={{ marginTop: "20px", maxWidth: "400px" }}>
             <List>
               <ListItem
@@ -267,17 +328,14 @@ export default function UserAlbum() {
                       InputProps={{
                         readOnly: false,
                       }}
-                      sx={{height: 20}}
+                      sx={{ height: 20, width: 300}}
                       inputRef={titleRef}
-                      label="title"
+                      label="Write the title of the album"
                       multiline
                     />
                   </FormControl>
                 }
               >
-                <ListItemText
-                  primary={<label>Album title: </label>}
-                />
               </ListItem>
             </List>
           </DialogContentText>
@@ -287,7 +345,69 @@ export default function UserAlbum() {
           <Button autoFocus onClick={handleClose}>Cancel</Button>
           <Button autoFocus onClick={ImageUploader}>Save</Button>
         </DialogActions>
+      </Dialog >
+      {/* Confirmation dialog */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={openD}
+        onClose={handleCloseD}
+        aria-labelledby="responsive-delete-dialog-title"
+      >
+        <DialogTitle id="responsive-delete-dialog-title" variant='h6'>
+          Delete
+        </DialogTitle>
+        <Divider />
+        <DialogContent
+          sx={{ padding: "10px 24px", width: 500 }}
+        >
+          <DialogContentText>
+            <Typography>Are you sure you want to delete it?</Typography>
+          </DialogContentText>
+        </DialogContent>
+        <Divider />
+        <DialogActions>
+          <Button autoFocus onClick={handleCloseD}>Cancel</Button>
+          <Button onClick={DeleteTodos} autoFocus>Delete</Button>
+        </DialogActions>
       </Dialog>
+      {/* modal to update album */}
+      {title ? <Dialog
+          fullScreen={fullScreen}
+          open={openU}
+          onClose={handleCloseU}
+          aria-labelledby="responsive-update-dialog-title"
+        >
+          <DialogTitle id="responsive-update-dialog-title" variant='h4'>
+            <b>Update</b>
+          </DialogTitle>
+          <Divider />
+          <DialogContent
+            sx={{ padding: "10px 24px", height:300, width: 500 }}
+          >
+            <DialogContentText>
+            <FormControl size="small">
+                    <TextField
+                      id="outlined-update-input"
+                      placeholder='Write a title...'
+                      defaultValue={title}
+                      InputProps={{
+                        readOnly: false,
+                      }}
+                      sx={{marginTop: 2,  height: 50, width: 500}}
+                      inputRef={editTitleRef}
+                      label="Title of the album"
+                      multiline
+                      rows={2}
+                    />
+                  </FormControl>
+            </DialogContentText>
+          </DialogContent>
+          <Divider />
+          <DialogActions>
+            <Button autoFocus onClick={handleCloseU}>Cancel</Button>
+            <Button onClick={updateAlbumHandler} autoFocus>Update</Button>
+          </DialogActions>
+        </Dialog> : ""}
     </>
   )
 }

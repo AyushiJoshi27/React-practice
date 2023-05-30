@@ -33,7 +33,7 @@ export default function Todos() {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   //Todos update/delete
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(false);
   const openMenu = Boolean(anchorEl);
   //modal => Delete
   const [id, setId] = useState();
@@ -100,8 +100,8 @@ export default function Todos() {
   const DeleteTodos = () => {
     if (id) {
       axios.delete(`http://localhost:3000/todos/${id}`)
-      FetchTodos();
     };
+    FetchTodos();
     setOpenD(false);
   }
 
@@ -120,7 +120,7 @@ export default function Todos() {
   }
 
   const updateTodo = () => {
-    setAnchorEl(null);
+    setAnchorEl(false);
 
     if (titleRef) {
       const data = {
@@ -173,12 +173,9 @@ export default function Todos() {
               sx={{ paddingLeft: 0 }}
               key={item.title}
               secondaryAction={
-                  <IconButton
-                    edge="end"
-                    aria-label="changes"
-                    sx={{ "&:hover": { backgroundColor: "#ffffff" } }}
-                  >
+                <>
                     <Button
+                      edge="end"
                       sx={{ paddingRight: 0, float: "right", "&:hover": { backgroundColor: "#ffffff", padding: "0px" } }}
                       id="basic-button"
                       aria-controls={openMenu ? 'basic-menu' : undefined}
@@ -189,7 +186,6 @@ export default function Todos() {
                       <MoreVertRoundedIcon onClick={() => vertClick(item.id, item.title)} sx={{ "&:hover": { padding: "0px" } }} />
                     </Button>
                     <Menu
-                      sx={{ boxShadow: "null" }}
                       id="basic-menu"
                       anchorEl={anchorEl}
                       open={openMenu}
@@ -197,11 +193,12 @@ export default function Todos() {
                       MenuListProps={{
                         'aria-labelledby': 'basic-button',
                       }}
+                      sx={{ boxShadow: "2px 2px 5px 4px lightgrey" }}
                     >
                       <MenuItem onClick={() => TodoUpdateHandler()} >Update</MenuItem>
                       <MenuItem onClick={() => TodoDeleteHandler()} >Delete</MenuItem>
                     </Menu>
-                  </IconButton>
+                    </>
               }
             >
               <ListItem

@@ -14,7 +14,7 @@ export default function AlbumPhoto({ album, photos }) {
             alt={album.id}
             style={{
               borderRadius: "10px",
-              height: "148px",
+              height: "117px",
               marginBottom: "5px",
               width: "145px"
             }}
