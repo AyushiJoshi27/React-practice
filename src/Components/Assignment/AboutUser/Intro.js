@@ -37,6 +37,7 @@ export default function Intro() {
   const phoneRef = useRef();
   const companyRef = useRef('');
   const [scsMsg, setScsMsg] = useState('');
+  const [inputDisabled, setInputDisabled] = useState(false);
 
   // eslint-disable-next-line
   const FetchIntro = useCallback(async () => {
@@ -63,12 +64,16 @@ export default function Intro() {
       }
     };
 
+    setInputDisabled(true);
     data ? axios.put(`http://localhost:3000/users/${param}`, data) 
      && FetchIntro()
     : console.log("Info");
     setTimeout(() => { setScsMsg("Successfully submitted") }, 2000)
-    setTimeout(() => { setEditInfo(false) }, 3000);
-    setScsMsg("");
+    setTimeout(() => { 
+      setEditInfo(false);
+      setScsMsg("");
+      setInputDisabled(false);
+    }, 3000);
   };
 
   const EditInfo = () => {
@@ -152,6 +157,7 @@ export default function Intro() {
                     inputRef={phoneRef}
                     sx={{width: 370}}
                     label="Phone number"
+                    disabled={inputDisabled}
                   />
                   } />
                 </ListItem>
@@ -167,6 +173,7 @@ export default function Intro() {
                     inputRef={mailRef}
                     sx={{width: 370}}
                     label="Email"
+                    disabled={inputDisabled}
                   />
                     } />
                 </ListItem>
@@ -184,6 +191,7 @@ export default function Intro() {
                     inputRef={companyRef}
                     sx={{width: 370}}
                     label="Workingp place"
+                    disabled={inputDisabled}
                   />
                     } />
                 </ListItem>
@@ -200,6 +208,7 @@ export default function Intro() {
                     inputRef={aptsRef}
                     sx={{width: 370}}
                     label="Apartment number"
+                    disabled={inputDisabled}
                   />
                     
                   } />
@@ -216,6 +225,7 @@ export default function Intro() {
                     inputRef={streetRef}
                     sx={{width: 370}}
                     label="Street address"
+                    disabled={inputDisabled}
                   />
                   } />
                 </ListItem>
@@ -231,6 +241,7 @@ export default function Intro() {
                     inputRef={cityRef}
                     sx={{width: 370}}
                     label="City name"
+                    disabled={inputDisabled}
                   />
                   } />
                 </ListItem>
@@ -246,6 +257,7 @@ export default function Intro() {
                     inputRef={websiteRef}
                     sx={{width: 370}}
                     label="Website"
+                    disabled={inputDisabled}
                   />
                   } />
                 </ListItem>

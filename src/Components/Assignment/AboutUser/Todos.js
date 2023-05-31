@@ -37,6 +37,7 @@ export default function Todos() {
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [scsMsg, setScsMsg] = useState('');
   const [selectedValue, setSelectedValue] = useState('');
+  const [inputDisabled, setInputDisabled] = useState(false);
   //Todos update/delete
   const [anchorEl, setAnchorEl] = useState(false);
   const openMenu = Boolean(anchorEl);
@@ -47,6 +48,7 @@ export default function Todos() {
   const [title, setTitle] = useState('');
   const [openU, setOpenU] = useState(false);
   const [checked, setChecked] = useState(false);
+
 
   const titleRef = useRef('');
   const newTodoRef = useRef("");
@@ -91,6 +93,7 @@ export default function Todos() {
       completed: Boolean(selectedValue)
     }
 
+    setInputDisabled(true);
     if (data) {
       console.log(data);
     }
@@ -99,6 +102,7 @@ export default function Todos() {
     setTimeout(() => {
       setScsMsg("");
       setOpen(false);
+      setInputDisabled(false);
     }, 3000);
   }
 
@@ -112,10 +116,12 @@ export default function Todos() {
       axios.delete(`http://localhost:3000/todos/${id}`)
       FetchTodos();
     };
-    setTimeout(() => { setScsMsg("Deleted submitted") }, 1000)
+    setInputDisabled(true);
+    setTimeout(() => { setScsMsg("Successfully deleted") }, 1000)
     setTimeout(() => {
       setScsMsg("");
       setOpenD(false);
+      setInputDisabled(false);
     }, 3000);
   }
 
@@ -142,12 +148,14 @@ export default function Todos() {
         title: titleRef.current.value,
         completed: Boolean(checked)
       }
+      setInputDisabled(true);
 
       data ? axios.put(`http://localhost:3000/todos/${id}`, data) && FetchTodos() : console.log("Update todo");
-      setTimeout(() => { setScsMsg("Updated submitted") }, 1000)
+      setTimeout(() => { setScsMsg("Successfully Updated") }, 1000)
       setTimeout(() => {
         setOpenU(false);
         setScsMsg("");
+        setInputDisabled(false);
       }, 3000);
     }
   }
@@ -196,14 +204,14 @@ export default function Todos() {
                 <>
                   <Button
                     edge="end"
-                    sx={{ paddingRight: 0, float: "right", "&:hover": { backgroundColor: "#ffffff", padding: "0px" } }}
+                    sx={{ padding: 0, float: "right", "&:hover": { backgroundColor: "#ffffff", padding: 0 } }}
                     id="basic-button"
                     aria-controls={openMenu ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={openMenu ? 'true' : undefined}
                     onClick={handleClick}
                   >
-                    <MoreVertRoundedIcon onClick={() => vertClick(item.id, item.title)} sx={{ "&:hover": { padding: "0px" } }} />
+                    <MoreVertRoundedIcon onClick={() => vertClick(item.id, item.title)} sx={{ "&:hover": { padding: 0 } }} />
                   </Button>
                   <Menu
                     id="basic-menu"
@@ -229,8 +237,9 @@ export default function Todos() {
                 <ListItemText> {item.title}</ListItemText>
                 <Checkbox
                   edge="start"
-                  sx={{ paddingLeft: 2 }}
+                  sx={{ paddingLeft: 2, marginRight: 1 }}
                   checked={item.completed === true ? true : false}
+                  disableRipple={false}
                 />
               </ListItem>
             </ListItem>
@@ -244,7 +253,7 @@ export default function Todos() {
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title" variant='h4'>
+        <DialogTitle id="responsive-dialog-title" variant='h6'>
           New to-do
           <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
         </DialogTitle>
@@ -257,7 +266,7 @@ export default function Todos() {
               key="create"
               secondaryAction={
                 <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                  <InputLabel id="toDoStatus">Status</InputLabel>
+                  <InputLabel id="toDoStatus" disabled={inputDisabled}>Status</InputLabel>
                   <Select
                     labelId="toDoStatus"
                     id="demo-simple-select"
@@ -265,6 +274,7 @@ export default function Todos() {
                     label="Status"
                     onChange={handleSelector}
                     sx={{ height: 50 }}
+                    disabled={inputDisabled}
                   >
                     <MenuItem value={false}>Incompleted</MenuItem>
                     <MenuItem value={true}>Completed</MenuItem>
@@ -283,6 +293,7 @@ export default function Todos() {
                   inputRef={newTodoRef}
                   sx={{ marginRight: 2, width: 345 }}
                   multiline
+                  disabled={inputDisabled}
                 />
               } />
             </ListItem>
@@ -301,8 +312,8 @@ export default function Todos() {
         onClose={handleCloseD}
         aria-labelledby="responsive-delete-dialog-title"
       >
-        <DialogTitle id="responsive-delete-dialog-title" variant='h4'>
-          Delete
+        <DialogTitle id="responsive-delete-dialog-title" variant='h6'>
+          Remove to-do
           <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
         </DialogTitle>
         <Divider />
@@ -310,7 +321,7 @@ export default function Todos() {
           sx={{ padding: "10px 24px", width: 500 }}
         >
           <DialogContentText>
-            <Typography>Are you sure you want to delete the to-do from the list?</Typography>
+            <Typography disabled={inputDisabled}>Are you sure you want to delete the to-do from the list?</Typography>
           </DialogContentText>
         </DialogContent>
         <Divider />
@@ -327,8 +338,8 @@ export default function Todos() {
           onClose={handleCloseU}
           aria-labelledby="responsive-update-dialog-title"
         >
-          <DialogTitle id="responsive-update-dialog-title" variant='h4'>
-            Update <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
+          <DialogTitle id="responsive-update-dialog-title" variant='h6'>
+            Edit to-do <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
           </DialogTitle>
           <Divider />
           <DialogContent
@@ -347,6 +358,7 @@ export default function Todos() {
                       label="Status"
                       onChange={CheckboxHandler}
                       sx={{ height: 50 }}
+                      disabled={inputDisabled}
                     >
                       <MenuItem value={false}>Incompleted</MenuItem>
                       <Divider/>
@@ -366,6 +378,7 @@ export default function Todos() {
                     inputRef={titleRef}
                     sx={{ marginRight: 2, width: 345 }}
                     multiline
+                    disabled={inputDisabled}
                   />
                 } />
               </ListItem>
