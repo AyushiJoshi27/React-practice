@@ -13,7 +13,6 @@ import Divider from '@mui/material/Divider';
 // import ListItemButton from '@mui/material/ListItemButton';
 //Todo update/dalete
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 //dialog
 import Button from '@mui/material/Button';
@@ -25,6 +24,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 export default function Todos() {
   const [userTodos, setUserTodos] = useState([]);
@@ -32,6 +35,8 @@ export default function Todos() {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const [scsMsg, setScsMsg] = useState('');
+  const [selectedValue, setSelectedValue] = useState('');
   //Todos update/delete
   const [anchorEl, setAnchorEl] = useState(false);
   const openMenu = Boolean(anchorEl);
@@ -44,6 +49,7 @@ export default function Todos() {
   const [checked, setChecked] = useState(false);
 
   const titleRef = useRef('');
+  const newTodoRef = useRef("");
 
   useEffect(() => {
     FetchTodos();
@@ -68,9 +74,6 @@ export default function Todos() {
     setAnchorEl(null);
   };
 
-  const status = useRef("");
-  const newTodo = useRef("");
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -81,15 +84,22 @@ export default function Todos() {
 
   //post
   const AddNewTodos = () => {
+    setScsMsg("");
     const data = {
       userId: Number(param),
-      title: newTodo.current.value,
-      completed: Boolean(status.current.value)
+      title: newTodoRef.current.value,
+      completed: Boolean(selectedValue)
     }
 
-    axios.post(`http://localhost:3000/todos?userId=${param}`, data);
-    FetchTodos();
-    setOpen(false);
+    if (data) {
+      console.log(data);
+    }
+    data ? axios.post(`http://localhost:3000/todos?userId=${param}`, data) && FetchTodos() : console.log("todo's post");
+    setTimeout(() => { setScsMsg("Successfully submitted") }, 1000)
+    setTimeout(() => {
+      setScsMsg("");
+      setOpen(false);
+    }, 3000);
   }
 
   //Todo Delete
@@ -100,9 +110,13 @@ export default function Todos() {
   const DeleteTodos = () => {
     if (id) {
       axios.delete(`http://localhost:3000/todos/${id}`)
+      FetchTodos();
     };
-    FetchTodos();
-    setOpenD(false);
+    setTimeout(() => { setScsMsg("Deleted submitted") }, 1000)
+    setTimeout(() => {
+      setScsMsg("");
+      setOpenD(false);
+    }, 3000);
   }
 
   const handleCloseD = () => {
@@ -129,17 +143,23 @@ export default function Todos() {
         completed: Boolean(checked)
       }
 
-      console.log(Number(param))
-      console.log(titleRef.current.value)
-      console.log(Boolean(checked))
-      axios.put(`http://localhost:3000/todos/${id}`, data);
-      FetchTodos();
-      setOpenU(false);
+      data ? axios.put(`http://localhost:3000/todos/${id}`, data) && FetchTodos() : console.log("Update todo");
+      setTimeout(() => { setScsMsg("Updated submitted") }, 1000)
+      setTimeout(() => {
+        setOpenU(false);
+        setScsMsg("");
+      }, 3000);
     }
   }
 
   const CheckboxHandler = (event) => {
-    setChecked(event.target.checked)
+    console.group(event.target.value);
+    // setChecked(event.target.checked)
+  }
+
+  const handleSelector = (event) => {
+    console.log(event.target.value)
+    setSelectedValue(event.target.value);
   }
 
   return (
@@ -174,31 +194,31 @@ export default function Todos() {
               key={item.title}
               secondaryAction={
                 <>
-                    <Button
-                      edge="end"
-                      sx={{ paddingRight: 0, float: "right", "&:hover": { backgroundColor: "#ffffff", padding: "0px" } }}
-                      id="basic-button"
-                      aria-controls={openMenu ? 'basic-menu' : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={openMenu ? 'true' : undefined}
-                      onClick={handleClick}
-                    >
-                      <MoreVertRoundedIcon onClick={() => vertClick(item.id, item.title)} sx={{ "&:hover": { padding: "0px" } }} />
-                    </Button>
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={openMenu}
-                      onClose={TodoHandler}
-                      MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                      }}
-                      sx={{ boxShadow: "2px 2px 5px 4px lightgrey" }}
-                    >
-                      <MenuItem onClick={() => TodoUpdateHandler()} >Update</MenuItem>
-                      <MenuItem onClick={() => TodoDeleteHandler()} >Delete</MenuItem>
-                    </Menu>
-                    </>
+                  <Button
+                    edge="end"
+                    sx={{ paddingRight: 0, float: "right", "&:hover": { backgroundColor: "#ffffff", padding: "0px" } }}
+                    id="basic-button"
+                    aria-controls={openMenu ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={openMenu ? 'true' : undefined}
+                    onClick={handleClick}
+                  >
+                    <MoreVertRoundedIcon onClick={() => vertClick(item.id, item.title)} sx={{ "&:hover": { padding: "0px" } }} />
+                  </Button>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={openMenu}
+                    onClose={TodoHandler}
+                    MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                    }}
+                    sx={{ boxShadow: "2px 2px 5px 4px lightgrey" }}
+                  >
+                    <MenuItem onClick={() => TodoUpdateHandler()} >Update</MenuItem>
+                    <MenuItem onClick={() => TodoDeleteHandler()} >Delete</MenuItem>
+                  </Menu>
+                </>
               }
             >
               <ListItem
@@ -225,39 +245,53 @@ export default function Todos() {
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title" variant='h4'>
-          {"Add a todo"}
+          New to-do
+          <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
         </DialogTitle>
         <Divider />
         <DialogContent
-          sx={{ width: 500 }}
+          sx={{ width: "520px" }}
         >
-          <DialogContentText sx={{ marginTop: "20px" }}>
-            <Typography sx={{
-              display: "inline-block",
-              width: "180px",
-              textAlign: "end",
-              paddingRight: "10px"
-            }}
+          <List dense>
+            <ListItem
+              key="create"
+              secondaryAction={
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                  <InputLabel id="toDoStatus">Status</InputLabel>
+                  <Select
+                    labelId="toDoStatus"
+                    id="demo-simple-select"
+                    value={selectedValue}
+                    label="Status"
+                    onChange={handleSelector}
+                    sx={{ height: 50 }}
+                  >
+                    <MenuItem value={false}>Incompleted</MenuItem>
+                    <MenuItem value={true}>Completed</MenuItem>
+                  </Select>
+                </FormControl>
+              }
+              disablePadding
             >
-              <label for="html">Status: </label>
-            </Typography>
-            <input type='text' ref={status} style={{ marginBottom: "20px", width: 200 }} /><br />
-            <Typography sx={{
-              display: "inline-block",
-              width: "180px",
-              textAlign: "end",
-              paddingRight: "10px"
-            }}
-            >
-              <label for="html">Add a Todo: </label>
-            </Typography>
-            <input type='text' ref={newTodo} style={{ marginBottom: "20px", width: 200 }} /><br />
-          </DialogContentText>
+              <ListItemText primary={
+                <TextField
+                  id="outlined-post-input"
+                  defaultValue='New to-do'
+                  InputProps={{
+                    readOnly: false,
+                  }}
+                  inputRef={newTodoRef}
+                  sx={{ marginRight: 2, width: 345 }}
+                  multiline
+                />
+              } />
+            </ListItem>
+          </List>
         </DialogContent>
         <Divider />
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>Cancel</Button>
-          <Button onClick={AddNewTodos} autoFocus>Save</Button>
+          <Button onClick={handleClose} variant="contained" color='error'><b>Cancel</b></Button>
+          <Button onClick={AddNewTodos} variant="contained"><b>Save</b></Button>
         </DialogActions>
       </Dialog>
       {/* Modal Delete */}
@@ -269,19 +303,20 @@ export default function Todos() {
       >
         <DialogTitle id="responsive-delete-dialog-title" variant='h4'>
           Delete
+          <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
         </DialogTitle>
         <Divider />
         <DialogContent
           sx={{ padding: "10px 24px", width: 500 }}
         >
           <DialogContentText>
-            <Typography>Are you sure you want to delete it?</Typography>
+            <Typography>Are you sure you want to delete the to-do from the list?</Typography>
           </DialogContentText>
         </DialogContent>
         <Divider />
         <DialogActions>
-          <Button autoFocus onClick={handleCloseD}>Cancel</Button>
-          <Button onClick={DeleteTodos} autoFocus>Delete</Button>
+          <Button onClick={handleCloseD} variant="contained" color='error'><b>Cancel</b></Button>
+          <Button onClick={DeleteTodos} variant="contained"><b>Save</b></Button>
         </DialogActions>
       </Dialog>
       {/* Modal to update */}
@@ -293,33 +328,53 @@ export default function Todos() {
           aria-labelledby="responsive-update-dialog-title"
         >
           <DialogTitle id="responsive-update-dialog-title" variant='h4'>
-            Update
+            Update <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
           </DialogTitle>
           <Divider />
           <DialogContent
             sx={{ padding: "10px 24px", width: 500 }}
           >
-            <DialogContentText>
-              <TextField
-                id="outlined-update-input"
-                defaultValue={title}
-                InputProps={{
-                  readOnly: false,
-                }}
-                inputRef={titleRef}
-                sx={{width: 500}}
-                multiline
-                rows={2}
-              />
-              <FormControlLabel
-                control={<Checkbox checked={checked} onChange={CheckboxHandler} />}
-              />
-            </DialogContentText>
+            <List dense>
+              <ListItem
+                key="create"
+                secondaryAction={
+                  <FormControl sx={{m: 1, minWidth: 120 }} size="small">
+                    <InputLabel id="toDoStatus">Status</InputLabel>
+                    <Select
+                      labelId="toDoStatus"
+                      id="demo-simple-select"
+                      value={selectedValue}
+                      label="Status"
+                      onChange={CheckboxHandler}
+                      sx={{ height: 50 }}
+                    >
+                      <MenuItem value={false}>Incompleted</MenuItem>
+                      <Divider/>
+                      <MenuItem value={true}>Completed</MenuItem>
+                    </Select>
+                  </FormControl>
+                }
+                disablePadding
+              >
+                <ListItemText primary={
+                  <TextField
+                    id="outlined-update-input"
+                    defaultValue={title}
+                    InputProps={{
+                      readOnly: false,
+                    }}
+                    inputRef={titleRef}
+                    sx={{ marginRight: 2, width: 345 }}
+                    multiline
+                  />
+                } />
+              </ListItem>
+            </List>
           </DialogContent>
           <Divider />
           <DialogActions>
-            <Button autoFocus onClick={handleCloseU}>Cancel</Button>
-            <Button onClick={updateTodo} autoFocus>Update</Button>
+            <Button onClick={handleCloseU} variant="contained" color='error'><b>Cancel</b></Button>
+            <Button onClick={updateTodo} variant="contained"><b>Update</b></Button>
           </DialogActions>
         </Dialog>
         : " "}

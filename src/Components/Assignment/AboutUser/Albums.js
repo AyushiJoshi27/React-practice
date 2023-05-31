@@ -41,6 +41,7 @@ export default function UserAlbum() {
   const [combinedList, setCombinedList] = useState('');
   const [albumId, setAalbumId] = React.useState('');
   const { param } = useParams();
+  const [scsMsg, setScsMsg] = useState('');
   // modal state
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
@@ -120,14 +121,8 @@ export default function UserAlbum() {
   // combinedList ? console.log(combinedList) : console.log("combinedList");
 
   //modal controllers
-  const handleClickOpen = () => {
-    // console.log('modal open');
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClickOpen = () => { setOpen(true) };
+  const handleClose = () => { setOpen(false) };
 
   const ImageUploader = () => {
     // albumId ? console.log(albumId) : console.log("age");
@@ -136,8 +131,10 @@ export default function UserAlbum() {
       "title": titleRef.current.value
     }
     // console.log("data: ", data);
-    axios.post(`http://localhost:3000/albums?userId=${param}`, data);
-    setOpen(false);
+    data ? axios.post(`http://localhost:3000/albums?userId=${param}`, data) && fetchAlbums2() : console.log("Post album");
+
+    setTimeout(() => { setScsMsg("Successfully submitted") }, 2000)
+    setTimeout(() => { setOpen(false) && setScsMsg("") }, 3000);
   }
 
   //Dlt Album 
@@ -145,18 +142,14 @@ export default function UserAlbum() {
     setDltAlbumId(albumId);
     setOpenD(true);
   }
-  
+
   const DeleteTodos = () => {
-    if (dltAlbumId) {
-      axios.delete(`http://localhost:3000/albums/${dltAlbumId}`)
-    }
-    fetchAlbums2();
-    setOpenD(false);
+    dltAlbumId ? axios.delete(`http://localhost:3000/albums/${dltAlbumId}`) && fetchAlbums2() : console.log("Delete Album");
+    setTimeout(() => { setScsMsg("Deleted submitted") }, 2000)
+    setTimeout(() => { setOpenD(false) && setScsMsg("") }, 3000);
   }
- 
-  const handleCloseD = () => {
-    setOpenD(false);
-  };
+
+  const handleCloseD = () => { setOpenD(false) };
 
   //update handler
   const AlbumEdtHandler = (id, title) => {
@@ -171,20 +164,18 @@ export default function UserAlbum() {
     if (updateAlbum && title) {
       const data = {
         userId: Number(updateAlbum),
-        title: title
+        title: editTitleRef.current.value
       }
       console.log(data);
 
       // axios.put(`http://localhost:3000/albums?userId=${updateAlbum}`, data);
+      // fetchAlbums2();
     }
-
-    // fetchAlbums2();
-      setOpenU(false);
+    setTimeout(() => { setScsMsg("Updated submitted") }, 2000)
+    setTimeout(() => { setOpenU(false) && setScsMsg("") }, 3000);
   }
 
-  const handleCloseU = () => {
-    setOpenU(false);
-  }
+  const handleCloseU = () => { setOpenU(false); }
 
   return (
     <>
@@ -313,7 +304,8 @@ export default function UserAlbum() {
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title" variant='h5'>
-          {<b>Album</b>}
+          <b>Create a album</b>
+          <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
         </DialogTitle>
         <Divider />
         <DialogContent sx={{ height: 350, width: 300 }}>
@@ -324,13 +316,13 @@ export default function UserAlbum() {
                   <FormControl size="small">
                     <TextField
                       id="outlined-update-input"
-                      placeholder='Title of the album...'
+                      placeholder='Write something...'
                       InputProps={{
                         readOnly: false,
                       }}
-                      sx={{ height: 20, width: 300}}
+                      sx={{ height: 20, width: 300 }}
                       inputRef={titleRef}
-                      label="Write the title of the album"
+                      label="Write a title of the album"
                       multiline
                     />
                   </FormControl>
@@ -342,8 +334,8 @@ export default function UserAlbum() {
         </DialogContent>
         <Divider />
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>Cancel</Button>
-          <Button autoFocus onClick={ImageUploader}>Save</Button>
+          <Button onClick={handleClose} variant="contained" color='error'><b>Cancel</b></Button>
+          <Button onClick={ImageUploader} variant="contained"><b>Save</b></Button>
         </DialogActions>
       </Dialog >
       {/* Confirmation dialog */}
@@ -354,7 +346,8 @@ export default function UserAlbum() {
         aria-labelledby="responsive-delete-dialog-title"
       >
         <DialogTitle id="responsive-delete-dialog-title" variant='h6'>
-          Delete
+          <b>Delete album</b>
+          <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
         </DialogTitle>
         <Divider />
         <DialogContent
@@ -366,48 +359,49 @@ export default function UserAlbum() {
         </DialogContent>
         <Divider />
         <DialogActions>
-          <Button autoFocus onClick={handleCloseD}>Cancel</Button>
-          <Button onClick={DeleteTodos} autoFocus>Delete</Button>
+          <Button onClick={handleCloseD} variant="contained" color='error'><b>Cancel</b></Button>
+          <Button onClick={DeleteTodos} variant="contained"><b>Save</b></Button>
         </DialogActions>
       </Dialog>
       {/* modal to update album */}
       {title ? <Dialog
-          fullScreen={fullScreen}
-          open={openU}
-          onClose={handleCloseU}
-          aria-labelledby="responsive-update-dialog-title"
+        fullScreen={fullScreen}
+        open={openU}
+        onClose={handleCloseU}
+        aria-labelledby="responsive-update-dialog-title"
+      >
+        <DialogTitle id="responsive-update-dialog-title" variant='h4'>
+          <b>Update</b>
+          <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
+        </DialogTitle>
+        <Divider />
+        <DialogContent
+          sx={{ padding: "10px 24px", height: 200, width: 500 }}
         >
-          <DialogTitle id="responsive-update-dialog-title" variant='h4'>
-            <b>Update</b>
-          </DialogTitle>
-          <Divider />
-          <DialogContent
-            sx={{ padding: "10px 24px", height:300, width: 500 }}
-          >
-            <DialogContentText>
+          <DialogContentText>
             <FormControl size="small">
-                    <TextField
-                      id="outlined-update-input"
-                      placeholder='Write a title...'
-                      defaultValue={title}
-                      InputProps={{
-                        readOnly: false,
-                      }}
-                      sx={{marginTop: 2,  height: 50, width: 500}}
-                      inputRef={editTitleRef}
-                      label="Title of the album"
-                      multiline
-                      rows={2}
-                    />
-                  </FormControl>
-            </DialogContentText>
-          </DialogContent>
-          <Divider />
-          <DialogActions>
-            <Button autoFocus onClick={handleCloseU}>Cancel</Button>
-            <Button onClick={updateAlbumHandler} autoFocus>Update</Button>
-          </DialogActions>
-        </Dialog> : ""}
+              <TextField
+                id="outlined-update-input"
+                placeholder='Write a title...'
+                defaultValue={title}
+                InputProps={{
+                  readOnly: false,
+                }}
+                sx={{ marginTop: 2, height: 50, width: 500 }}
+                inputRef={editTitleRef}
+                label="Title of the album"
+                multiline
+                rows={2}
+              />
+            </FormControl>
+          </DialogContentText>
+        </DialogContent>
+        <Divider />
+        <DialogActions>
+          <Button onClick={handleCloseU} variant="contained" color='error'><b>Cancel</b></Button>
+          <Button onClick={updateAlbumHandler} variant="contained"><b>Save</b></Button>
+        </DialogActions>
+      </Dialog> : ""}
     </>
   )
 }

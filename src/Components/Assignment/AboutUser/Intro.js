@@ -18,7 +18,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import { Button } from '@mui/base';
+import Button from '@mui/material/Button';
 import AddRoadIcon from '@mui/icons-material/AddRoad';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 
@@ -36,6 +36,7 @@ export default function Intro() {
   const cityRef = useRef('');
   const phoneRef = useRef();
   const companyRef = useRef('');
+  const [scsMsg, setScsMsg] = useState('');
 
   // eslint-disable-next-line
   const FetchIntro = useCallback(async () => {
@@ -62,9 +63,12 @@ export default function Intro() {
       }
     };
 
-    data ? axios.put(`http://localhost:3000/users/${param}`, data) : console.log("Info");
-    FetchIntro();
-    setEditInfo(false);
+    data ? axios.put(`http://localhost:3000/users/${param}`, data) 
+     && FetchIntro()
+    : console.log("Info");
+    setTimeout(() => { setScsMsg("Successfully submitted") }, 2000)
+    setTimeout(() => { setEditInfo(false) }, 3000);
+    setScsMsg("");
   };
 
   const EditInfo = () => {
@@ -93,7 +97,7 @@ export default function Intro() {
                 <EditIcon edge="end" aria-label="edit" onClick={EditInfo}/>
               }
             >
-              <ListItemText primary={<b>Intro</b>} />
+              <ListItemText primary={<b>Information</b>} />
             </ListItem>
             <ListItem>
               <ListItemAvatar sx={{fontSize: 14}}><Avatar><PhoneIcon /></Avatar></ListItemAvatar>
@@ -119,20 +123,22 @@ export default function Intro() {
             </ListItem>
           </List> : ''}
         {/* Update dialog */}
-        {userIntro ? <Dialog
+        {userIntro ? 
+        <Dialog
           fullScreen={fullScreen}
           open={editInfo}
           onClose={editClose}
           aria-labelledby="responsive-dialog-title"
+          sx={{height: 500}}
         >
           <DialogTitle id="responsive-dialog-title" variant='h6'>
-            Edit info
+            Edit information
+            <center style={{color:"rgb(55,125,51)"}}>{scsMsg}</center>
           </DialogTitle>
           <Divider />
           <DialogContent
             sx={{ width: "500px" }}
           >
-            <DialogContentText>
               <List sx={{ fontSize: "14px" }}>
                 <ListItem>
                   <ListItemAvatar><Avatar><PhoneIcon /></Avatar></ListItemAvatar>
@@ -144,7 +150,8 @@ export default function Intro() {
                       readOnly: false,
                     }}
                     inputRef={phoneRef}
-                    sx={{width: "auto"}}
+                    sx={{width: 370}}
+                    label="Phone number"
                   />
                   } />
                 </ListItem>
@@ -158,7 +165,8 @@ export default function Intro() {
                       readOnly: false,
                     }}
                     inputRef={mailRef}
-                    sx={{width: "auto"}}
+                    sx={{width: 370}}
+                    label="Email"
                   />
                     } />
                 </ListItem>
@@ -174,7 +182,8 @@ export default function Intro() {
                       readOnly: false,
                     }}
                     inputRef={companyRef}
-                    sx={{width: "auto"}}
+                    sx={{width: 370}}
+                    label="Workingp place"
                   />
                     } />
                 </ListItem>
@@ -189,13 +198,14 @@ export default function Intro() {
                     }}
                     multiline
                     inputRef={aptsRef}
-                    sx={{width: "auto"}}
+                    sx={{width: 370}}
+                    label="Apartment number"
                   />
                     
                   } />
                 </ListItem>
-                <ListItem>
-                  <ListItemAvatar><Avatar><AddRoadIcon /></Avatar></ListItemAvatar>
+                <ListItem sx={{color: "#000000"}}>
+                  <ListItemAvatar><Avatar><AddRoadIcon/></Avatar></ListItemAvatar>
                   <ListItemText primary={
                     <TextField
                     id="outlined-update-input"
@@ -204,7 +214,8 @@ export default function Intro() {
                       readOnly: false,
                     }}
                     inputRef={streetRef}
-                    sx={{width: "auto"}}
+                    sx={{width: 370}}
+                    label="Street address"
                   />
                   } />
                 </ListItem>
@@ -218,7 +229,8 @@ export default function Intro() {
                       readOnly: false,
                     }}
                     inputRef={cityRef}
-                    sx={{width: "auto"}}
+                    sx={{width: 370}}
+                    label="City name"
                   />
                   } />
                 </ListItem>
@@ -232,17 +244,17 @@ export default function Intro() {
                       readOnly: false,
                     }}
                     inputRef={websiteRef}
-                    sx={{width: "auto"}}
+                    sx={{width: 370}}
+                    label="Website"
                   />
                   } />
                 </ListItem>
               </List>
-            </DialogContentText>
           </DialogContent>
           <Divider />
           <DialogActions>
-            <Button autoFocus onClick={editClose}>Cancel</Button>
-            <Button onClick={infoUpdate} variant="contained" autoFocus type='submit'>Post</Button>
+            <Button onClick={editClose} variant="contained" color='error'><b>Cancel</b></Button>
+            <Button onClick={infoUpdate} variant="contained"><b>Save</b></Button>
           </DialogActions>
         </Dialog> : ''}
       </Paper >
