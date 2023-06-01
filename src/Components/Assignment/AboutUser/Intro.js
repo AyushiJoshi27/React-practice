@@ -9,6 +9,7 @@ import Link from '@mui/material/Link';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import EditIcon from '@mui/icons-material/Edit';
+import LinearProgress from '@mui/material/LinearProgress';
 //dialog
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -38,16 +39,46 @@ export default function Intro() {
   const companyRef = useRef('');
   const [scsMsg, setScsMsg] = useState('');
   const [inputDisabled, setInputDisabled] = useState(false);
+  const[display, setDisplay] = useState("none")
+  const [progress, setProgress] = React.useState(0);
+  const [buffer, setBuffer] = React.useState(10);
+
+  const progressRef = React.useRef(() => {});
+
+  useEffect(() => {
+    FetchIntro();
+  }, []);
+
+  useEffect(() => {
+    progressRef.current = () => {
+      if (progress > 100) {
+        setProgress(0);
+        setBuffer(10);
+      } else {
+        const diff = Math.random() * 10;
+        const diff2 = Math.random() * 10;
+        setProgress(progress + diff);
+        setBuffer(progress + diff + diff2);
+      }
+    };
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      progressRef.current();
+    }, 200);
+
+    return () => {
+      clearInterval(timer)
+    };
+  }, []);
+
 
   // eslint-disable-next-line
   const FetchIntro = useCallback(async () => {
     const response = await axios.get(`http://localhost:3000/users?id=${param}`);
     setUserIntro(response.data[0]);
   })
-
-  useEffect(() => {
-    FetchIntro();
-  }, []);
 
   const infoUpdate = () => {
     const data = {
@@ -68,12 +99,16 @@ export default function Intro() {
     data ? axios.put(`http://localhost:3000/users/${param}`, data) 
      && FetchIntro()
     : console.log("Info");
-    setTimeout(() => { setScsMsg("Successfully submitted") }, 2000)
+    setTimeout(() => {setDisplay("block")}, 2000);
+    setTimeout(() => { 
+      setDisplay("none");
+      setScsMsg("Successfully submitted") ;
+    }, 3000);
     setTimeout(() => { 
       setEditInfo(false);
       setScsMsg("");
       setInputDisabled(false);
-    }, 3000);
+    }, 4000);
   };
 
   const EditInfo = () => {
@@ -102,29 +137,63 @@ export default function Intro() {
                 <EditIcon edge="end" aria-label="edit" onClick={EditInfo}/>
               }
             >
-              <ListItemText primary={<b>Information</b>} />
+              <ListItemText 
+                sx={{
+                  "&::first-letter": {
+                    textTransform: "uppercase"
+                  }
+                }}
+                primary={<b>Information</b>} />
             </ListItem>
             <ListItem>
               <ListItemAvatar sx={{fontSize: 14}}><Avatar><PhoneIcon /></Avatar></ListItemAvatar>
-              <ListItemText primary={userIntro.phone} />
+              <ListItemText 
+                sx={{
+                  "&::first-letter": {
+                    textTransform: "uppercase"
+                  }
+                }}
+                primary={userIntro.phone} />
             </ListItem>
             <ListItem>
               <ListItemAvatar><Avatar><EmailIcon /></Avatar></ListItemAvatar>
-              <ListItemText primary={userIntro.email} />
+              <ListItemText 
+                sx={{
+                  "&::first-letter": {
+                    textTransform: "uppercase"
+                  }
+                }}
+                primary={userIntro.email} />
             </ListItem>
             <ListItem>
-              <ListItemAvatar>
-                <Avatar><BusinessCenterIcon /></Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={userIntro.company.name} />
+              <ListItemAvatar><Avatar><BusinessCenterIcon /></Avatar></ListItemAvatar>
+              <ListItemText 
+                sx={{
+                  "&::first-letter": {
+                    textTransform: "uppercase"
+                  }
+                }}
+                primary={userIntro.company.name} />
             </ListItem>
             <ListItem>
               <ListItemAvatar><Avatar><LocationOnIcon /></Avatar></ListItemAvatar>
-              <ListItemText primary={<span>{userIntro.address.suite}, {userIntro.address.street}, {userIntro.address.city}</span>} />
+              <ListItemText 
+                sx={{
+                  "&::first-letter": {
+                    textTransform: "uppercase"
+                  }
+                }}
+                primary={<span>{userIntro.address.suite}, {userIntro.address.street}, {userIntro.address.city}</span>} />
             </ListItem>
             <ListItem>
               <ListItemAvatar><Avatar><LinkIcon /></Avatar></ListItemAvatar>
-              <ListItemText primary={<Link href={userIntro.website}>{userIntro.website}</Link>} />
+              <ListItemText 
+                sx={{
+                  "&::first-letter": {
+                    textTransform: "uppercase"
+                  }
+                }}
+                primary={<Link href={userIntro.website}>{userIntro.website}</Link>} />
             </ListItem>
           </List> : ''}
         {/* Update dialog */}
@@ -138,7 +207,10 @@ export default function Intro() {
         >
           <DialogTitle id="responsive-dialog-title" variant='h6'>
             Edit information
-            <center style={{color:"rgb(55,125,51)"}}>{scsMsg}</center>
+            <Typography>
+              <center style={{color:"rgb(55,125,51)", marginTop: "10px"}}>{scsMsg}</center>
+            </Typography>
+            <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{display:{display}}}/>
           </DialogTitle>
           <Divider />
           <DialogContent
@@ -190,7 +262,7 @@ export default function Intro() {
                     }}
                     inputRef={companyRef}
                     sx={{width: 370}}
-                    label="Workingp place"
+                    label="Working place"
                     disabled={inputDisabled}
                   />
                     } />

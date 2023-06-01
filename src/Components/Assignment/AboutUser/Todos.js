@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
+import LinearProgress from '@mui/material/LinearProgress';
 // import ListItemButton from '@mui/material/ListItemButton';
 //Todo update/dalete
 import Menu from '@mui/material/Menu';
@@ -48,13 +49,26 @@ export default function Todos() {
   const [title, setTitle] = useState('');
   const [openU, setOpenU] = useState(false);
   const [checked, setChecked] = useState(false);
-
-
+  const [todoStatus, setTodoStatus] = useState(false);
+  const [display, setDisplay] = useState("none")
+  const [progress, setProgress] = React.useState(0);
+  const [buffer, setBuffer] = React.useState(10);
+  const progressRef = React.useRef(() => { });
   const titleRef = useRef('');
   const newTodoRef = useRef("");
 
   useEffect(() => {
     FetchTodos();
+  }, [])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      progressRef.current();
+    }, 200);
+
+    return () => {
+      clearInterval(timer)
+    };
   }, [])
 
   // eslint-disable-next-line
@@ -63,9 +77,25 @@ export default function Todos() {
     setUserTodos(response.data);
   });
 
-  const vertClick = (id, title) => {
+  useEffect(() => {
+    progressRef.current = () => {
+      if (progress > 100) {
+        setProgress(0);
+        setBuffer(10);
+      } else {
+        const diff = Math.random() * 10;
+        const diff2 = Math.random() * 10;
+        setProgress(progress + diff);
+        setBuffer(progress + diff + diff2);
+      }
+    };
+  });
+
+  const vertClick = (id, title, status) => {
     setId(id);
     setTitle(title);
+    console.log(status);
+    setTodoStatus(status);
   }
 
   const handleClick = (event) => {
@@ -97,13 +127,20 @@ export default function Todos() {
     if (data) {
       console.log(data);
     }
-    data ? axios.post(`http://localhost:3000/todos?userId=${param}`, data) && FetchTodos() : console.log("todo's post");
-    setTimeout(() => { setScsMsg("Successfully submitted") }, 1000)
+    data ? axios.post(`http://localhost:3000/todos?userId=${param}`, data)
+      : console.log("todo's post");
+
+    setTimeout(() => { setDisplay("block") }, 1000);
+    setTimeout(() => {
+      setDisplay("none");
+      FetchTodos();
+      setScsMsg("Successfully submitted");
+    }, 3000);
     setTimeout(() => {
       setScsMsg("");
       setOpen(false);
       setInputDisabled(false);
-    }, 3000);
+    }, 4000);
   }
 
   //Todo Delete
@@ -113,16 +150,20 @@ export default function Todos() {
 
   const DeleteTodos = () => {
     if (id) {
-      axios.delete(`http://localhost:3000/todos/${id}`)
-      FetchTodos();
+      axios.delete(`http://localhost:3000/todos/${id}`);
     };
     setInputDisabled(true);
-    setTimeout(() => { setScsMsg("Successfully deleted") }, 1000)
+    setTimeout(() => { setDisplay("block") }, 1000);
+    setTimeout(() => {
+      FetchTodos();
+      setDisplay("none");
+      setScsMsg("Successfully submitted");
+    }, 4000);
     setTimeout(() => {
       setScsMsg("");
       setOpenD(false);
       setInputDisabled(false);
-    }, 3000);
+    }, 5000);
   }
 
   const handleCloseD = () => {
@@ -131,7 +172,6 @@ export default function Todos() {
 
   //handler for update modal
   const TodoUpdateHandler = () => {
-    // id ? console.log("Update: ", id) : console.log("id");
     setOpenU(true);
   }
 
@@ -142,31 +182,34 @@ export default function Todos() {
   const updateTodo = () => {
     setAnchorEl(false);
 
-    if (titleRef) {
       const data = {
         userId: Number(param),
         title: titleRef.current.value,
-        completed: Boolean(checked)
-      }
+        completed: Boolean(todoStatus)
+      };
+
       setInputDisabled(true);
+      if (data) { console.log(data) }
 
       data ? axios.put(`http://localhost:3000/todos/${id}`, data) && FetchTodos() : console.log("Update todo");
-      setTimeout(() => { setScsMsg("Successfully Updated") }, 1000)
+      setTimeout(() => {setDisplay("block")}, 2000);
+      setTimeout(() => { 
+        setDisplay("none");
+        setScsMsg("Successfully submitted") ;
+      }, 3000);
       setTimeout(() => {
         setOpenU(false);
         setScsMsg("");
         setInputDisabled(false);
-      }, 3000);
-    }
+      }, 5000);
   }
 
   const CheckboxHandler = (event) => {
-    console.group(event.target.value);
-    // setChecked(event.target.checked)
+    setTodoStatus(event.target.value);
+    console.log(event.target.value);
   }
 
   const handleSelector = (event) => {
-    console.log(event.target.value)
     setSelectedValue(event.target.value);
   }
 
@@ -199,7 +242,7 @@ export default function Todos() {
           {userTodos.map((item, index) => (
             <ListItem
               sx={{ paddingLeft: 0 }}
-              key={item.title}
+              key={item.id}
               secondaryAction={
                 <>
                   <Button
@@ -211,7 +254,7 @@ export default function Todos() {
                     aria-expanded={openMenu ? 'true' : undefined}
                     onClick={handleClick}
                   >
-                    <MoreVertRoundedIcon onClick={() => vertClick(item.id, item.title)} sx={{ "&:hover": { padding: 0 } }} />
+                    <MoreVertRoundedIcon onClick={() => vertClick(item.id, item.title, item.completed)} sx={{ "&:hover": { padding: 0 } }} />
                   </Button>
                   <Menu
                     id="basic-menu"
@@ -234,12 +277,19 @@ export default function Todos() {
                 sx={{ "&:hover": { backgroundColor: "#ffffff" } }}
               >
                 <ListItemIcon sx={{ width: "50px" }}>{index + 1}.</ListItemIcon>
-                <ListItemText> {item.title}</ListItemText>
+                <ListItemText
+                  sx={{
+                    "&::first-letter": {
+                      textTransform: "uppercase"
+                    }
+                  }}
+                >
+                  {item.title}</ListItemText>
                 <Checkbox
                   edge="start"
                   sx={{ paddingLeft: 2, marginRight: 1 }}
                   checked={item.completed === true ? true : false}
-                  disableRipple={false}
+                  disableRipple={true}
                 />
               </ListItem>
             </ListItem>
@@ -255,7 +305,10 @@ export default function Todos() {
       >
         <DialogTitle id="responsive-dialog-title" variant='h6'>
           New to-do
-          <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
+          <Typography>
+            <center style={{ color: "rgb(55,125,51)", marginTop: "10px" }}>{scsMsg}</center>
+          </Typography>
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
         </DialogTitle>
         <Divider />
         <DialogContent
@@ -314,7 +367,10 @@ export default function Todos() {
       >
         <DialogTitle id="responsive-delete-dialog-title" variant='h6'>
           Remove to-do
-          <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
+          <Typography>
+            <center style={{ color: "rgb(55,125,51)", marginTop: "10px" }}>{scsMsg}</center>
+          </Typography>
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
         </DialogTitle>
         <Divider />
         <DialogContent
@@ -349,19 +405,19 @@ export default function Todos() {
               <ListItem
                 key="create"
                 secondaryAction={
-                  <FormControl sx={{m: 1, minWidth: 120 }} size="small">
+                  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                     <InputLabel id="toDoStatus">Status</InputLabel>
                     <Select
                       labelId="toDoStatus"
                       id="demo-simple-select"
-                      value={selectedValue}
-                      label="Status"
+                      value={todoStatus}
+                      label="status"
                       onChange={CheckboxHandler}
                       sx={{ height: 50 }}
                       disabled={inputDisabled}
                     >
                       <MenuItem value={false}>Incompleted</MenuItem>
-                      <Divider/>
+                      <Divider />
                       <MenuItem value={true}>Completed</MenuItem>
                     </Select>
                   </FormControl>
@@ -376,7 +432,7 @@ export default function Todos() {
                       readOnly: false,
                     }}
                     inputRef={titleRef}
-                    sx={{ marginRight: 2, width: 345 }}
+                    sx={{ marginRight: 2, width: 330 }}
                     multiline
                     disabled={inputDisabled}
                   />

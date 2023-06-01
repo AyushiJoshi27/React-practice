@@ -25,7 +25,11 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 // import MenuItem from '@mui/material/MenuItem';
 // import Select from '@mui/material/Select';
-import { FormControl } from '@mui/base';
+import LinearProgress from '@mui/material/LinearProgress';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 // const Item = styled(Paper)(({ theme }) => ({
 //   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -39,20 +43,28 @@ export default function UserAlbum() {
   const [albums, setAlbums] = useState();
   const [photoList, setPhotoList] = useState('');
   const [combinedList, setCombinedList] = useState('');
-  const [albumId, setAalbumId] = React.useState('');
+  const [albumId, setAalbumId] = useState('');
   const { param } = useParams();
   const [scsMsg, setScsMsg] = useState('');
   // modal state
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const titleRef = useRef('');
   const [openD, setOpenD] = useState(false);
   const [dltAlbumId, setDltAlbumId] = useState('');
   const [updateAlbum, setUpdateAlbum] = useState('');
   const [title, setTitle] = useState('');
   const [openU, setOpenU] = useState(false);
+  const titleRef = useRef('');
   const editTitleRef = useRef('');
+  const [display, setDisplay] = useState("none")
+  const [progress, setProgress] = useState(0);
+  const [buffer, setBuffer] = useState(10);
+  const progressRef = useRef(() => { });
+  const [openP, setOpenP] = useState(false);
+  const [inputDisabled, setInputDisabled] = useState(false);
+  const newTodoRef = useRef("");
+  const [selectedValue, setSelectedValue] = useState('');
 
   // eslint-disable-next-line
   const fetchAlbums2 = useCallback(() => {
@@ -82,6 +94,30 @@ export default function UserAlbum() {
       fetchPhotos();
     }
   }, [str]);
+
+  useEffect(() => {
+    progressRef.current = () => {
+      if (progress > 100) {
+        setProgress(0);
+        setBuffer(10);
+      } else {
+        const diff = Math.random() * 10;
+        const diff2 = Math.random() * 10;
+        setProgress(progress + diff);
+        setBuffer(progress + diff + diff2);
+      }
+    };
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      progressRef.current();
+    }, 200);
+
+    return () => {
+      clearInterval(timer)
+    };
+  }, []);
 
   // eslint-disable-next-line
   const fetchPhotos = useCallback(() => {
@@ -123,6 +159,8 @@ export default function UserAlbum() {
   //modal controllers
   const handleClickOpen = () => { setOpen(true) };
   const handleClose = () => { setOpen(false) };
+  const handleClickOpenPhotos= () => {setOpenP(true)};
+  const closePhotoM = () => {setOpenP(false)};
 
   const ImageUploader = () => {
     // albumId ? console.log(albumId) : console.log("age");
@@ -133,27 +171,40 @@ export default function UserAlbum() {
     // console.log("data: ", data);
     data ? axios.post(`http://localhost:3000/albums?userId=${param}`, data) && fetchAlbums2() : console.log("Post album");
 
-    setTimeout(() => { setScsMsg("Successfully submitted") }, 2000)
-    setTimeout(() => { setOpen(false) && setScsMsg("") }, 3000);
+    setTimeout(() => { setDisplay("block") }, 2000);
+    setTimeout(() => {
+      setDisplay("none");
+      setScsMsg("Successfully submitted");
+    }, 3000);
+    setTimeout(() => {
+      setOpen(false);
+      setScsMsg("");
+    }, 5000);
   }
 
   //Dlt Album 
   const AlbumDltHandler = (albumId) => {
     setDltAlbumId(albumId);
     setOpenD(true);
-  }
+  };
 
   const DeleteTodos = () => {
     dltAlbumId ? axios.delete(`http://localhost:3000/albums/${dltAlbumId}`) && fetchAlbums2() : console.log("Delete Album");
-    setTimeout(() => { setScsMsg("Deleted submitted") }, 2000)
-    setTimeout(() => { setOpenD(false) && setScsMsg("") }, 3000);
-  }
+    setTimeout(() => { setDisplay("block") }, 2000);
+    setTimeout(() => {
+      setDisplay("none");
+      setScsMsg("Successfully deleted");
+    }, 3000);
+    setTimeout(() => {
+      setOpenD(false);
+      setScsMsg("");
+    }, 3000);
+  };
 
   const handleCloseD = () => { setOpenD(false) };
 
   //update handler
   const AlbumEdtHandler = (id, title) => {
-    // id ? console.log("Update: ", id) : console.log("id");
     console.log(id, title);
     setTitle(title);
     setUpdateAlbum(id);
@@ -164,18 +215,30 @@ export default function UserAlbum() {
     if (updateAlbum && title) {
       const data = {
         userId: Number(updateAlbum),
-        title: editTitleRef.current.value
+        title: editTitleRef.current.value,
+        photos: {
+          thumbnailUrl: "https://images.unsplash.com/photo-1522770179533-24471fcdba45"
+        }
       }
       console.log(data);
+      console.log(updateAlbum);
 
-      // axios.put(`http://localhost:3000/albums?userId=${updateAlbum}`, data);
-      // fetchAlbums2();
+      axios.put(`http://localhost:3000/albums/${updateAlbum}`, data);
+      fetchAlbums2();
     }
-    setTimeout(() => { setScsMsg("Updated submitted") }, 2000)
-    setTimeout(() => { setOpenU(false) && setScsMsg("") }, 3000);
+    setTimeout(() => { setDisplay("block") }, 2000);
+    setTimeout(() => {
+      setDisplay("none");
+      setScsMsg("Successfully updated");
+    }, 4000);
+    setTimeout(() => { setOpenU(false) && setScsMsg("") }, 5000);
   }
 
   const handleCloseU = () => { setOpenU(false); }
+
+  const selectAlbum = () => {
+    console.log("new photo");
+  }
 
   return (
     <>
@@ -204,7 +267,7 @@ export default function UserAlbum() {
           </ListItem>
         </List>
         {combinedList ?
-          <ImageList sx={{ width: 465, height: 450 }} cols={3} rowHeight={164}>
+          <ImageList sx={{ width: 465, height: 250 }} cols={3} rowHeight={164}>
             {combinedList.map((item) => {
               var image = item.photos;
               var obj = "";
@@ -274,7 +337,7 @@ export default function UserAlbum() {
         <List>
           <ListItem
             secondaryAction={
-              <AddCircleIcon aria-label="addTodo" onClick={handleClickOpen} />
+              <AddCircleIcon aria-label="addTodo" onClick={handleClickOpenPhotos} />
             }
           >
             <ListItemText primary={<b>Photos</b>} />
@@ -296,40 +359,36 @@ export default function UserAlbum() {
             : ''}
         </ImageList>
       </Paper >
-      {/* Modal */}
+      {/*                                           Modals                                            */}
       < Dialog
         fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title" variant='h5'>
-          <b>Create a album</b>
-          <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
+        <DialogTitle id="responsive-dialog-title" variant='h6'>
+          <b>Add Album</b>
+          <Typography>
+            <center style={{ color: "rgb(55,125,51)", marginTop: "10px" }}>{scsMsg}</center>
+          </Typography>
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
         </DialogTitle>
         <Divider />
-        <DialogContent sx={{ height: 350, width: 300 }}>
+        <DialogContent sx={{ height: 100, width: 500 }}>
           <DialogContentText sx={{ marginTop: "20px", maxWidth: "400px" }}>
-            <List>
-              <ListItem
-                secondaryAction={
-                  <FormControl size="small">
-                    <TextField
-                      id="outlined-update-input"
-                      placeholder='Write something...'
-                      InputProps={{
-                        readOnly: false,
-                      }}
-                      sx={{ height: 20, width: 300 }}
-                      inputRef={titleRef}
-                      label="Write a title of the album"
-                      multiline
-                    />
-                  </FormControl>
-                }
-              >
-              </ListItem>
-            </List>
+            <FormControl size="small">
+              <TextField
+                id="outlined-update-input"
+                placeholder='Write something...'
+                InputProps={{
+                  readOnly: false,
+                }}
+                sx={{ height: 20, width: 500 }}
+                inputRef={titleRef}
+                label="Write a title of the album"
+                multiline
+              />
+            </FormControl>
           </DialogContentText>
         </DialogContent>
         <Divider />
@@ -346,8 +405,11 @@ export default function UserAlbum() {
         aria-labelledby="responsive-delete-dialog-title"
       >
         <DialogTitle id="responsive-delete-dialog-title" variant='h6'>
-          <b>Delete album</b>
-          <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
+          <b>Remove Album</b>
+          <Typography>
+            <center style={{ color: "rgb(55,125,51)", marginTop: "10px" }}>{scsMsg}</center>
+          </Typography>
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
         </DialogTitle>
         <Divider />
         <DialogContent
@@ -370,13 +432,16 @@ export default function UserAlbum() {
         onClose={handleCloseU}
         aria-labelledby="responsive-update-dialog-title"
       >
-        <DialogTitle id="responsive-update-dialog-title" variant='h4'>
-          <b>Update</b>
-          <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
+        <DialogTitle id="responsive-update-dialog-title" variant='h6'>
+          <b>Edi Albumt</b>
+          <Typography>
+            <center style={{ color: "rgb(55,125,51)", marginTop: "10px" }}>{scsMsg}</center>
+          </Typography>
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
         </DialogTitle>
         <Divider />
         <DialogContent
-          sx={{ padding: "10px 24px", height: 200, width: 500 }}
+          sx={{ padding: "10px 24px", height: 100, width: 500 }}
         >
           <DialogContentText>
             <FormControl size="small">
@@ -402,23 +467,65 @@ export default function UserAlbum() {
           <Button onClick={updateAlbumHandler} variant="contained"><b>Save</b></Button>
         </DialogActions>
       </Dialog> : ""}
+      {/* create photos */}
+      < Dialog
+        fullScreen={fullScreen}
+        open={openP}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title" variant='h6'>
+          <b>Add new photo</b>
+          <Typography>
+            <center style={{ color: "rgb(55,125,51)", marginTop: "10px" }}>{scsMsg}</center>
+          </Typography>
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
+        </DialogTitle>
+        <Divider />
+        <DialogContent sx={{ height: 100, width: 500 }}>  
+        <List dense>
+            <ListItem
+              key="create"
+              secondaryAction={
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                  {/* <InputLabel id="toDoStatus" disabled={inputDisabled}>Photo url</InputLabel> */}
+                  <InputLabel id="toDoStatus" >Photo url</InputLabel>
+                  <Select
+                    labelId="toDoStatus"
+                    id="demo-simple-select"
+                    value={selectedValue}
+                    label="Status"
+                    onChange={selectAlbum}
+                    sx={{ height: 50 }}
+                    // disabled={inputDisabled}
+                  >
+                  </Select>
+                </FormControl>
+              }
+              disablePadding
+            >
+              <ListItemText primary={
+                <TextField
+                  id="outlined-photp-input"
+                  defaultValue="url of the photo"
+                  InputProps={{
+                    readOnly: false,
+                  }}
+                  inputRef={newTodoRef}
+                  sx={{ marginRight: 2, width: 345 }}
+                  multiline
+                  disabled={inputDisabled}
+                />
+              } />
+            </ListItem>
+          </List>
+        </DialogContent>
+        <Divider />
+        <DialogActions>
+          <Button onClick={closePhotoM} variant="contained" color='error'><b>Cancel</b></Button>
+          <Button onClick={ImageUploader} variant="contained"><b>Save</b></Button>
+        </DialogActions>
+      </Dialog >
     </>
-  )
-}
-
-
-{/* <Select
-                      labelId="demo-select-small-label"
-                      id="demo-select-small"
-                      value={albumId}
-                      label="Age"
-                     onChange={handleChange}
-                    sx={{height: 40, minWidth: 120}}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {combinedList && combinedList.map((item) => (
-                      <MenuItem value={item.id}>{item.id}</MenuItem>
-                    ))}
-                    </Select> */}
+  );
+};

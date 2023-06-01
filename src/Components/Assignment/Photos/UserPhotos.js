@@ -3,7 +3,6 @@ import { useParams } from 'react-router';
 import axios from 'axios';
 import { ImageList, Paper, Typography } from '@mui/material';
 import AlbumPhoto from '../Albums/Photo';
-// import PhotoId from './PhotoId';
 
 export function Photo() {
   const { param } = useParams();
@@ -48,15 +47,12 @@ export function Photo() {
       cols={3} 
       rowHeight={164}
     >
-      
-      {albumId && albumId.map((item) => (
-          <AlbumPhoto albumId={item.id} />
-          )
-      )}
+    {albumId && albumId.map((item) => (
+        <AlbumPhoto albumId={item.id} />
+      )
+    )}
     </ImageList>
     </Paper>
     </>
   )
 }
-
-//console.log("Album Id: ", albumId)}

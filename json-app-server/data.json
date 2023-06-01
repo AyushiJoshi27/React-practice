@@ -4628,11 +4628,6 @@
       "id": 101
     },
     {
-      "userId": "1",
-      "title": "Beta",
-      "id": 102
-    },
-    {
       "userId": "5",
       "title": "New album",
       "id": 103
@@ -39507,9 +39502,9 @@
   "todos": [
     {
       "userId": 1,
-      "id": 1,
       "title": "delectus aut autem",
-      "completed": false
+      "completed": true,
+      "id": 1
     },
     {
       "userId": 1,
