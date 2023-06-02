@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router';
-import { styled } from '@mui/material/styles';
 // import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { ImageList, Divider, TextField, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
@@ -23,27 +22,16 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-// import MenuItem from '@mui/material/MenuItem';
-// import Select from '@mui/material/Select';
 import LinearProgress from '@mui/material/LinearProgress';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-// const Item = styled(Paper)(({ theme }) => ({
-//   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-//   ...theme.typography.body2,
-//   padding: theme.spacing(1),
-//   textAlign: 'center',
-//   color: theme.palette.text.secondary,
-// }));
-
 export default function UserAlbum() {
   const [albums, setAlbums] = useState();
   const [photoList, setPhotoList] = useState('');
   const [combinedList, setCombinedList] = useState('');
-  const [albumId, setAalbumId] = useState('');
   const { param } = useParams();
   const [scsMsg, setScsMsg] = useState('');
   // modal state
@@ -61,10 +49,18 @@ export default function UserAlbum() {
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
   const progressRef = useRef(() => { });
-  const [openP, setOpenP] = useState(false);
   const [inputDisabled, setInputDisabled] = useState(false);
-  const newTodoRef = useRef("");
-  const [selectedValue, setSelectedValue] = useState('');
+  //photos
+  //create
+  const [openPhoto, setOpenPhoto] = useState(false);
+  //delete photo
+  const [openDltPhoto, setOpenDltPhoto] = useState(false);
+  const [dltItemUrl, setDltItemUrl] = useState("");
+  const [photoAlbumId, setPhotoAlbumId] = useState("");
+  const [selectedAlbum, setSelectedAlbum] = useState("");
+  const [photoDtlId, setPhotoDltId] = useState("");
+  const photUrlRef = useRef("");
+  const photoTitleRef = useRef("");
 
   // eslint-disable-next-line
   const fetchAlbums2 = useCallback(() => {
@@ -72,8 +68,6 @@ export default function UserAlbum() {
       .get(`http://localhost:3000/albums?userId=${param}`)
       .then((response) => setAlbums(response.data));
   })
-
-  // combinedList ? console.log(combinedList) : console.log("combinedList");
 
   var str = "";
   if (albums) {
@@ -86,8 +80,6 @@ export default function UserAlbum() {
     var sortStr = "_sort=albumId";
     str += sortStr;
   }
-
-  // str ? console.log("200:", str) : console.log("404: ", str);
 
   useEffect(() => {
     if (str) {
@@ -154,31 +146,27 @@ export default function UserAlbum() {
     fetchAlbums2();
   }, [])
 
-  // combinedList ? console.log(combinedList) : console.log("combinedList");
-
   //modal controllers
   const handleClickOpen = () => { setOpen(true) };
   const handleClose = () => { setOpen(false) };
-  const handleClickOpenPhotos= () => {setOpenP(true)};
-  const closePhotoM = () => {setOpenP(false)};
 
   const ImageUploader = () => {
-    // albumId ? console.log(albumId) : console.log("age");
     const data = {
       "userId": param,
       "title": titleRef.current.value
     }
-    // console.log("data: ", data);
-    data ? axios.post(`http://localhost:3000/albums?userId=${param}`, data) && fetchAlbums2() : console.log("Post album");
-
+    data ? axios.post(`http://localhost:3000/albums?userId=${param}`, data) : console.log("Post album");
+    setInputDisabled(true);
     setTimeout(() => { setDisplay("block") }, 2000);
     setTimeout(() => {
       setDisplay("none");
+      fetchAlbums2()
       setScsMsg("Successfully submitted");
     }, 3000);
     setTimeout(() => {
       setOpen(false);
       setScsMsg("");
+      setInputDisabled(false);
     }, 5000);
   }
 
@@ -189,55 +177,120 @@ export default function UserAlbum() {
   };
 
   const DeleteTodos = () => {
-    dltAlbumId ? axios.delete(`http://localhost:3000/albums/${dltAlbumId}`) && fetchAlbums2() : console.log("Delete Album");
+    setInputDisabled(false);
+    dltAlbumId ? axios.delete(`http://localhost:3000/albums/${dltAlbumId}`) : console.log("Delete Album");
     setTimeout(() => { setDisplay("block") }, 2000);
     setTimeout(() => {
       setDisplay("none");
       setScsMsg("Successfully deleted");
     }, 3000);
     setTimeout(() => {
+      fetchAlbums2();
       setOpenD(false);
       setScsMsg("");
-    }, 3000);
+    }, 5000);
   };
 
   const handleCloseD = () => { setOpenD(false) };
 
   //update handler
   const AlbumEdtHandler = (id, title) => {
-    console.log(id, title);
     setTitle(title);
     setUpdateAlbum(id);
     setOpenU(true);
   }
 
   const updateAlbumHandler = () => {
-    if (updateAlbum && title) {
-      const data = {
-        userId: Number(updateAlbum),
-        title: editTitleRef.current.value,
-        photos: {
-          thumbnailUrl: "https://images.unsplash.com/photo-1522770179533-24471fcdba45"
-        }
-      }
-      console.log(data);
-      console.log(updateAlbum);
-
-      axios.put(`http://localhost:3000/albums/${updateAlbum}`, data);
-      fetchAlbums2();
+    setInputDisabled(false);
+    const data = {
+      userId: param,
+      id: Number(updateAlbum),
+      title: editTitleRef.current.value,
     }
+    data ? axios.put(`http://localhost:3000/albums/${updateAlbum}`, data) : console.log("Update album");
     setTimeout(() => { setDisplay("block") }, 2000);
     setTimeout(() => {
       setDisplay("none");
+      fetchAlbums2();
       setScsMsg("Successfully updated");
     }, 4000);
-    setTimeout(() => { setOpenU(false) && setScsMsg("") }, 5000);
+    setTimeout(() => {
+      setOpenU(false);
+      setScsMsg("");
+    }, 5000);
   }
 
   const handleCloseU = () => { setOpenU(false); }
 
-  const selectAlbum = () => {
-    console.log("new photo");
+  //Photo section
+  //delete and edit handlers
+  const PhotoEdtHandler = (url, id) => {
+    setDltItemUrl(url);
+    setPhotoAlbumId(id);
+  };
+
+  const PhotoDltHandler = (data) => {
+    setPhotoDltId(data);
+    setOpenDltPhoto(true);
+  };
+
+  const handleClosePhoto = () => { setOpenDltPhoto(false) };
+
+  const handleDltPhoto = () => {
+    if (photoDtlId) {
+      axios.delete(`http://localhost:3000/photos/${photoDtlId}`);
+    };
+    setInputDisabled(true);
+    setTimeout(() => { setDisplay("block") }, 1000);
+    setTimeout(() => {
+      fetchPhotos();
+      setDisplay("none");
+      setScsMsg("Successfully deleted");
+    }, 4000);
+    setTimeout(() => {
+      setScsMsg("");
+      setOpenDltPhoto(false);
+      setInputDisabled(false);
+    }, 5000);
+  }
+
+  // create photos
+  const handleClickOpenPhotos = () => {
+    setOpenPhoto(true);
+  };
+
+  const selectAlbum = (e) => {
+    setSelectedAlbum(e.target.value)
+  }
+
+  const closePhotoM = () => { setOpenPhoto(false) };
+
+  const photoUploader = () => {
+    console.log(photUrlRef.current.value);
+    console.log(selectedAlbum);
+    const data = {
+      albumId: Number(selectedAlbum),
+      thumbnailUrl: photUrlRef.current.value,
+      url: photUrlRef.current.value,
+      title: photoTitleRef.current.value
+    }
+
+    if (data) {
+      console.log(data);
+    }
+    // data ? axios.post(`http://localhost:3000/photos?albumId=${selectedAlbum}`, data) : console.log("Post album");
+    setInputDisabled(true);
+    setTimeout(() => { setDisplay("block") }, 1000);
+    setTimeout(() => {
+      fetchPhotos();
+      setDisplay("none");
+      setScsMsg("Successfully created");
+    }, 4000);
+    setTimeout(() => {
+      setScsMsg("");
+      setOpenPhoto(false);
+      setInputDisabled(false);
+    }, 5000);
   }
 
   return (
@@ -269,6 +322,7 @@ export default function UserAlbum() {
         {combinedList ?
           <ImageList sx={{ width: 465, height: 250 }} cols={3} rowHeight={164}>
             {combinedList.map((item) => {
+              // console.log(combinedList);
               var image = item.photos;
               var obj = "";
               if (image) {
@@ -279,7 +333,7 @@ export default function UserAlbum() {
                 }
               }
               return (
-                <ImageListItem key={item.albumId} sx={{ width: 145 }}>
+                <ImageListItem key={"Album" + item.id} sx={{ width: 145 }}>
                   <AlbumPhoto album={obj} />
                   <ImageListItemBar
                     sx={{
@@ -311,7 +365,12 @@ export default function UserAlbum() {
                     actionPosition="right"
                   />
                   <ImageListItemBar
-                    sx={{ fontSize: 14 }}
+                    sx={{
+                      fontSize: 12,
+                      "&::first-letter": {
+                        textTransform: "uppercase"
+                      }
+                    }}
                     title={item.title}
                     position="below"
                   />
@@ -343,21 +402,53 @@ export default function UserAlbum() {
             <ListItemText primary={<b>Photos</b>} />
           </ListItem>
         </List>
-        <ImageList
-          sx={{
-            backgroundColor: "rgb(255 255 255)",
-            borderRadius: "5px",
-            marginBottom: 0,
-            height: 305,
-            width: "468px"
-          }}
-          cols={3}
-          rowHeight={164}
-        >
-          {photoList ?
-            <AlbumPhoto photos={photoList} />
-            : ''}
-        </ImageList>
+        {photoList ?
+          <ImageList sx={{ width: 465, height: 250 }} cols={3} >
+            {photoList.map((item) => (
+              <ImageListItem key={"Photo" + item.id} sx={{ width: 145 }}>
+                <AlbumPhoto photos={item} />
+                <ImageListItemBar
+                  sx={{
+                    background:
+                      'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+                      'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                    borderRadius: "10px 10px 0 0"
+                  }}
+
+                  position="top"
+                  actionIcon={
+                    <>
+                      <IconButton
+                        sx={{ color: 'white' }}
+                        aria-label={`star ${item.title}`}
+                        onClick={() => PhotoEdtHandler(item.albumId, item.thumbnailUrl)}
+                      >
+                        <EditIcon sx={{ fontSize: "15px", marginRight: "5px" }} />
+                      </IconButton>
+                      <IconButton
+                        sx={{ color: 'white' }}
+                        aria-label={`star ${item.title}`}
+                        onClick={() => PhotoDltHandler(item.id)}
+                      >
+                        <DeleteIcon sx={{ fontSize: "15px" }} />
+                      </IconButton>
+                    </>
+                  }
+                  actionPosition="right"
+                />
+                <ImageListItemBar
+                  // sx={{
+                  //   textTransform: "capitalise",
+                  //   "&::first-letter": {
+                  //     textTransform: "capitalise"
+                  //   }
+                  // }}
+                  title={item.title}
+                  position="below"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList> : ""}
       </Paper >
       {/*                                           Modals                                            */}
       < Dialog
@@ -367,9 +458,9 @@ export default function UserAlbum() {
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title" variant='h6'>
-          <b>Add Album</b>
-          <Typography>
-            <center style={{ color: "rgb(55,125,51)", marginTop: "10px" }}>{scsMsg}</center>
+          <b>Create Album</b>
+          <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
+            {scsMsg}
           </Typography>
           <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
         </DialogTitle>
@@ -387,14 +478,15 @@ export default function UserAlbum() {
                 inputRef={titleRef}
                 label="Write a title of the album"
                 multiline
+                disabled={inputDisabled}
               />
             </FormControl>
           </DialogContentText>
         </DialogContent>
         <Divider />
         <DialogActions>
-          <Button onClick={handleClose} variant="contained" color='error'><b>Cancel</b></Button>
-          <Button onClick={ImageUploader} variant="contained"><b>Save</b></Button>
+          <Button onClick={handleClose} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
+          <Button onClick={ImageUploader} variant="contained" disabled={inputDisabled}><b>Create</b></Button>
         </DialogActions>
       </Dialog >
       {/* Confirmation dialog */}
@@ -406,8 +498,8 @@ export default function UserAlbum() {
       >
         <DialogTitle id="responsive-delete-dialog-title" variant='h6'>
           <b>Remove Album</b>
-          <Typography>
-            <center style={{ color: "rgb(55,125,51)", marginTop: "10px" }}>{scsMsg}</center>
+          <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
+            {scsMsg}
           </Typography>
           <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
         </DialogTitle>
@@ -421,8 +513,8 @@ export default function UserAlbum() {
         </DialogContent>
         <Divider />
         <DialogActions>
-          <Button onClick={handleCloseD} variant="contained" color='error'><b>Cancel</b></Button>
-          <Button onClick={DeleteTodos} variant="contained"><b>Save</b></Button>
+          <Button onClick={handleCloseD} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
+          <Button onClick={DeleteTodos} variant="contained" disabled={inputDisabled}><b>Delete</b></Button>
         </DialogActions>
       </Dialog>
       {/* modal to update album */}
@@ -433,9 +525,9 @@ export default function UserAlbum() {
         aria-labelledby="responsive-update-dialog-title"
       >
         <DialogTitle id="responsive-update-dialog-title" variant='h6'>
-          <b>Edi Albumt</b>
-          <Typography>
-            <center style={{ color: "rgb(55,125,51)", marginTop: "10px" }}>{scsMsg}</center>
+          <b>Edit Album</b>
+          <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
+            {scsMsg}
           </Typography>
           <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
         </DialogTitle>
@@ -457,75 +549,111 @@ export default function UserAlbum() {
                 label="Title of the album"
                 multiline
                 rows={2}
+                disabled={inputDisabled}
               />
             </FormControl>
           </DialogContentText>
         </DialogContent>
         <Divider />
         <DialogActions>
-          <Button onClick={handleCloseU} variant="contained" color='error'><b>Cancel</b></Button>
-          <Button onClick={updateAlbumHandler} variant="contained"><b>Save</b></Button>
+          <Button onClick={handleCloseU} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
+          <Button onClick={updateAlbumHandler} variant="contained" disabled={inputDisabled}><b>Update</b></Button>
         </DialogActions>
       </Dialog> : ""}
+      {/* Modals for Photos */}
       {/* create photos */}
       < Dialog
         fullScreen={fullScreen}
-        open={openP}
+        open={openPhoto}
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title" variant='h6'>
           <b>Add new photo</b>
-          <Typography>
-            <center style={{ color: "rgb(55,125,51)", marginTop: "10px" }}>{scsMsg}</center>
+          <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
+            {scsMsg}
           </Typography>
           <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
         </DialogTitle>
         <Divider />
-        <DialogContent sx={{ height: 100, width: 500 }}>  
-        <List dense>
-            <ListItem
-              key="create"
-              secondaryAction={
-                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                  {/* <InputLabel id="toDoStatus" disabled={inputDisabled}>Photo url</InputLabel> */}
-                  <InputLabel id="toDoStatus" >Photo url</InputLabel>
-                  <Select
-                    labelId="toDoStatus"
-                    id="demo-simple-select"
-                    value={selectedValue}
-                    label="Status"
-                    onChange={selectAlbum}
-                    sx={{ height: 50 }}
-                    // disabled={inputDisabled}
-                  >
-                  </Select>
-                </FormControl>
-              }
-              disablePadding
+        <DialogContent sx={{ height: 100, width: 500 }}>
+          <FormControl sx={{ minWidth: 475 }} size="small">
+            <InputLabel id="toDoStatus" >Select Album</InputLabel>
+            <Select
+              labelId="toDoStatus"
+              id="demo-simple-select"
+              value={selectedAlbum ? selectedAlbum : "None"}
+              label="Select Album"
+              onChange={selectAlbum}
+              sx={{ height: 50 }}
+              disabled={inputDisabled}
             >
-              <ListItemText primary={
-                <TextField
-                  id="outlined-photp-input"
-                  defaultValue="url of the photo"
-                  InputProps={{
-                    readOnly: false,
-                  }}
-                  inputRef={newTodoRef}
-                  sx={{ marginRight: 2, width: 345 }}
-                  multiline
-                  disabled={inputDisabled}
-                />
-              } />
-            </ListItem>
-          </List>
+              {/* <MenuItem>None</MenuItem> */}
+              {combinedList && combinedList.map((item) => (
+                <MenuItem value={item.id} key={item.id} sx={{}}>{item.title}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <TextField
+            id="outlined-photo-input"
+            InputProps={{
+              readOnly: false,
+            }}
+            label="Photo's title"
+            inputRef={photoTitleRef}
+            sx={{ marginTop: 2, marginBottom: 2, width: 475 }}
+            multiline
+            disabled={inputDisabled}
+          />
+
+
+          <TextField
+            id="outlined-photo-input"
+            InputProps={{
+              readOnly: false,
+            }}
+            label="Photo's url"
+            inputRef={photUrlRef}
+            sx={{ marginRight: 2, marginTop: 2, width: 475 }}
+            multiline
+            disabled={inputDisabled}
+          />
         </DialogContent>
         <Divider />
         <DialogActions>
           <Button onClick={closePhotoM} variant="contained" color='error'><b>Cancel</b></Button>
-          <Button onClick={ImageUploader} variant="contained"><b>Save</b></Button>
+          <Button onClick={photoUploader} variant="contained"><b>Save</b></Button>
         </DialogActions>
       </Dialog >
+      {/* Delete photos */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={openDltPhoto}
+        onClose={handleClosePhoto}
+        aria-labelledby="responsive-delete-dialog-title"
+      >
+        <DialogTitle id="responsive-delete-dialog-title" variant='h6'>
+          Delete photo
+          <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
+            {scsMsg}
+          </Typography>
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
+        </DialogTitle>
+        <Divider />
+        <DialogContent
+          sx={{ padding: "10px 24px", width: 500 }}
+        >
+          <DialogContentText>
+            <Typography>Are you sure you want to delete the photo?</Typography>
+          </DialogContentText>
+        </DialogContent>
+        <Divider />
+        <DialogActions>
+          <Button onClick={handleClosePhoto} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
+          <Button onClick={handleDltPhoto} variant="contained" disabled={inputDisabled}><b>Delete</b></Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

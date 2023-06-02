@@ -207,8 +207,8 @@ export default function Intro() {
         >
           <DialogTitle id="responsive-dialog-title" variant='h6'>
             Edit information
-            <Typography>
-              <center style={{color:"rgb(55,125,51)", marginTop: "10px"}}>{scsMsg}</center>
+            <Typography sx={{color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center"}}>
+              {scsMsg}
             </Typography>
             <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{display:{display}}}/>
           </DialogTitle>

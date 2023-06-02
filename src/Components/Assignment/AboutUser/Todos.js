@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import axios from 'axios';
-import { FormControlLabel, Paper, Typography } from '@mui/material'
+import { Paper, Typography } from '@mui/material'
 import { useParams } from 'react-router';
 import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List';
@@ -11,7 +11,6 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import LinearProgress from '@mui/material/LinearProgress';
-// import ListItemButton from '@mui/material/ListItemButton';
 //Todo update/dalete
 import Menu from '@mui/material/Menu';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
@@ -48,7 +47,6 @@ export default function Todos() {
   //update
   const [title, setTitle] = useState('');
   const [openU, setOpenU] = useState(false);
-  const [checked, setChecked] = useState(false);
   const [todoStatus, setTodoStatus] = useState(false);
   const [display, setDisplay] = useState("none")
   const [progress, setProgress] = React.useState(0);
@@ -98,21 +96,13 @@ export default function Todos() {
     setTodoStatus(status);
   }
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleClick = (event) => {setAnchorEl(event.currentTarget);};
 
-  const TodoHandler = () => {
-    setAnchorEl(null);
-  };
+  const TodoHandler = () => {setAnchorEl(null);};
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const handleClickOpen = () => {setOpen(true);};
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClose = () => {setOpen(false);};
 
   //post
   const AddNewTodos = () => {
@@ -305,8 +295,8 @@ export default function Todos() {
       >
         <DialogTitle id="responsive-dialog-title" variant='h6'>
           New to-do
-          <Typography>
-            <center style={{ color: "rgb(55,125,51)", marginTop: "10px" }}>{scsMsg}</center>
+          <Typography sx={{color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center"}}>
+            {scsMsg}
           </Typography>
           <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
         </DialogTitle>
@@ -329,7 +319,7 @@ export default function Todos() {
                     sx={{ height: 50 }}
                     disabled={inputDisabled}
                   >
-                    <MenuItem value={false}>Incompleted</MenuItem>
+                    <MenuItem value={false}>In progress</MenuItem>
                     <MenuItem value={true}>Completed</MenuItem>
                   </Select>
                 </FormControl>
@@ -339,7 +329,7 @@ export default function Todos() {
               <ListItemText primary={
                 <TextField
                   id="outlined-post-input"
-                  defaultValue='New to-do'
+                  label="New to-do"
                   InputProps={{
                     readOnly: false,
                   }}
@@ -354,8 +344,8 @@ export default function Todos() {
         </DialogContent>
         <Divider />
         <DialogActions>
-          <Button onClick={handleClose} variant="contained" color='error'><b>Cancel</b></Button>
-          <Button onClick={AddNewTodos} variant="contained"><b>Save</b></Button>
+          <Button onClick={handleClose} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
+          <Button onClick={AddNewTodos} variant="contained" disabled={inputDisabled}><b>Save</b></Button>
         </DialogActions>
       </Dialog>
       {/* Modal Delete */}
@@ -366,9 +356,9 @@ export default function Todos() {
         aria-labelledby="responsive-delete-dialog-title"
       >
         <DialogTitle id="responsive-delete-dialog-title" variant='h6'>
-          Remove to-do
-          <Typography>
-            <center style={{ color: "rgb(55,125,51)", marginTop: "10px" }}>{scsMsg}</center>
+          Delete to-do
+          <Typography sx={{color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center"}}>
+            {scsMsg}
           </Typography>
           <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
         </DialogTitle>
@@ -377,13 +367,13 @@ export default function Todos() {
           sx={{ padding: "10px 24px", width: 500 }}
         >
           <DialogContentText>
-            <Typography disabled={inputDisabled}>Are you sure you want to delete the to-do from the list?</Typography>
+            <Typography>Are you sure you want to delete the to-do from the list?</Typography>
           </DialogContentText>
         </DialogContent>
         <Divider />
         <DialogActions>
-          <Button onClick={handleCloseD} variant="contained" color='error'><b>Cancel</b></Button>
-          <Button onClick={DeleteTodos} variant="contained"><b>Save</b></Button>
+          <Button onClick={handleCloseD} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
+          <Button onClick={DeleteTodos} variant="contained" disabled={inputDisabled}><b>Delete</b></Button>
         </DialogActions>
       </Dialog>
       {/* Modal to update */}
@@ -395,7 +385,10 @@ export default function Todos() {
           aria-labelledby="responsive-update-dialog-title"
         >
           <DialogTitle id="responsive-update-dialog-title" variant='h6'>
-            Edit to-do <center style={{ color: "rgb(55,125,51)" }}>{scsMsg}</center>
+            <b>Edit to-do</b>
+            <Typography sx={{color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center"}}>
+            {scsMsg}
+            </Typography>
           </DialogTitle>
           <Divider />
           <DialogContent
@@ -431,6 +424,7 @@ export default function Todos() {
                     InputProps={{
                       readOnly: false,
                     }}
+                    label="Edit to-do"
                     inputRef={titleRef}
                     sx={{ marginRight: 2, width: 330 }}
                     multiline
@@ -442,8 +436,8 @@ export default function Todos() {
           </DialogContent>
           <Divider />
           <DialogActions>
-            <Button onClick={handleCloseU} variant="contained" color='error'><b>Cancel</b></Button>
-            <Button onClick={updateTodo} variant="contained"><b>Update</b></Button>
+            <Button onClick={handleCloseU} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
+            <Button onClick={updateTodo} variant="contained" disabled={inputDisabled}><b>Update</b></Button>
           </DialogActions>
         </Dialog>
         : " "}

@@ -55,7 +55,7 @@ export default function Posts() {
   const [expanded, setExpanded] = React.useState(false);
   const [posts, setPosts] = useState("");
   const [user, setUser] = useState("");
-  const [initials, setInitials] = useState("Alpha");
+  const [initials, setInitials] = useState("");
   const [albumId, setAlbumId] = useState({ url: "" });
   const [photo, setPhoto] = useState("");
   const { param } = useParams();
@@ -80,10 +80,10 @@ export default function Posts() {
     fetchPhoto();
   }, []);
 
-  useEffect(() => {
-    // console.log(commentRef.current);
-    // console.log(nameRef.current);
-  }, [nameRef.current.value]);
+  // useEffect(() => {
+  //   // console.log(commentRef.current);
+  //   // console.log(nameRef.current);
+  // }, [nameRef.current.value]);
 
   // eslint-disable-next-line
   const fetchUser = useCallback(() => {
@@ -91,7 +91,7 @@ export default function Posts() {
       .get(`http://localhost:3000/users?id=${param}`)
       .then((response) => {
         setUser(response.data[0].name);
-        // setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
+        setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
       });
   });
 
@@ -121,11 +121,11 @@ export default function Posts() {
   };
 
   //add a comment
-  const myFunction = () => {
-    console.log(commentRef);
-    // axios
-    //   .post(`http://localhost:3000/comments?userId=${param}`, data);
-  }
+  // const myFunction = () => {
+  //   console.log(commentRef);
+  //   // axios
+  //   //   .post(`http://localhost:3000/comments?userId=${param}`, data);
+  // }
 
   //add a post style and functionality
   const blue = {
@@ -285,10 +285,10 @@ export default function Posts() {
               image={photo.url}
               alt={post.userId}
             />
-            <Input type="text" disableUnderline inputRef={nameRef} className='nameInput' />
-            <Input type="text" disableUnderline inputRef={commentRef} className='commentInput' />
+            {/* <Input type="text" disableUnderline placeholder='Alpha Beta' inputRef={nameRef} className='nameInput' />
+            <Input type="text" disableUnderline inputRef={commentRef} className='commentInput' /> */}
             {/* <Input placeholder="Placeholder" inputProps={ariaLabel} /> */}
-            <SendIcon onClick={myFunction} sx={{ padding: "0 15px" }} />
+            {/* <SendIcon onClick={myFunction} sx={{ padding: "0 15px" }} /> */}
             <CardActions disableSpacing>
               <ExpandMore
                 expand={expanded}
@@ -315,7 +315,7 @@ export default function Posts() {
         <DialogTitle id="responsive-dialog-title" variant='h6'>
           Create Post
         </DialogTitle>
-        <Divider/>
+        <Divider />
         <DialogContent
           sx={{ width: "500px" }}
         >
@@ -323,7 +323,7 @@ export default function Posts() {
             <TextField
               label="Title"
               // onChange={(e) => setNewPost(e.target.value)}
-              sx={{width: "480px" }}
+              sx={{ width: "480px" }}
             />
           </DialogContentText>
           <DialogContentText sx={{ marginTop: "10px" }}>
@@ -338,7 +338,7 @@ export default function Posts() {
             />
           </DialogContentText>
         </DialogContent>
-        <Divider/>
+        <Divider />
         <DialogActions>
           <Button autoFocus onClick={postCreationClose}>
             Cancel

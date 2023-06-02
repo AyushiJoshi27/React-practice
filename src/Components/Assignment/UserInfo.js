@@ -11,7 +11,7 @@ import { Photo } from './Photos/UserPhotos';
 export default function UserInfo() {
   const {param} = useParams('');
   const [user, setUser] = useState("");
-  const [initials, setInitials] = useState("Alpha");
+  const [initials, setInitials] = useState("");
 
   useEffect(() => {
     fetchUser();
@@ -23,7 +23,7 @@ export default function UserInfo() {
       .get(`http://localhost:3000/users?id=${param}`)
       .then((response) => {
         setUser(response.data[0].name);
-        // setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
+        setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
       });
   });
 
