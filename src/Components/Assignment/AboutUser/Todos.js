@@ -367,7 +367,7 @@ export default function Todos() {
           sx={{ padding: "10px 24px", width: 500 }}
         >
           <DialogContentText>
-            <Typography>Are you sure you want to delete the to-do from the list?</Typography>
+            Are you sure you want to delete the to-do from the list?
           </DialogContentText>
         </DialogContent>
         <Divider />

@@ -4,9 +4,9 @@ import { Outlet, Link } from "react-router-dom";
 const Layout = () => {
   return (
     <>
-      <nav>
+      <nav style={{display: "none"}}>
         <ul>
-          <li>
+          {/* <li>
             <Link to="/">Home</Link>
           </li>
           <li>
@@ -49,9 +49,6 @@ const Layout = () => {
             <Link to='albums'>Albums</Link>
           </li>
           <li>
-            <Link to='facebook/1'>Facebook profile page</Link>
-          </li>
-          <li>
               <Link to='comment'>Comment</Link>
           </li>
           <li>
@@ -59,6 +56,9 @@ const Layout = () => {
           </li>
           <li>
             <Link to='list_control'>List Control</Link>
+          </li> */}
+          <li>
+            <Link to='facebook/1'>Facebook profile page</Link>
           </li>
         </ul>
       </nav>

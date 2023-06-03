@@ -11,8 +11,14 @@ import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
 export default function FbNavBarCompo() {
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box 
+      sx={{ flexGrow: 1,
+        position: "sticky", 
+        top: 0,
+        zIndex: 1,
+      }} 
+    >
+      <AppBar>
         <Toolbar>
           <IconButton
             size="large"

@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import axios from 'axios';
 //import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-import { Paper } from '@mui/material'
+import { DialogContentText, LinearProgress, ListItem, Paper } from '@mui/material'
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -16,26 +16,24 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Comments from './Comments';
-import SendIcon from '@mui/icons-material/Send';
-import Input from '@mui/material/Input';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListSubheader from '@mui/material/ListSubheader';
 import Divider from '@mui/material/Divider';
 //dialog for post creation
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-
-//import { FetchPostsIds } from './ApisExport';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -49,58 +47,53 @@ const ExpandMore = styled((props) => {
   marginTop: '10px',
 }));
 
-const ariaLabel = { 'aria-label': 'description' };
-
 export default function Posts() {
   const [expanded, setExpanded] = React.useState(false);
   const [posts, setPosts] = useState("");
   const [user, setUser] = useState("");
   const [initials, setInitials] = useState("");
-  const [albumId, setAlbumId] = useState({ url: "" });
   const [photo, setPhoto] = useState("");
   const { param } = useParams();
   var options = { year: 'numeric', month: 'long', day: 'numeric' };
   const currentDate = new Date();
   const dateFormate = currentDate.toLocaleDateString("en-US", options);
-
-  const commentRef = useRef();
-  const nameRef = useRef("");
+  const [scsMsg, setScsMsg] = useState('');
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [data, setData] = useState("");
+  const openMenu = Boolean(anchorEl);
 
   //post dialog
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [createPost, setCreatePost] = React.useState(false);
-  const [newTodo, setNewPost] = useState('');
+  const [openP, setOpenP] = React.useState(false);
+  const [inputDisabled, setInputDisabled] = useState(false);
+  const [display, setDisplay] = useState("none")
+  const [progress, setProgress] = useState(0);
+  const [buffer, setBuffer] = useState(10);
+  const progressRef = useRef(() => { });
+  //create
+  const postTitleRef = useRef("");
+  const postBlogRef = useRef("");
+  //delete modal
+  const [openD, setOpenD] = useState(false);
+  const [openU, setOpenU] = useState(false);
 
   // eslint-disable-next-line
   useEffect(() => {
     fetchUser();
     fetchPosts();
-    fetchAlbums();
     fetchPhoto();
   }, []);
-
-  // useEffect(() => {
-  //   // console.log(commentRef.current);
-  //   // console.log(nameRef.current);
-  // }, [nameRef.current.value]);
 
   // eslint-disable-next-line
   const fetchUser = useCallback(() => {
     return axios
-      .get(`http://localhost:3000/users?id=${param}`)
+      .get(`http://localhost:3000/users/${param}`)
       .then((response) => {
-        setUser(response.data[0].name);
-        setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
+        setUser(response.data.name);
+        setInitials(response.data.name.match(/(\b\S)?/g).join("").toUpperCase())
       });
   });
-
-  //eslint-disable-next-line
-  const fetchAlbums = useCallback(() => {
-    return axios
-      .get(`http://localhost:3000/albums?userId=${param}`)
-      .then((response) => setAlbumId(response.data));
-  })
 
   // eslint-disable-next-line
   const fetchPosts = useCallback(() => {
@@ -119,13 +112,6 @@ export default function Posts() {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  //add a comment
-  // const myFunction = () => {
-  //   console.log(commentRef);
-  //   // axios
-  //   //   .post(`http://localhost:3000/comments?userId=${param}`, data);
-  // }
 
   //add a post style and functionality
   const blue = {
@@ -177,19 +163,142 @@ export default function Posts() {
   `,
   );
 
+  //select menu
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  //loader
+  useEffect(() => {
+    progressRef.current = () => {
+      if (progress > 100) {
+        setProgress(0);
+        setBuffer(10);
+      } else {
+        const diff = Math.random() * 10;
+        const diff2 = Math.random() * 10;
+        setProgress(progress + diff);
+        setBuffer(progress + diff + diff2);
+      }
+    };
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      progressRef.current();
+    }, 200);
+
+    return () => {
+      clearInterval(timer)
+    };
+  }, []);
+
   //post dialog handlers
   const createPostHanlder = () => {
-    setCreatePost(false);
+    const data = {
+      userId: param,
+      title: postTitleRef.current.value,
+      body: postBlogRef.current.value,
+    }
+    data ? axios.post(`http://localhost:3000/posts?userId=${param}`, data) : console.log("User post");
+    setInputDisabled(true);
+    setTimeout(() => { setDisplay("block") }, 2000);
+    setTimeout(() => {
+      setDisplay("none");
+      fetchPosts();
+      setScsMsg("Successfully submitted");
+    }, 4000);
+    setTimeout(() => {
+      setOpenP(false);
+      setScsMsg("");
+      setInputDisabled(false);
+    }, 5000);
+    // setOpenP(false);
   }
 
+  // VertIcon click
+  const vertClick = (obj) => {
+    console.log(obj);
+    setData(obj);
+  }
+
+  // set anchorEl
+  const TodoHandler = () => { setAnchorEl(null); };
+
   const postCreationHandler = () => {
-    setCreatePost(true);
+    setOpenP(true);
   };
 
   const postCreationClose = () => {
-    setCreatePost(false);
+    setOpenP(false);
   };
 
+  //delete handler
+  const deletePhotoHandler = () => {
+    setAnchorEl(null);
+    setOpenD(true);
+  }
+
+  //close
+  const handleCloseD = () => {
+    setOpenD(false);
+  }
+
+  const deletePost = () => {
+    data ? console.log(data) : console.log("data");
+    if (data) {
+      axios.delete(`http://localhost:3000/posts/${data.id}`);
+      fetchPosts();
+    };
+    setInputDisabled(true);
+    setTimeout(() => { setDisplay("block") }, 1000);
+    setTimeout(() => {
+      setDisplay("none");
+      setScsMsg("Deleted successfully");
+    }, 3000);
+    setTimeout(() => {
+      setScsMsg("");
+      setOpenD(false);
+      setInputDisabled(false);
+    }, 5000);
+  };
+
+  //Update handler
+  const editPhotoHandler = () => {
+    setAnchorEl(null);
+    setOpenU(true);
+    console.log("Update");
+  };
+
+  const handleCloseU = () => {
+    setOpenU(false);
+  };
+
+  const updatePost = () => {
+    console.log(postBlogRef.current.value);
+    console.log(postTitleRef.current.value)
+
+    const obj = {
+      userId: param,
+      title: postTitleRef.current.value,
+      body: postBlogRef.current.value,
+    }
+    if (obj) {
+      axios.put(`http://localhost:3000/posts/${data.id}`, obj);
+    };
+    setInputDisabled(true);
+    setTimeout(() => { setDisplay("block") }, 2000);
+    setTimeout(() => {
+      setDisplay("none");
+      fetchPosts();
+      setScsMsg("Successfully submitted");
+    }, 3000);
+    setTimeout(() => {
+      setOpenU(false);
+      setScsMsg("");
+      setInputDisabled(false);
+    }, 5000);
+  };
 
   return (
     <>
@@ -209,25 +318,17 @@ export default function Posts() {
           <List
             sx={{
               width: '100%',
-              bgcolor: 'background.paper',
-              "&:hover": { backgroundColor: "white" },
               padding: 0
             }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
+            aria-labelledby="Create-post-field"
             subheader={
               <Typography variant='h6'><b>Add a post</b></Typography>
             }
           >
-            <ListItemButton sx={{
-              "&:hover": { backgroundColor: "white" },
+            <ListItem sx={{
               padding: "5px 0"
             }}>
-              <ListItemIcon>
-                <Avatar sx={{ bgcolor: 'rgb(244 67 54)' }} aria-label="user">
-                  {initials}
-                </Avatar>
-              </ListItemIcon>
+              <ListItemIcon><Avatar sx={{ backgroundColor: 'rgb(244 67 54)' }} aria-label="user">{initials}</Avatar></ListItemIcon>
               <ListItemText
                 primary={
                   <StyledTextarea
@@ -236,16 +337,13 @@ export default function Posts() {
                       width: "400px"
                     }}
                     maxRows={4}
-                    aria-label="maximum height"
+                    aria-label="Create a post"
                     placeholder="Add a post"
                   />
                 }
                 onClick={postCreationHandler}
               />
-              {/* <Button variant="contained" onClick={postCreationHandler} >
-                <SendIcon />
-              </Button> */}
-            </ListItemButton>
+            </ListItem>
           </List>
         </Paper>
         {posts && posts.map((post, index) => (
@@ -260,12 +358,44 @@ export default function Posts() {
             }}
           >
             <CardHeader
-              sx={{ padding: "16px 16px 8px 16px" }}
+              sx={{ padding: "16px 16px 0px 16px" }}
               avatar={<Avatar sx={{ bgcolor: 'rgb(244 67 54)' }} aria-label="user">
                 {initials}
               </Avatar>}
               title={<b>{user}</b>}
               subheader={dateFormate}
+              action={
+                <>
+                  <Button
+                    edge="end"
+                    sx={{ padding: 0, float: "right", "&:hover": { backgroundColor: "#ffffff", padding: 0 } }}
+                    id="basic-button"
+                    aria-controls={openMenu ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={openMenu ? 'true' : undefined}
+                    onClick={handleClick}
+                  >
+                    <MoreVertRoundedIcon onClick={() => vertClick(post)} sx={{ "&:hover": { padding: 0 } }} />
+                  </Button>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={openMenu}
+                    onClose={TodoHandler}
+                    MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                    }}
+                    sx={{ boxShadow: "2px 2px 5px 4px lightgrey" }}
+                  >
+                    <MenuItem onClick={() => editPhotoHandler()}>
+                      <EditIcon sx={{ marginRight: 2 }} />Update
+                    </MenuItem>
+                    <MenuItem onClick={() => deletePhotoHandler()}>
+                      <DeleteForeverIcon sx={{ marginRight: 2 }} />Delete
+                    </MenuItem>
+                  </Menu>
+                </>
+              }
             />
             <CardContent
               style={{
@@ -285,11 +415,8 @@ export default function Posts() {
               image={photo.url}
               alt={post.userId}
             />
-            {/* <Input type="text" disableUnderline placeholder='Alpha Beta' inputRef={nameRef} className='nameInput' />
-            <Input type="text" disableUnderline inputRef={commentRef} className='commentInput' /> */}
-            {/* <Input placeholder="Placeholder" inputProps={ariaLabel} /> */}
-            {/* <SendIcon onClick={myFunction} sx={{ padding: "0 15px" }} /> */}
             <CardActions disableSpacing>
+              See all comments
               <ExpandMore
                 expand={expanded}
                 onClick={handleExpandClick}
@@ -306,48 +433,142 @@ export default function Posts() {
         ))}
       </div>
       {/* Modal */}
+      {/* Create posts */}
       <Dialog
         fullScreen={fullScreen}
-        open={createPost}
+        open={openP}
         onClose={postCreationClose}
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title" variant='h6'>
           Create Post
+          <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
+            {scsMsg}
+          </Typography>
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
+        </DialogTitle>
+        <Divider />
+        <DialogContent sx={{ width: 500 }}>
+          <TextField
+            id="outlined-update-input"
+            label="Post title"
+            InputProps={{
+              readOnly: false,
+            }}
+            sx={{
+              width: 500
+            }}
+            inputRef={postTitleRef}
+            multiline
+            disabled={inputDisabled}
+          />
+          <TextField
+            id="outlined-update-input"
+            placeholder='Write something...'
+            InputProps={{
+              readOnly: false,
+            }}
+            label="Post description"
+            sx={{
+              marginTop: "20px",
+              width: 500
+            }}
+            inputRef={postBlogRef}
+            multiline
+            disabled={inputDisabled}
+          />
+        </DialogContent>
+        <Divider />
+        <DialogActions>
+          <Button onClick={postCreationClose} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
+          <Button onClick={createPostHanlder} variant="contained" disabled={inputDisabled}><b>Create</b></Button>
+        </DialogActions>
+      </Dialog>
+      {/* Delete */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={openD}
+        onClose={handleCloseD}
+        aria-labelledby="responsive-delete-dialog-title"
+      >
+        <DialogTitle id="responsive-delete-dialog-title" variant='h6'>
+          Delete Post
+          <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
+            {scsMsg}
+          </Typography>
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
         </DialogTitle>
         <Divider />
         <DialogContent
-          sx={{ width: "500px" }}
+          sx={{ padding: "10px 24px", width: 500 }}
         >
           <DialogContentText>
-            <TextField
-              label="Title"
-              // onChange={(e) => setNewPost(e.target.value)}
-              sx={{ width: "480px" }}
-            />
-          </DialogContentText>
-          <DialogContentText sx={{ marginTop: "10px" }}>
-            <StyledTextarea
-              sx={{
-                "&:hover": { backgroundColor: "white" },
-                width: "450px"
-              }}
-              maxRows={4}
-              multiline
-              placeholder="write something..."
-            />
+            Are you sure you want to delete the post?
           </DialogContentText>
         </DialogContent>
         <Divider />
         <DialogActions>
-          <Button autoFocus onClick={postCreationClose}>
-            Cancel
-          </Button>
-          <Button onClick={createPostHanlder} variant="contained" autoFocus>
-            Post
-          </Button>
+          <Button onClick={handleCloseD} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
+          <Button onClick={deletePost} variant="contained" disabled={inputDisabled}><b>Delete</b></Button>
         </DialogActions>
       </Dialog>
+      {/* Update photo */}
+      {data ?
+        <Dialog
+          fullScreen={fullScreen}
+          open={openU}
+          onClose={handleCloseU}
+          aria-labelledby="responsive-update-dialog-title"
+        >
+          <DialogTitle id="responsive-update-dialog-title" variant='h6'>
+            <b>Edit posts</b>
+            <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
+            {scsMsg}
+          </Typography>
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
+          </DialogTitle>
+          <Divider />
+          <DialogContent
+            sx={{ padding: "10px 24px", width: 500 }}
+          >
+            <TextField
+              id="outlined-update-input"
+              label="Post title"
+              InputProps={{
+                readOnly: false,
+              }}
+              sx={{
+                width: 500
+              }}
+              defaultValue={data.title}
+              inputRef={postTitleRef}
+              multiline
+              disabled={inputDisabled}
+            />
+            <TextField
+              id="outlined-update-input"
+              placeholder='Write something...'
+              InputProps={{
+                readOnly: false,
+              }}
+              label="Post description"
+              sx={{
+                marginTop: "20px",
+                width: 500
+              }}
+              defaultValue={data.body}
+              inputRef={postBlogRef}
+              multiline
+              disabled={inputDisabled}
+            />
+          </DialogContent>
+          <Divider />
+          <DialogActions>
+            <Button onClick={handleCloseU} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
+            <Button onClick={updatePost} variant="contained" disabled={inputDisabled}><b>Update</b></Button>
+          </DialogActions>
+        </Dialog>
+        : " "}
     </>
   );
 }

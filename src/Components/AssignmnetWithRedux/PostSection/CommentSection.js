@@ -36,8 +36,6 @@ export default function Comments({props}) {
             bgcolor: red[500],
             }} 
             aria-label="user">
-            {/*item.name.match(/(\b\S)?/g).join("").toUpperCase()*/}
-            {/*item.name.match(/\b\w/g).join('').slice(0, 2)*/}
             {item.name.split('').slice(0, 2).map(word => word[0]).join('')}
           </Avatar>
           </Grid>

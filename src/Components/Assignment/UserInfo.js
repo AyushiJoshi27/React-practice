@@ -20,10 +20,10 @@ export default function UserInfo() {
   // eslint-disable-next-line
   const fetchUser = useCallback(() => {
     return axios
-      .get(`http://localhost:3000/users?id=${param}`)
+      .get(`http://localhost:3000/users/${param}`)
       .then((response) => {
-        setUser(response.data[0].name);
-        setInitials(response.data[0].name.match(/(\b\S)?/g).join("").toUpperCase())
+        setUser(response.data.name);
+        setInitials(response.data.name.match(/(\b\S)?/g).join("").toUpperCase())
       });
   });
 

@@ -55,12 +55,18 @@ export default function UserAlbum() {
   const [openPhoto, setOpenPhoto] = useState(false);
   //delete photo
   const [openDltPhoto, setOpenDltPhoto] = useState(false);
-  const [dltItemUrl, setDltItemUrl] = useState("");
+  const [edtItemUrl, setEdtItemUrl] = useState("");
   const [photoAlbumId, setPhotoAlbumId] = useState("");
   const [selectedAlbum, setSelectedAlbum] = useState("");
   const [photoDtlId, setPhotoDltId] = useState("");
   const photUrlRef = useRef("");
   const photoTitleRef = useRef("");
+  // Edit photo
+  const [openEdtPhoto, setOpenEdtPhoto] = useState(false);
+  const [photoTitle, setPhotoTitle] = useState("");
+  const [edtPhotoId, setEdtPhotoId] = useState("");
+  const edtPhotoTitleRef = useRef("");
+  const edtPhotoUrlRef = useRef("");
 
   // eslint-disable-next-line
   const fetchAlbums2 = useCallback(() => {
@@ -144,7 +150,7 @@ export default function UserAlbum() {
 
   useEffect(() => {
     fetchAlbums2();
-  }, [])
+  }, []);
 
   //modal controllers
   const handleClickOpen = () => { setOpen(true) };
@@ -223,12 +229,7 @@ export default function UserAlbum() {
   const handleCloseU = () => { setOpenU(false); }
 
   //Photo section
-  //delete and edit handlers
-  const PhotoEdtHandler = (url, id) => {
-    setDltItemUrl(url);
-    setPhotoAlbumId(id);
-  };
-
+  //delete handlers 
   const PhotoDltHandler = (data) => {
     setPhotoDltId(data);
     setOpenDltPhoto(true);
@@ -239,11 +240,11 @@ export default function UserAlbum() {
   const handleDltPhoto = () => {
     if (photoDtlId) {
       axios.delete(`http://localhost:3000/photos/${photoDtlId}`);
+      fetchPhotos();
     };
     setInputDisabled(true);
     setTimeout(() => { setDisplay("block") }, 1000);
     setTimeout(() => {
-      fetchPhotos();
       setDisplay("none");
       setScsMsg("Successfully deleted");
     }, 4000);
@@ -266,19 +267,13 @@ export default function UserAlbum() {
   const closePhotoM = () => { setOpenPhoto(false) };
 
   const photoUploader = () => {
-    console.log(photUrlRef.current.value);
-    console.log(selectedAlbum);
     const data = {
       albumId: Number(selectedAlbum),
       thumbnailUrl: photUrlRef.current.value,
       url: photUrlRef.current.value,
       title: photoTitleRef.current.value
     }
-
-    if (data) {
-      console.log(data);
-    }
-    // data ? axios.post(`http://localhost:3000/photos?albumId=${selectedAlbum}`, data) : console.log("Post album");
+    data ? axios.post(`http://localhost:3000/photos?albumId=${selectedAlbum}`, data) : console.log("Post album");
     setInputDisabled(true);
     setTimeout(() => { setDisplay("block") }, 1000);
     setTimeout(() => {
@@ -289,6 +284,41 @@ export default function UserAlbum() {
     setTimeout(() => {
       setScsMsg("");
       setOpenPhoto(false);
+      setInputDisabled(false);
+    }, 5000);
+  }
+
+  // Edit Photos in photo section
+  const PhotoEdtHandler = (obj) => {
+    setEdtItemUrl(obj.thumbnailUrl);
+    setPhotoAlbumId(obj.albumId);
+    setPhotoTitle(obj.title);
+    setEdtPhotoId(obj.id);
+    setOpenEdtPhoto(true);
+  };
+
+  const closePhotoE = () => setOpenEdtPhoto(false);
+
+  const photoEditHanlder = () => {
+    const data = {
+      title: edtPhotoTitleRef.current.value,
+      thumbnailUrl: edtPhotoUrlRef.current.value,
+      albumId: photoAlbumId,
+      id: edtPhotoId,
+      url: edtPhotoUrlRef.current.value,
+    }
+    data ? console.log(data) : console.log("data");
+    data ? axios.put(`http://localhost:3000/photos/${edtPhotoId}`, data) : console.log("Update Photos");
+    setInputDisabled(true);
+    setTimeout(() => { setDisplay("block") }, 2000);
+    setTimeout(() => {
+      setDisplay("none");
+      fetchPhotos();
+      setScsMsg("Successfully submitted");
+    }, 4000);
+    setTimeout(() => {
+      setOpenEdtPhoto(false);
+      setScsMsg("");
       setInputDisabled(false);
     }, 5000);
   }
@@ -322,7 +352,6 @@ export default function UserAlbum() {
         {combinedList ?
           <ImageList sx={{ width: 465, height: 250 }} cols={3} rowHeight={164}>
             {combinedList.map((item) => {
-              // console.log(combinedList);
               var image = item.photos;
               var obj = "";
               if (image) {
@@ -421,7 +450,7 @@ export default function UserAlbum() {
                       <IconButton
                         sx={{ color: 'white' }}
                         aria-label={`star ${item.title}`}
-                        onClick={() => PhotoEdtHandler(item.albumId, item.thumbnailUrl)}
+                        onClick={() => PhotoEdtHandler(item)}
                       >
                         <EditIcon sx={{ fontSize: "15px", marginRight: "5px" }} />
                       </IconButton>
@@ -455,9 +484,9 @@ export default function UserAlbum() {
         fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
+        aria-labelledby="responsive-dialog-create-album"
       >
-        <DialogTitle id="responsive-dialog-title" variant='h6'>
+        <DialogTitle id="responsive-dialog-create-album" variant='h6'>
           <b>Create Album</b>
           <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
             {scsMsg}
@@ -466,22 +495,24 @@ export default function UserAlbum() {
         </DialogTitle>
         <Divider />
         <DialogContent sx={{ height: 100, width: 500 }}>
-          <DialogContentText sx={{ marginTop: "20px", maxWidth: "400px" }}>
-            <FormControl size="small">
-              <TextField
-                id="outlined-update-input"
-                placeholder='Write something...'
-                InputProps={{
-                  readOnly: false,
-                }}
-                sx={{ height: 20, width: 500 }}
-                inputRef={titleRef}
-                label="Write a title of the album"
-                multiline
-                disabled={inputDisabled}
-              />
-            </FormControl>
-          </DialogContentText>
+          <FormControl size="small">
+            <TextField
+              id="outlined-update-input"
+              placeholder='Write something...'
+              InputProps={{
+                readOnly: false,
+              }}
+              sx={{
+                height: 20,
+                marginTop: "20px",
+                width: 500
+              }}
+              inputRef={titleRef}
+              label="Write a title of the album"
+              multiline
+              disabled={inputDisabled}
+            />
+          </FormControl>
         </DialogContent>
         <Divider />
         <DialogActions>
@@ -507,9 +538,7 @@ export default function UserAlbum() {
         <DialogContent
           sx={{ padding: "10px 24px", width: 500 }}
         >
-          <DialogContentText>
-            <Typography>Are you sure you want to delete it?</Typography>
-          </DialogContentText>
+          <DialogContentText>Are you sure you want to delete it?</DialogContentText>
         </DialogContent>
         <Divider />
         <DialogActions>
@@ -535,7 +564,6 @@ export default function UserAlbum() {
         <DialogContent
           sx={{ padding: "10px 24px", height: 100, width: 500 }}
         >
-          <DialogContentText>
             <FormControl size="small">
               <TextField
                 id="outlined-update-input"
@@ -552,7 +580,6 @@ export default function UserAlbum() {
                 disabled={inputDisabled}
               />
             </FormControl>
-          </DialogContentText>
         </DialogContent>
         <Divider />
         <DialogActions>
@@ -582,14 +609,14 @@ export default function UserAlbum() {
             <Select
               labelId="toDoStatus"
               id="demo-simple-select"
-              value={selectedAlbum ? selectedAlbum : "None"}
+              value={selectedAlbum}
               label="Select Album"
               onChange={selectAlbum}
               sx={{ height: 50 }}
               disabled={inputDisabled}
             >
-              {/* <MenuItem>None</MenuItem> */}
               {combinedList && combinedList.map((item) => (
+
                 <MenuItem value={item.id} key={item.id} sx={{}}>{item.title}</MenuItem>
               ))}
             </Select>
@@ -644,9 +671,7 @@ export default function UserAlbum() {
         <DialogContent
           sx={{ padding: "10px 24px", width: 500 }}
         >
-          <DialogContentText>
-            <Typography>Are you sure you want to delete the photo?</Typography>
-          </DialogContentText>
+          <DialogContentText>Are you sure you want to delete the photo?</DialogContentText>
         </DialogContent>
         <Divider />
         <DialogActions>
@@ -654,6 +679,54 @@ export default function UserAlbum() {
           <Button onClick={handleDltPhoto} variant="contained" disabled={inputDisabled}><b>Delete</b></Button>
         </DialogActions>
       </Dialog>
+      {/* Update Photos */}
+      {edtItemUrl && photoTitle ?
+        < Dialog
+          fullScreen={fullScreen}
+          open={openEdtPhoto}
+          onClose={closePhotoE}
+          aria-labelledby="responsive-dialog-title"
+        >
+          <DialogTitle id="responsive-dialog-title" variant='h6'>
+            <b>Edit photo</b>
+            <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
+              {scsMsg}
+            </Typography>
+            <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
+          </DialogTitle>
+          <Divider />
+          <DialogContent sx={{ height: 100, width: 500 }}>
+            <TextField
+              id="outlined-photo-input"
+              InputProps={{
+                readOnly: false,
+              }}
+              label="Photo's title"
+              defaultValue={photoTitle}
+              inputRef={edtPhotoTitleRef}
+              sx={{ marginTop: 2, marginBottom: 2, width: 475 }}
+              multiline
+              disabled={inputDisabled}
+            />
+            <TextField
+              id="outlined-photo-input"
+              InputProps={{
+                readOnly: false,
+              }}
+              label="Photo's url"
+              defaultValue={edtItemUrl}
+              inputRef={edtPhotoUrlRef}
+              sx={{ marginRight: 2, marginTop: 2, width: 475 }}
+              multiline
+              disabled={inputDisabled}
+            />
+          </DialogContent>
+          <Divider />
+          <DialogActions>
+            <Button onClick={closePhotoE} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
+            <Button onClick={photoEditHanlder} variant="contained" disabled={inputDisabled}><b>Update</b></Button>
+          </DialogActions>
+        </Dialog > : ""}
     </>
   );
 };
