@@ -27,10 +27,18 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAlbumsDataAction } from '../Redux/Actions/AlbumActions';
+import { getPhotosDataAction } from '../Redux/Actions/PhotosActions';
 
 export default function UserAlbum() {
-  const [albums, setAlbums] = useState();
-  const [photoList, setPhotoList] = useState('');
+  const dispatch = useDispatch();
+  // const [albums, setAlbums] = useState();
+  const albums = useSelector((state) => state.getAlbumData);
+  console.log(useSelector((state)=>state))
+  // console.log(useSelector((state)=>state.getPhotoData));
+  const albums2 = useSelector(state => state)
+  // const [photoList, setPhotoList] = useState('');
   const [combinedList, setCombinedList] = useState('');
   const { param } = useParams();
   const [scsMsg, setScsMsg] = useState('');
@@ -68,16 +76,79 @@ export default function UserAlbum() {
   const edtPhotoTitleRef = useRef("");
   const edtPhotoUrlRef = useRef("");
 
-  // eslint-disable-next-line
-  const fetchAlbums2 = useCallback(() => {
-    return axios
-      .get(`http://localhost:3000/albums?userId=${param}`)
-      .then((response) => setAlbums(response.data));
-  })
+  // useEffect(() => {
+  //   if (str) {
+  //     fetchPhotos();
+  //   }
+  // }, [str]);
+
+  // useEffect(() => {
+  //   progressRef.current = () => {
+  //     if (progress > 100) {
+  //       setProgress(0);
+  //       setBuffer(10);
+  //     } else {
+  //       const diff = Math.random() * 10;
+  //       const diff2 = Math.random() * 10;
+  //       setProgress(progress + diff);
+  //       setBuffer(progress + diff + diff2);
+  //     }
+  //   };
+  // });
+
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     progressRef.current();
+  //   }, 200);
+
+  //   return () => {
+  //     clearInterval(timer)
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   if (photoList && albums) {
+  //     var y = albums;
+  //     let photosObj = {}
+
+  //     for (let i = 0; i < photoList.length; i++) {
+  //       let albumId = photoList[i].albumId;
+
+  //       if (photosObj[albumId] && photosObj[albumId].length > 0) {
+  //         photosObj[albumId].push(photoList[i]);
+  //       } else {
+  //         photosObj[albumId] = []
+  //         photosObj[albumId].push(photoList[i]);
+  //       }
+  //     }
+
+  //     for (let j = 0; j < albums.length; j++) {
+  //       y[j]['photos'] = photosObj[albums[j].id];
+  //       setCombinedList(y);
+  //     }
+  //   }
+
+  // }, [albums, photoList])
+
+  // console.log(albums.length);
+
+  // useEffect(() => {
+  //   fetchAlbums2()
+  //   // fetchAlbums2();
+  // }, []);
+
+  useEffect(() => {
+    if (!albums.length) {
+      fetch(`http://localhost:3000/albums?userId=${param}`)
+        .then(res => res.json())
+        .then(data => dispatch(getAlbumsDataAction(data)));
+    }
+  }, [dispatch, albums, param]);
 
   var str = "";
   if (albums) {
     (
+      // eslint-disable-next-line array-callback-return
       albums && albums.map((data) => {
         var str1 = "albumId=" + data.id + "&";
         str += str1;
@@ -87,241 +158,207 @@ export default function UserAlbum() {
     str += sortStr;
   }
 
+  //photos useEffect
   useEffect(() => {
-    if (str) {
-      fetchPhotos();
+    if (str !== "_sort=albumId" ) {
+      fetch(`http://localhost:3000/photos?${str}`)
+        .then(res => res.json())
+        // .then((response) => console.log(response))
+        .then((response) => dispatch(getPhotosDataAction(response)))
     }
-  }, [str]);
-
-  useEffect(() => {
-    progressRef.current = () => {
-      if (progress > 100) {
-        setProgress(0);
-        setBuffer(10);
-      } else {
-        const diff = Math.random() * 10;
-        const diff2 = Math.random() * 10;
-        setProgress(progress + diff);
-        setBuffer(progress + diff + diff2);
-      }
-    };
-  });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      progressRef.current();
-    }, 200);
-
-    return () => {
-      clearInterval(timer)
-    };
-  }, []);
+  // eslint-disable-next-line no-use-before-define
+  }, [dispatch, str]);
 
   // eslint-disable-next-line
-  const fetchPhotos = useCallback(() => {
-    return axios
-      .get(`http://localhost:3000/photos?${str}`)
-      .then((response) => setPhotoList(response.data));
-  })
+  // const fetchAlbums2 = () => {
+  //     return axios
+  //       .get(`http://localhost:3000/albums?userId=${param}`)
+  //       .then(response => {
+  //         setAlbums((response.data))
+  //         console.log(response.data)
+  //       }
+  //       )
+  //     // .then((response) => dispatch(getAlbumsDataAction(response.data)))
+  //   }
 
-  useEffect(() => {
-    if (photoList && albums) {
-      var y = albums;
-      let photosObj = {}
+  // eslint-disable-next-line
+  // const fetchPhotos = useCallback(() => {
+  //   return axios
+  //     .get(`http://localhost:3000/photos?${str}`)
+  //     .then((response) => dispatch(getPhotoDataAction(response.data)))
+  //    .then((response) => setPhotoList(response.data));
+  // })
 
-      for (let i = 0; i < photoList.length; i++) {
-        let albumId = photoList[i].albumId;
+  // //modal controllers
+  // const handleClickOpen = () => { setOpen(true) };
+  // const handleClose = () => { setOpen(false) };
 
-        if (photosObj[albumId] && photosObj[albumId].length > 0) {
-          photosObj[albumId].push(photoList[i]);
-        } else {
-          photosObj[albumId] = []
-          photosObj[albumId].push(photoList[i]);
-        }
-      }
+  // const ImageUploader = () => {
+  //   const data = {
+  //     "userId": param,
+  //     "title": titleRef.current.value
+  //   }
+  //   data ? axios.post(`http://localhost:3000/albums?userId=${param}`, data) : console.log("Post album");
+  //   setInputDisabled(true);
+  //   setTimeout(() => { setDisplay("block") }, 2000);
+  //   setTimeout(() => {
+  //     setDisplay("none");
+  //     fetchAlbums2()
+  //     setScsMsg("Successfully submitted");
+  //   }, 3000);
+  //   setTimeout(() => {
+  //     setOpen(false);
+  //     setScsMsg("");
+  //     setInputDisabled(false);
+  //   }, 5000);
+  // }
 
-      for (let j = 0; j < albums.length; j++) {
-        y[j]['photos'] = photosObj[albums[j].id];
-        setCombinedList(y);
-      }
-    }
+  // //Dlt Album 
+  // const AlbumDltHandler = (albumId) => {
+  //   setDltAlbumId(albumId);
+  //   setOpenD(true);
+  // };
 
-  }, [albums, photoList])
+  // const DeleteTodos = () => {
+  //   setInputDisabled(false);
+  //   dltAlbumId ? axios.delete(`http://localhost:3000/albums/${dltAlbumId}`) : console.log("Delete Album");
+  //   setTimeout(() => { setDisplay("block") }, 2000);
+  //   setTimeout(() => {
+  //     setDisplay("none");
+  //     setScsMsg("Successfully deleted");
+  //   }, 3000);
+  //   setTimeout(() => {
+  //     fetchAlbums2();
+  //     setOpenD(false);
+  //     setScsMsg("");
+  //   }, 5000);
+  // };
 
-  useEffect(() => {
-    fetchAlbums2();
-  }, []);
+  // const handleCloseD = () => { setOpenD(false) };
 
-  //modal controllers
-  const handleClickOpen = () => { setOpen(true) };
-  const handleClose = () => { setOpen(false) };
+  // //update handler
+  // const AlbumEdtHandler = (id, title) => {
+  //   setTitle(title);
+  //   setUpdateAlbum(id);
+  //   setOpenU(true);
+  // }
 
-  const ImageUploader = () => {
-    const data = {
-      "userId": param,
-      "title": titleRef.current.value
-    }
-    data ? axios.post(`http://localhost:3000/albums?userId=${param}`, data) : console.log("Post album");
-    setInputDisabled(true);
-    setTimeout(() => { setDisplay("block") }, 2000);
-    setTimeout(() => {
-      setDisplay("none");
-      fetchAlbums2()
-      setScsMsg("Successfully submitted");
-    }, 3000);
-    setTimeout(() => {
-      setOpen(false);
-      setScsMsg("");
-      setInputDisabled(false);
-    }, 5000);
-  }
+  // const updateAlbumHandler = () => {
+  //   setInputDisabled(false);
+  //   const data = {
+  //     userId: param,
+  //     id: Number(updateAlbum),
+  //     title: editTitleRef.current.value,
+  //   }
+  //   data ? axios.put(`http://localhost:3000/albums/${updateAlbum}`, data) : console.log("Update album");
+  //   setTimeout(() => { setDisplay("block") }, 2000);
+  //   setTimeout(() => {
+  //     setDisplay("none");
+  //     fetchAlbums2();
+  //     setScsMsg("Successfully updated");
+  //   }, 4000);
+  //   setTimeout(() => {
+  //     setOpenU(false);
+  //     setScsMsg("");
+  //   }, 5000);
+  // }
 
-  //Dlt Album 
-  const AlbumDltHandler = (albumId) => {
-    setDltAlbumId(albumId);
-    setOpenD(true);
-  };
+  // const handleCloseU = () => { setOpenU(false); }
 
-  const DeleteTodos = () => {
-    setInputDisabled(false);
-    dltAlbumId ? axios.delete(`http://localhost:3000/albums/${dltAlbumId}`) : console.log("Delete Album");
-    setTimeout(() => { setDisplay("block") }, 2000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("Successfully deleted");
-    }, 3000);
-    setTimeout(() => {
-      fetchAlbums2();
-      setOpenD(false);
-      setScsMsg("");
-    }, 5000);
-  };
+  // //Photo section
+  // //delete handlers 
+  // const PhotoDltHandler = (data) => {
+  //   setPhotoDltId(data);
+  //   setOpenDltPhoto(true);
+  // };
 
-  const handleCloseD = () => { setOpenD(false) };
+  // const handleClosePhoto = () => { setOpenDltPhoto(false) };
 
-  //update handler
-  const AlbumEdtHandler = (id, title) => {
-    setTitle(title);
-    setUpdateAlbum(id);
-    setOpenU(true);
-  }
+  // const handleDltPhoto = () => {
+  //   if (photoDtlId) {
+  //     axios.delete(`http://localhost:3000/photos/${photoDtlId}`);
+  //     fetchPhotos();
+  //   };
+  //   setInputDisabled(true);
+  //   setTimeout(() => { setDisplay("block") }, 1000);
+  //   setTimeout(() => {
+  //     setDisplay("none");
+  //     setScsMsg("Successfully deleted");
+  //   }, 4000);
+  //   setTimeout(() => {
+  //     setScsMsg("");
+  //     setOpenDltPhoto(false);
+  //     setInputDisabled(false);
+  //   }, 5000);
+  // }
 
-  const updateAlbumHandler = () => {
-    setInputDisabled(false);
-    const data = {
-      userId: param,
-      id: Number(updateAlbum),
-      title: editTitleRef.current.value,
-    }
-    data ? axios.put(`http://localhost:3000/albums/${updateAlbum}`, data) : console.log("Update album");
-    setTimeout(() => { setDisplay("block") }, 2000);
-    setTimeout(() => {
-      setDisplay("none");
-      fetchAlbums2();
-      setScsMsg("Successfully updated");
-    }, 4000);
-    setTimeout(() => {
-      setOpenU(false);
-      setScsMsg("");
-    }, 5000);
-  }
+  // // create photos
+  // const handleClickOpenPhotos = () => {
+  //   setOpenPhoto(true);
+  // };
 
-  const handleCloseU = () => { setOpenU(false); }
+  // const selectAlbum = (e) => {
+  //   setSelectedAlbum(e.target.value)
+  // }
 
-  //Photo section
-  //delete handlers 
-  const PhotoDltHandler = (data) => {
-    setPhotoDltId(data);
-    setOpenDltPhoto(true);
-  };
+  // const closePhotoM = () => { setOpenPhoto(false) };
 
-  const handleClosePhoto = () => { setOpenDltPhoto(false) };
+  // const photoUploader = () => {
+  //   const data = {
+  //     albumId: Number(selectedAlbum),
+  //     thumbnailUrl: photUrlRef.current.value,
+  //     url: photUrlRef.current.value,
+  //     title: photoTitleRef.current.value
+  //   }
+  //   data ? axios.post(`http://localhost:3000/photos?albumId=${selectedAlbum}`, data) : console.log("Post album");
+  //   setInputDisabled(true);
+  //   setTimeout(() => { setDisplay("block") }, 1000);
+  //   setTimeout(() => {
+  //     fetchPhotos();
+  //     setDisplay("none");
+  //     setScsMsg("Successfully created");
+  //   }, 4000);
+  //   setTimeout(() => {
+  //     setScsMsg("");
+  //     setOpenPhoto(false);
+  //     setInputDisabled(false);
+  //   }, 5000);
+  // }
 
-  const handleDltPhoto = () => {
-    if (photoDtlId) {
-      axios.delete(`http://localhost:3000/photos/${photoDtlId}`);
-      fetchPhotos();
-    };
-    setInputDisabled(true);
-    setTimeout(() => { setDisplay("block") }, 1000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("Successfully deleted");
-    }, 4000);
-    setTimeout(() => {
-      setScsMsg("");
-      setOpenDltPhoto(false);
-      setInputDisabled(false);
-    }, 5000);
-  }
+  // // Edit Photos in photo section
+  // const PhotoEdtHandler = (obj) => {
+  //   setEdtItemUrl(obj.thumbnailUrl);
+  //   setPhotoAlbumId(obj.albumId);
+  //   setPhotoTitle(obj.title);
+  //   setEdtPhotoId(obj.id);
+  //   setOpenEdtPhoto(true);
+  // };
 
-  // create photos
-  const handleClickOpenPhotos = () => {
-    setOpenPhoto(true);
-  };
+  // const closePhotoE = () => setOpenEdtPhoto(false);
 
-  const selectAlbum = (e) => {
-    setSelectedAlbum(e.target.value)
-  }
-
-  const closePhotoM = () => { setOpenPhoto(false) };
-
-  const photoUploader = () => {
-    const data = {
-      albumId: Number(selectedAlbum),
-      thumbnailUrl: photUrlRef.current.value,
-      url: photUrlRef.current.value,
-      title: photoTitleRef.current.value
-    }
-    data ? axios.post(`http://localhost:3000/photos?albumId=${selectedAlbum}`, data) : console.log("Post album");
-    setInputDisabled(true);
-    setTimeout(() => { setDisplay("block") }, 1000);
-    setTimeout(() => {
-      fetchPhotos();
-      setDisplay("none");
-      setScsMsg("Successfully created");
-    }, 4000);
-    setTimeout(() => {
-      setScsMsg("");
-      setOpenPhoto(false);
-      setInputDisabled(false);
-    }, 5000);
-  }
-
-  // Edit Photos in photo section
-  const PhotoEdtHandler = (obj) => {
-    setEdtItemUrl(obj.thumbnailUrl);
-    setPhotoAlbumId(obj.albumId);
-    setPhotoTitle(obj.title);
-    setEdtPhotoId(obj.id);
-    setOpenEdtPhoto(true);
-  };
-
-  const closePhotoE = () => setOpenEdtPhoto(false);
-
-  const photoEditHanlder = () => {
-    const data = {
-      title: edtPhotoTitleRef.current.value,
-      thumbnailUrl: edtPhotoUrlRef.current.value,
-      albumId: photoAlbumId,
-      id: edtPhotoId,
-      url: edtPhotoUrlRef.current.value,
-    }
-    data ? console.log(data) : console.log("data");
-    data ? axios.put(`http://localhost:3000/photos/${edtPhotoId}`, data) : console.log("Update Photos");
-    setInputDisabled(true);
-    setTimeout(() => { setDisplay("block") }, 2000);
-    setTimeout(() => {
-      setDisplay("none");
-      fetchPhotos();
-      setScsMsg("Successfully submitted");
-    }, 4000);
-    setTimeout(() => {
-      setOpenEdtPhoto(false);
-      setScsMsg("");
-      setInputDisabled(false);
-    }, 5000);
-  }
+  // const photoEditHanlder = () => {
+  //   const data = {
+  //     title: edtPhotoTitleRef.current.value,
+  //     thumbnailUrl: edtPhotoUrlRef.current.value,
+  //     albumId: photoAlbumId,
+  //     id: edtPhotoId,
+  //     url: edtPhotoUrlRef.current.value,
+  //   }
+  //   data ? console.log(data) : console.log("data");
+  //   data ? axios.put(`http://localhost:3000/photos/${edtPhotoId}`, data) : console.log("Update Photos");
+  //   setInputDisabled(true);
+  //   setTimeout(() => { setDisplay("block") }, 2000);
+  //   setTimeout(() => {
+  //     setDisplay("none");
+  //     fetchPhotos();
+  //     setScsMsg("Successfully submitted");
+  //   }, 4000);
+  //   setTimeout(() => {
+  //     setOpenEdtPhoto(false);
+  //     setScsMsg("");
+  //     setInputDisabled(false);
+  //   }, 5000);
+  // }
 
   return (
     <>
@@ -338,7 +375,9 @@ export default function UserAlbum() {
         elevation={2}
         className='albums'
       >
-        <List>
+        Albums
+        </Paper>
+        {/* <List>
           <ListItem
             secondaryAction={
               <AddCircleIcon edge="end" aria-label="addTodo" onClick={handleClickOpen} />
@@ -409,7 +448,7 @@ export default function UserAlbum() {
           </ImageList> : ""}
       </Paper >
       {/* Photos section */}
-      <Paper
+      {/* <Paper 
         sx={{
           borderRadius: "5px",
           boxShadow: "rgb(211, 211, 211) 0px 2px 3px 0px",
@@ -480,7 +519,7 @@ export default function UserAlbum() {
           </ImageList> : ""}
       </Paper >
       {/*                                           Modals                                            */}
-      < Dialog
+      {/* < Dialog 
         fullScreen={fullScreen}
         open={open}
         onClose={handleClose}
@@ -521,7 +560,7 @@ export default function UserAlbum() {
         </DialogActions>
       </Dialog >
       {/* Confirmation dialog */}
-      <Dialog
+      {/* <Dialog 
         fullScreen={fullScreen}
         open={openD}
         onClose={handleCloseD}
@@ -547,7 +586,7 @@ export default function UserAlbum() {
         </DialogActions>
       </Dialog>
       {/* modal to update album */}
-      {title ? <Dialog
+      {/* {title ? <Dialog 
         fullScreen={fullScreen}
         open={openU}
         onClose={handleCloseU}
@@ -564,22 +603,22 @@ export default function UserAlbum() {
         <DialogContent
           sx={{ padding: "10px 24px", height: 100, width: 500 }}
         >
-            <FormControl size="small">
-              <TextField
-                id="outlined-update-input"
-                placeholder='Write a title...'
-                defaultValue={title}
-                InputProps={{
-                  readOnly: false,
-                }}
-                sx={{ marginTop: 2, height: 50, width: 500 }}
-                inputRef={editTitleRef}
-                label="Title of the album"
-                multiline
-                rows={2}
-                disabled={inputDisabled}
-              />
-            </FormControl>
+          <FormControl size="small">
+            <TextField
+              id="outlined-update-input"
+              placeholder='Write a title...'
+              defaultValue={title}
+              InputProps={{
+                readOnly: false,
+              }}
+              sx={{ marginTop: 2, height: 50, width: 500 }}
+              inputRef={editTitleRef}
+              label="Title of the album"
+              multiline
+              rows={2}
+              disabled={inputDisabled}
+            />
+          </FormControl>
         </DialogContent>
         <Divider />
         <DialogActions>
@@ -589,7 +628,7 @@ export default function UserAlbum() {
       </Dialog> : ""}
       {/* Modals for Photos */}
       {/* create photos */}
-      < Dialog
+      {/* < Dialog 
         fullScreen={fullScreen}
         open={openPhoto}
         onClose={handleClose}
@@ -654,7 +693,7 @@ export default function UserAlbum() {
         </DialogActions>
       </Dialog >
       {/* Delete photos */}
-      <Dialog
+      {/* <Dialog
         fullScreen={fullScreen}
         open={openDltPhoto}
         onClose={handleClosePhoto}
@@ -680,7 +719,9 @@ export default function UserAlbum() {
         </DialogActions>
       </Dialog>
       {/* Update Photos */}
-      {edtItemUrl && photoTitle ?
+      {/* 
+      <>
+      {edtItemUrl && photoTitle ? 
         < Dialog
           fullScreen={fullScreen}
           open={openEdtPhoto}
@@ -726,7 +767,9 @@ export default function UserAlbum() {
             <Button onClick={closePhotoE} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
             <Button onClick={photoEditHanlder} variant="contained" disabled={inputDisabled}><b>Update</b></Button>
           </DialogActions>
-        </Dialog > : ""}
+        </Dialog > : ""} 
+        </>
+        */}
     </>
   );
 };

@@ -22,10 +22,12 @@ import { useTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import AddRoadIcon from '@mui/icons-material/AddRoad';
 import ApartmentIcon from '@mui/icons-material/Apartment';
+import { useSelector } from 'react-redux';
 
 export default function Intro() {
   const [userIntro, setUserIntro] = useState('');
   const { param } = useParams()
+  const userData = useSelector((state) => state.getUserData);
   // dialog
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -121,6 +123,7 @@ export default function Intro() {
 
   return (
     <>
+    {userData.name && userData.company && userData.address ?
       <Paper
         sx={{
           borderRadius: "5px",
@@ -130,7 +133,6 @@ export default function Intro() {
         }}
         elevation={2}
       >
-        {userIntro ?
           <List sx={{ fontSize: "12px" }}>
             <ListItem
               secondaryAction={
@@ -153,7 +155,7 @@ export default function Intro() {
                     textTransform: "uppercase"
                   }
                 }}
-                primary={userIntro.phone} />
+                primary={userData.phone} />
             </ListItem>
             <ListItem>
               <ListItemAvatar><Avatar><EmailIcon /></Avatar></ListItemAvatar>
@@ -163,7 +165,7 @@ export default function Intro() {
                     textTransform: "uppercase"
                   }
                 }}
-                primary={userIntro.email} />
+                primary={userData.email} />
             </ListItem>
             <ListItem>
               <ListItemAvatar><Avatar><BusinessCenterIcon /></Avatar></ListItemAvatar>
@@ -173,7 +175,8 @@ export default function Intro() {
                     textTransform: "uppercase"
                   }
                 }}
-                primary={userIntro.company.name} />
+                primary={userData.company.name} 
+                />
             </ListItem>
             <ListItem>
               <ListItemAvatar><Avatar><LocationOnIcon /></Avatar></ListItemAvatar>
@@ -183,7 +186,7 @@ export default function Intro() {
                     textTransform: "uppercase"
                   }
                 }}
-                primary={<span>{userIntro.address.suite}, {userIntro.address.street}, {userIntro.address.city}</span>} />
+                primary={<span>{userData.address.suite}, {userData.address.street}, {userData.address.city}</span>} />
             </ListItem>
             <ListItem>
               <ListItemAvatar><Avatar><LinkIcon /></Avatar></ListItemAvatar>
@@ -193,11 +196,10 @@ export default function Intro() {
                     textTransform: "uppercase"
                   }
                 }}
-                primary={<Link href={userIntro.website}>{userIntro.website}</Link>} />
+                primary={<Link href={userData.website}>{userData.website}</Link>} />
             </ListItem>
-          </List> : ''}
+          </List> 
         {/* Update dialog */}
-        {userIntro ? 
         <Dialog
           fullScreen={fullScreen}
           open={editInfo}
@@ -222,7 +224,7 @@ export default function Intro() {
                   <ListItemText primary={
                     <TextField
                     id="outlined-update-input"
-                    defaultValue={userIntro.phone}
+                    defaultValue={userData.phone}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -238,7 +240,7 @@ export default function Intro() {
                   <ListItemText primary={
                     <TextField
                     id="outlined-update-input"
-                    defaultValue={userIntro.email}
+                    defaultValue={userData.email}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -256,7 +258,7 @@ export default function Intro() {
                   <ListItemText primary={
                     <TextField
                     id="outlined-update-input"
-                    defaultValue={userIntro.company.name}
+                    defaultValue={userData.company.name}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -272,7 +274,7 @@ export default function Intro() {
                   <ListItemText primary={
                     <TextField
                     id="outlined-update-input"
-                    defaultValue={userIntro.address.suite}
+                    defaultValue={userData.address.suite}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -290,7 +292,7 @@ export default function Intro() {
                   <ListItemText primary={
                     <TextField
                     id="outlined-update-input"
-                    defaultValue={userIntro.address.street}
+                    defaultValue={userData.address.street}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -306,7 +308,7 @@ export default function Intro() {
                   <ListItemText primary={
                     <TextField
                     id="outlined-update-input"
-                    defaultValue={userIntro.address.city}
+                    defaultValue={userData.address.city}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -322,7 +324,7 @@ export default function Intro() {
                   <ListItemText primary={
                     <TextField
                     id="outlined-update-input"
-                    defaultValue={userIntro.website}
+                    defaultValue={userData.website}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -340,8 +342,8 @@ export default function Intro() {
             <Button onClick={editClose} variant="contained" color='error'><b>Cancel</b></Button>
             <Button onClick={infoUpdate} variant="contained"><b>Save</b></Button>
           </DialogActions>
-        </Dialog> : ''}
-      </Paper >
+        </Dialog> 
+      </Paper > : ''}
     </>
   )
 };

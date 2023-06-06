@@ -1,30 +1,30 @@
 import { Avatar, Box, CardHeader, Container } from '@mui/material'
 import React, {useState, useCallback, useEffect} from 'react'
-import Posts from './Posts'
 import axios from 'axios';
+import UserPostsCompo from './Posts';
 import { useParams } from 'react-router';
 import Intro from './AboutUser/Intro';
 import Todos from './AboutUser/Todos';
 import UserAlbum from './AboutUser/Albums';
 import { Photo } from './Photos/UserPhotos';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserDataAction } from './Redux/Actions/UserActions.';
+import Posts from './Posts';
 
 export default function UserInfo() {
+  const dispatch = useDispatch();
   const {param} = useParams('');
-  const [user, setUser] = useState("");
-  const [initials, setInitials] = useState("");
+  const userData = useSelector((state) => state.getUserData);
 
   useEffect(() => {
-    fetchUser();
-  }, [])
+    fetchUser2();
+  }, []);
 
   // eslint-disable-next-line
-  const fetchUser = useCallback(() => {
+  const fetchUser2 = useCallback(() => {
     return axios
       .get(`http://localhost:3000/users/${param}`)
-      .then((response) => {
-        setUser(response.data.name);
-        setInitials(response.data.name.match(/(\b\S)?/g).join("").toUpperCase())
-      });
+      .then((response) => dispatch(getUserDataAction(response.data)))
   });
 
   // function stringAvatar(name) {
@@ -39,6 +39,7 @@ export default function UserInfo() {
   return (
     <>
       <div className='bgBlock'>
+        {userData.name ?
         <Container>
           <Box sx={{height:"600px", marginBottom: 2}}>
             <img
@@ -62,10 +63,10 @@ export default function UserInfo() {
                   backgroundColor: 'rgb(244 67 54)',
                   borderColor: 'rgb(255,255,255)',
                 }}>
-                {initials}
+                {userData.name.split(" ").map(string => string.charAt(0)).join('').toUpperCase()}
               </Avatar>
               }
-              title={<b className='userName'>{user}</b>}
+              title={<b className='userName'>{userData.name}</b>}
               sx={{
                 position: "relative",
                 top: "400px",
@@ -73,7 +74,8 @@ export default function UserInfo() {
               }}
             /> 
           </Box>
-        </Container>
+        </Container> 
+        : ""}
       </div>
       <div className='userActivity'>
         <Container sx={{backgroundColor: "rgb(240,242,245)"}}>
@@ -87,9 +89,10 @@ export default function UserInfo() {
             <Todos />
             <UserAlbum />
           </Box>
-          <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
-            <Posts />
-          </Box>
+          {userData.data ? <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
+            {/* <UserPostsCompo name={userData.data.name} mail={userData.data.email}/> */}
+            <Posts name="Alpha" mail="Beta"/>
+          </Box> : ""}
         </Container>
       </div>
     </>

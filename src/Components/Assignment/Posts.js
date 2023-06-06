@@ -47,7 +47,7 @@ const ExpandMore = styled((props) => {
   marginTop: '10px',
 }));
 
-export default function Posts() {
+export default function Posts({ name, mail }) {
   const [expanded, setExpanded] = React.useState(false);
   const [posts, setPosts] = useState("");
   const [user, setUser] = useState("");
@@ -218,7 +218,6 @@ export default function Posts() {
 
   // VertIcon click
   const vertClick = (obj) => {
-    console.log(obj);
     setData(obj);
   }
 
@@ -245,7 +244,6 @@ export default function Posts() {
   }
 
   const deletePost = () => {
-    data ? console.log(data) : console.log("data");
     if (data) {
       axios.delete(`http://localhost:3000/posts/${data.id}`);
       fetchPosts();
@@ -267,7 +265,6 @@ export default function Posts() {
   const editPhotoHandler = () => {
     setAnchorEl(null);
     setOpenU(true);
-    console.log("Update");
   };
 
   const handleCloseU = () => {
@@ -275,9 +272,6 @@ export default function Posts() {
   };
 
   const updatePost = () => {
-    console.log(postBlogRef.current.value);
-    console.log(postTitleRef.current.value)
-
     const obj = {
       userId: param,
       title: postTitleRef.current.value,
@@ -291,7 +285,7 @@ export default function Posts() {
     setTimeout(() => {
       setDisplay("none");
       fetchPosts();
-      setScsMsg("Successfully submitted");
+      setScsMsg("updated successfully");
     }, 3000);
     setTimeout(() => {
       setOpenU(false);
@@ -311,7 +305,9 @@ export default function Posts() {
             lineHeight: 2,
             marginBottom: "16px",
             padding: 2,
-            marginTop: "16px"
+            marginTop: "16px",
+            height: "150px",
+            width: "200px"
           }}
           elevation={2}
         >
@@ -427,7 +423,7 @@ export default function Posts() {
               </ExpandMore>
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
-              <Comments props={post.id} />
+              { (name && mail) ? <Comments commentsId={post.id} userName={name} email={mail} /> : ""}
             </Collapse>
           </Card>
         ))}
@@ -523,9 +519,9 @@ export default function Posts() {
           <DialogTitle id="responsive-update-dialog-title" variant='h6'>
             <b>Edit posts</b>
             <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
-            {scsMsg}
-          </Typography>
-          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
+              {scsMsg}
+            </Typography>
+            <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
           </DialogTitle>
           <Divider />
           <DialogContent

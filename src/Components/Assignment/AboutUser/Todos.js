@@ -28,9 +28,13 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { useDispatch, useSelector } from 'react-redux';
+import { getTodosDataAction } from '../Redux/Actions/TodosAction';
 
 export default function Todos() {
-  const [userTodos, setUserTodos] = useState([]);
+  const dispatch = useDispatch()
+  const userTodos = useSelector((state) => state.getTodosData)
+  // const [userTodos, setUserTodos] = useState([]);
   const { param } = useParams();
   const [open, setOpen] = useState(false);
   const theme = useTheme();
@@ -72,7 +76,7 @@ export default function Todos() {
   // eslint-disable-next-line
   const FetchTodos = useCallback(async () => {
     const response = await axios.get(`http://localhost:3000/todos?userId=${param}`);
-    setUserTodos(response.data);
+    dispatch(getTodosDataAction(response.data));
   });
 
   useEffect(() => {
