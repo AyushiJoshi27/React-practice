@@ -1,16 +1,20 @@
-import { getUserDataReducer } from './Components/Assignment/Redux/Reducers/UserReducer';
+import thunk from 'redux-thunk';
 import { configureStore } from '@reduxjs/toolkit';
-import { getTodosDataReducer } from './Components/Assignment/Redux/Reducers/TodosReducer';
 import { getAlbumDataReducer } from './Components/Assignment/Redux/Reducers/AlbumReducer';
 import { getPhotosDataReducer } from './Components/Assignment/Redux/Reducers/PhotoReducer';
+import { getPostsDataReducer } from './Components/Assignment/Redux/Reducers/PostReducer';
+import todoReducer from './Components/Assignment/Redux/Reducers/TodosReducer';
+import userReducer from './Components/Assignment/Redux/Reducers/UserReducer';
 
 const rootReducer = {
-  getUserData: getUserDataReducer,
-  getTodosData: getTodosDataReducer,
+  todos: todoReducer,
+  users: userReducer,
   getAlbumData: getAlbumDataReducer,
-  getPhotosDataReducer,
+  getPhotoData: getPhotosDataReducer,
+  getPostsData: getPostsDataReducer,
 };
 
 export const store = configureStore({
-  reducer: rootReducer
+  reducer: rootReducer,
+  middleware: [thunk],
 })

@@ -32,15 +32,15 @@ import { getAlbumsDataAction } from '../Redux/Actions/AlbumActions';
 import { getPhotosDataAction } from '../Redux/Actions/PhotosActions';
 
 export default function UserAlbum() {
+  const { param } = useParams();
   const dispatch = useDispatch();
   // const [albums, setAlbums] = useState();
   const albums = useSelector((state) => state.getAlbumData);
-  console.log(useSelector((state)=>state))
+  // console.log(useSelector((state)=>state));
   // console.log(useSelector((state)=>state.getPhotoData));
   const albums2 = useSelector(state => state)
   // const [photoList, setPhotoList] = useState('');
   const [combinedList, setCombinedList] = useState('');
-  const { param } = useParams();
   const [scsMsg, setScsMsg] = useState('');
   // modal state
   const [open, setOpen] = useState(false);
@@ -168,26 +168,6 @@ export default function UserAlbum() {
     }
   // eslint-disable-next-line no-use-before-define
   }, [dispatch, str]);
-
-  // eslint-disable-next-line
-  // const fetchAlbums2 = () => {
-  //     return axios
-  //       .get(`http://localhost:3000/albums?userId=${param}`)
-  //       .then(response => {
-  //         setAlbums((response.data))
-  //         console.log(response.data)
-  //       }
-  //       )
-  //     // .then((response) => dispatch(getAlbumsDataAction(response.data)))
-  //   }
-
-  // eslint-disable-next-line
-  // const fetchPhotos = useCallback(() => {
-  //   return axios
-  //     .get(`http://localhost:3000/photos?${str}`)
-  //     .then((response) => dispatch(getPhotoDataAction(response.data)))
-  //    .then((response) => setPhotoList(response.data));
-  // })
 
   // //modal controllers
   // const handleClickOpen = () => { setOpen(true) };

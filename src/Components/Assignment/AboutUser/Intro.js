@@ -15,19 +15,21 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import AddRoadIcon from '@mui/icons-material/AddRoad';
 import ApartmentIcon from '@mui/icons-material/Apartment';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUsers, updateUser } from '../Redux/Actions/UserActions';
 
 export default function Intro() {
   const [userIntro, setUserIntro] = useState('');
   const { param } = useParams()
-  const userData = useSelector((state) => state.getUserData);
+  const dispatch = useDispatch()
+  console.log(useSelector((state)=> state.users.users));
+  const userData = useSelector((state)=> state.users.users);
   // dialog
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -44,73 +46,46 @@ export default function Intro() {
   const[display, setDisplay] = useState("none")
   const [progress, setProgress] = React.useState(0);
   const [buffer, setBuffer] = React.useState(10);
-
   const progressRef = React.useRef(() => {});
 
-  useEffect(() => {
-    FetchIntro();
-  }, []);
-
-  useEffect(() => {
-    progressRef.current = () => {
-      if (progress > 100) {
-        setProgress(0);
-        setBuffer(10);
-      } else {
-        const diff = Math.random() * 10;
-        const diff2 = Math.random() * 10;
-        setProgress(progress + diff);
-        setBuffer(progress + diff + diff2);
-      }
-    };
-  });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      progressRef.current();
-    }, 200);
-
-    return () => {
-      clearInterval(timer)
-    };
-  }, []);
-
-
-  // eslint-disable-next-line
-  const FetchIntro = useCallback(async () => {
-    const response = await axios.get(`http://localhost:3000/users?id=${param}`);
-    setUserIntro(response.data[0]);
-  })
-
   const infoUpdate = () => {
-    const data = {
-      "email": mailRef.current.value,
-      "website": websiteRef.current.value,
-      "address": {
-        "street": streetRef.current.value,
-        "suite": aptsRef.current.value,
-        "city": cityRef.current.value
-      },
-      "phone": phoneRef.current.value,
-      "company": {
-        "name": companyRef.current.value,
-      }
-    };
+    console.log(websiteRef.current.value);
+      const obj = {
+        "address": {
+          "city": cityRef.current.value,
+          // geo: {
+          //   lat:userData.address.geo.lat,
+          //   lng: userData.address.geo.lng,
+          // },
+          "street": streetRef.current.value,
+          "suite": aptsRef.current.value,
+          // zipcode: userData.address.zipcode
+        },
+        "email": mailRef.current.value,
+        id: param,
+        name: userData.name,
+        "phone": phoneRef.current.value,
+        username: userData.username,
+        "website": websiteRef.current.value,
+        "company": {
+          name: companyRef.current.value,
+          // catchPhrase: userData.company.catchPhrase,
+          // bs: userData.company.bs,
+        },
+      };
 
-    setInputDisabled(true);
-    data ? axios.put(`http://localhost:3000/users/${param}`, data) 
-     && FetchIntro()
-    : console.log("Info");
-    setTimeout(() => {setDisplay("block")}, 2000);
-    setTimeout(() => { 
-      setDisplay("none");
-      setScsMsg("Successfully submitted") ;
-    }, 3000);
-    setTimeout(() => { 
-      setEditInfo(false);
-      setScsMsg("");
-      setInputDisabled(false);
-    }, 4000);
+      setInputDisabled(true);
+      dispatch(updateUser(param, obj));
+      setTimeout(() => {setDisplay("block")}, 2000);
+      setTimeout(() => { 
+        setDisplay("none");
+        setScsMsg("Successfully submitted") ;
+      }, 3000);
+      setTimeout(() => { 
+        setEditInfo(false);
+        setScsMsg("");
+        setInputDisabled(false);
+      }, 4000);
   };
 
   const EditInfo = () => {

@@ -34,6 +34,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPostsDataAction } from './Redux/Actions/PostActions';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -48,6 +50,9 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function Posts({ name, mail }) {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.getUserData);
+  const userPosts = useSelector((state) => state.getPostsData);
   const [expanded, setExpanded] = React.useState(false);
   const [posts, setPosts] = useState("");
   const [user, setUser] = useState("");
@@ -71,6 +76,7 @@ export default function Posts({ name, mail }) {
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
   const progressRef = useRef(() => { });
+  // userPosts.length ? console.log(userPosts) : console.log("Posts");
   //create
   const postTitleRef = useRef("");
   const postBlogRef = useRef("");
@@ -80,20 +86,26 @@ export default function Posts({ name, mail }) {
 
   // eslint-disable-next-line
   useEffect(() => {
-    fetchUser();
+    // fetchUser();
     fetchPosts();
     fetchPhoto();
   }, []);
 
   // eslint-disable-next-line
-  const fetchUser = useCallback(() => {
-    return axios
-      .get(`http://localhost:3000/users/${param}`)
-      .then((response) => {
-        setUser(response.data.name);
-        setInitials(response.data.name.match(/(\b\S)?/g).join("").toUpperCase())
-      });
-  });
+  // const fetchUser = useCallback(async () => {
+  //   const response = await axios
+  //     .get(`http://localhost:3000/users/${param}`);
+  //   setUser(response.data.name);
+  //   setInitials(response.data.name.match(/(\b\S)?/g).join("").toUpperCase());
+  // });
+
+  useEffect(() => {
+    if (!userPosts.length) {
+      fetch(`http://localhost:3000/posts?userId=${param}`)
+        .then(res => res.json())
+        .then(data => dispatch(getPostsDataAction(data)));
+    }
+  }, [dispatch, userPosts, param]);
 
   // eslint-disable-next-line
   const fetchPosts = useCallback(() => {
@@ -169,29 +181,29 @@ export default function Posts({ name, mail }) {
   };
 
   //loader
-  useEffect(() => {
-    progressRef.current = () => {
-      if (progress > 100) {
-        setProgress(0);
-        setBuffer(10);
-      } else {
-        const diff = Math.random() * 10;
-        const diff2 = Math.random() * 10;
-        setProgress(progress + diff);
-        setBuffer(progress + diff + diff2);
-      }
-    };
-  });
+  // useEffect(() => {
+  //   progressRef.current = () => {
+  //     if (progress > 100) {
+  //       setProgress(0);
+  //       setBuffer(10);
+  //     } else {
+  //       const diff = Math.random() * 10;
+  //       const diff2 = Math.random() * 10;
+  //       setProgress(progress + diff);
+  //       setBuffer(progress + diff + diff2);
+  //     }
+  //   };
+  // });
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      progressRef.current();
-    }, 200);
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     progressRef.current();
+  //   }, 200);
 
-    return () => {
-      clearInterval(timer)
-    };
-  }, []);
+  //   return () => {
+  //     clearInterval(timer)
+  //   };
+  // }, []);
 
   //post dialog handlers
   const createPostHanlder = () => {
@@ -205,7 +217,7 @@ export default function Posts({ name, mail }) {
     setTimeout(() => { setDisplay("block") }, 2000);
     setTimeout(() => {
       setDisplay("none");
-      fetchPosts();
+      // fetchPosts();
       setScsMsg("Successfully submitted");
     }, 4000);
     setTimeout(() => {
@@ -246,7 +258,7 @@ export default function Posts({ name, mail }) {
   const deletePost = () => {
     if (data) {
       axios.delete(`http://localhost:3000/posts/${data.id}`);
-      fetchPosts();
+      // fetchPosts();
     };
     setInputDisabled(true);
     setTimeout(() => { setDisplay("block") }, 1000);
@@ -284,7 +296,7 @@ export default function Posts({ name, mail }) {
     setTimeout(() => { setDisplay("block") }, 2000);
     setTimeout(() => {
       setDisplay("none");
-      fetchPosts();
+      // fetchPosts();
       setScsMsg("updated successfully");
     }, 3000);
     setTimeout(() => {
@@ -306,8 +318,6 @@ export default function Posts({ name, mail }) {
             marginBottom: "16px",
             padding: 2,
             marginTop: "16px",
-            height: "150px",
-            width: "200px"
           }}
           elevation={2}
         >
@@ -324,17 +334,23 @@ export default function Posts({ name, mail }) {
             <ListItem sx={{
               padding: "5px 0"
             }}>
-              <ListItemIcon><Avatar sx={{ backgroundColor: 'rgb(244 67 54)' }} aria-label="user">{initials}</Avatar></ListItemIcon>
+              {userData.name ?
+                <ListItemIcon>
+                  <Avatar sx={{ backgroundColor: 'rgb(244 67 54)' }} aria-label="user">
+                    {userData.name.split(" ").map(string => string.charAt(0)).join('').toUpperCase()}
+                  </Avatar>
+                </ListItemIcon> 
+              : " " }
               <ListItemText
                 primary={
                   <StyledTextarea
                     sx={{
                       "&:hover": { backgroundColor: "white" },
-                      width: "400px"
+                      width: "450px"
                     }}
                     maxRows={4}
                     aria-label="Create a post"
-                    placeholder="Add a post"
+                    placeholder="Create a post..."
                   />
                 }
                 onClick={postCreationHandler}

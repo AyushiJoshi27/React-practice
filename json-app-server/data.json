@@ -38955,26 +38955,18 @@
       "id": 1
     },
     {
+      "address": {
+        "city": "Wisokyburgh",
+        "street": "Victor Plains",
+        "suite": "Suite 879"
+      },
+      "email": "Shanna@melissa.tv.",
       "id": 2,
       "name": "Ervin Howell",
-      "username": "Antonette",
-      "email": "Shanna@melissa.tv",
-      "address": {
-        "street": "Victor Plains",
-        "suite": "Suite 879",
-        "city": "Wisokyburgh",
-        "zipcode": "90566-7771",
-        "geo": {
-          "lat": "-43.9509",
-          "lng": "-34.4618"
-        }
-      },
-      "phone": "010-692-6593 x09125",
+      "phone": "010-692-6593 x091256",
       "website": "anastasia.net",
       "company": {
-        "name": "Deckow-Crist",
-        "catchPhrase": "Proactive didactic contingency",
-        "bs": "synergize scalable supply-chains"
+        "name": "Deckow-Crist"
       }
     },
     {
@@ -39366,21 +39358,9 @@
     },
     {
       "userId": 2,
-      "id": 38,
-      "title": "totam quia non",
-      "completed": false
-    },
-    {
-      "userId": 2,
       "id": 39,
       "title": "doloremque quibusdam asperiores libero corrupti illum qui omnis",
       "completed": false
-    },
-    {
-      "userId": 2,
-      "id": 40,
-      "title": "totam atque quo nesciunt",
-      "completed": true
     },
     {
       "userId": 3,
@@ -40299,6 +40279,12 @@
       "title": "New todo",
       "completed": true,
       "id": 201
+    },
+    {
+      "userId": 2,
+      "title": "New To-do Jun 8",
+      "completed": true,
+      "id": 204
     }
   ]
 }

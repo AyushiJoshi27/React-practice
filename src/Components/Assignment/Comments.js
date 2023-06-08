@@ -55,6 +55,7 @@ export default function Comments({ commentsId, userName, email }) {
     };
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchComments = useCallback(() => {
     return axios
       .get(`http://localhost:3000/comments?postId=${commentsId}`)

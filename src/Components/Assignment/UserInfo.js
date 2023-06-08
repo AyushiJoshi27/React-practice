@@ -1,40 +1,15 @@
 import { Avatar, Box, CardHeader, Container } from '@mui/material'
-import React, {useState, useCallback, useEffect} from 'react'
-import axios from 'axios';
 import UserPostsCompo from './Posts';
-import { useParams } from 'react-router';
 import Intro from './AboutUser/Intro';
 import Todos from './AboutUser/Todos';
 import UserAlbum from './AboutUser/Albums';
 import { Photo } from './Photos/UserPhotos';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUserDataAction } from './Redux/Actions/UserActions.';
+import { useSelector } from 'react-redux';
 import Posts from './Posts';
 
 export default function UserInfo() {
-  const dispatch = useDispatch();
-  const {param} = useParams('');
-  const userData = useSelector((state) => state.getUserData);
-
-  useEffect(() => {
-    fetchUser2();
-  }, []);
-
-  // eslint-disable-next-line
-  const fetchUser2 = useCallback(() => {
-    return axios
-      .get(`http://localhost:3000/users/${param}`)
-      .then((response) => dispatch(getUserDataAction(response.data)))
-  });
-
-  // function stringAvatar(name) {
-  //   return {
-  //     sx: {
-  //       bgcolor: "red",
-  //     },
-  //     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-  //   };
-  // }
+  const userData = useSelector((state) => state.users.users);
+  console.log(useSelector((state) => state.users.users));
 
   return (
     <>
@@ -87,12 +62,11 @@ export default function UserInfo() {
             }}>
             <Intro />
             <Todos />
-            <UserAlbum />
+            {/* <UserAlbum /> */}
           </Box>
-          {userData.data ? <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
-            {/* <UserPostsCompo name={userData.data.name} mail={userData.data.email}/> */}
-            <Posts name="Alpha" mail="Beta"/>
-          </Box> : ""}
+          <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
+            {/* <Posts name="Alpha" mail="Beta"/> */}
+          </Box>
         </Container>
       </div>
     </>

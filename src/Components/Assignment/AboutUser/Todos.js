@@ -29,12 +29,12 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTodosDataAction } from '../Redux/Actions/TodosAction';
+import { createTodo, deleteTodo, fetchTodos, updateTodos } from '../Redux/Actions/TodosAction';
 
 export default function Todos() {
   const dispatch = useDispatch()
-  const userTodos = useSelector((state) => state.getTodosData)
-  // const [userTodos, setUserTodos] = useState([]);
+  const userTodos = useSelector((state) => state.todos.todos);
+  console.log(useSelector((state) => state.todos.todos));
   const { param } = useParams();
   const [open, setOpen] = useState(false);
   const theme = useTheme();
@@ -59,57 +59,23 @@ export default function Todos() {
   const titleRef = useRef('');
   const newTodoRef = useRef("");
 
-  useEffect(() => {
-    FetchTodos();
-  }, [])
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      progressRef.current();
-    }, 200);
-
-    return () => {
-      clearInterval(timer)
-    };
-  }, [])
-
-  // eslint-disable-next-line
-  const FetchTodos = useCallback(async () => {
-    const response = await axios.get(`http://localhost:3000/todos?userId=${param}`);
-    dispatch(getTodosDataAction(response.data));
-  });
-
-  useEffect(() => {
-    progressRef.current = () => {
-      if (progress > 100) {
-        setProgress(0);
-        setBuffer(10);
-      } else {
-        const diff = Math.random() * 10;
-        const diff2 = Math.random() * 10;
-        setProgress(progress + diff);
-        setBuffer(progress + diff + diff2);
-      }
-    };
-  });
-
-  const vertClick = (id, title, status) => {
+  function vertClick(id, title, status) {
     setId(id);
     setTitle(title);
-    console.log(status);
     setTodoStatus(status);
   }
 
-  const handleClick = (event) => {setAnchorEl(event.currentTarget);};
+  const handleClick = (event) => { setAnchorEl(event.currentTarget); };
 
-  const TodoHandler = () => {setAnchorEl(null);};
+  const TodoHandler = () => { setAnchorEl(false); };
 
-  const handleClickOpen = () => {setOpen(true);};
+  const handleClickOpen = () => { setOpen(true); };
 
-  const handleClose = () => {setOpen(false);};
+  const handleClose = () => { setOpen(false); };
 
   //post
   const AddNewTodos = () => {
+    setAnchorEl(false);
     setScsMsg("");
     const data = {
       userId: Number(param),
@@ -118,16 +84,10 @@ export default function Todos() {
     }
 
     setInputDisabled(true);
-    if (data) {
-      console.log(data);
-    }
-    data ? axios.post(`http://localhost:3000/todos?userId=${param}`, data)
-      : console.log("todo's post");
-
+    data ? dispatch(createTodo(data)) : console.log("todo's post");
     setTimeout(() => { setDisplay("block") }, 1000);
     setTimeout(() => {
       setDisplay("none");
-      FetchTodos();
       setScsMsg("Successfully submitted");
     }, 3000);
     setTimeout(() => {
@@ -143,13 +103,15 @@ export default function Todos() {
   };
 
   const DeleteTodos = () => {
+    setAnchorEl(false);
     if (id) {
-      axios.delete(`http://localhost:3000/todos/${id}`);
-    };
+      console.log(id)
+      dispatch(deleteTodo(id));
+    }
+     
     setInputDisabled(true);
     setTimeout(() => { setDisplay("block") }, 1000);
     setTimeout(() => {
-      FetchTodos();
       setDisplay("none");
       setScsMsg("Successfully submitted");
     }, 4000);
@@ -175,32 +137,33 @@ export default function Todos() {
 
   const updateTodo = () => {
     setAnchorEl(false);
+    const obj = {
+      userId: Number(param),
+      id: id,
+      title: titleRef.current.value,
+      completed: Boolean(todoStatus)
+    };
 
-      const data = {
-        userId: Number(param),
-        title: titleRef.current.value,
-        completed: Boolean(todoStatus)
-      };
+    if (obj) {
+      console.log(obj);
+      dispatch(updateTodos(obj));
+    }
 
-      setInputDisabled(true);
-      if (data) { console.log(data) }
-
-      data ? axios.put(`http://localhost:3000/todos/${id}`, data) && FetchTodos() : console.log("Update todo");
-      setTimeout(() => {setDisplay("block")}, 2000);
-      setTimeout(() => { 
-        setDisplay("none");
-        setScsMsg("Successfully submitted") ;
-      }, 3000);
-      setTimeout(() => {
-        setOpenU(false);
-        setScsMsg("");
-        setInputDisabled(false);
-      }, 5000);
+    setInputDisabled(true);
+    setTimeout(() => { setDisplay("block") }, 1000);
+    setTimeout(() => {
+      setDisplay("none");
+      setScsMsg("Successfully submitted");
+    }, 3000);
+    setTimeout(() => {
+      setOpenU(false);
+      setScsMsg("");
+      setInputDisabled(false);
+    }, 5000);
   }
 
   const CheckboxHandler = (event) => {
     setTodoStatus(event.target.value);
-    console.log(event.target.value);
   }
 
   const handleSelector = (event) => {
@@ -221,74 +184,76 @@ export default function Todos() {
         }}
         elevation={2}
       >
-        <List>
-          <ListItem
-            secondaryAction={
-              <IconButton edge="end" aria-label="addTodo" onClick={handleClickOpen}>
-                <AddCircleIcon />
-              </IconButton>
-            }
-          >
-            <ListItemText
-              primary={<b>Todos</b>}
-            />
-          </ListItem>
-          {userTodos.map((item, index) => (
+        {userTodos ?
+          <List>
             <ListItem
-              sx={{ paddingLeft: 0 }}
-              key={item.id}
               secondaryAction={
-                <>
-                  <Button
-                    edge="end"
-                    sx={{ padding: 0, float: "right", "&:hover": { backgroundColor: "#ffffff", padding: 0 } }}
-                    id="basic-button"
-                    aria-controls={openMenu ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={openMenu ? 'true' : undefined}
-                    onClick={handleClick}
-                  >
-                    <MoreVertRoundedIcon onClick={() => vertClick(item.id, item.title, item.completed)} sx={{ "&:hover": { padding: 0 } }} />
-                  </Button>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={openMenu}
-                    onClose={TodoHandler}
-                    MenuListProps={{
-                      'aria-labelledby': 'basic-button',
-                    }}
-                    sx={{ boxShadow: "2px 2px 5px 4px lightgrey" }}
-                  >
-                    <MenuItem onClick={() => TodoUpdateHandler()} >Update</MenuItem>
-                    <MenuItem onClick={() => TodoDeleteHandler()} >Delete</MenuItem>
-                  </Menu>
-                </>
+                <IconButton edge="end" aria-label="addTodo" onClick={handleClickOpen}>
+                  <AddCircleIcon />
+                </IconButton>
               }
             >
-              <ListItem
-                dense
-                sx={{ "&:hover": { backgroundColor: "#ffffff" } }}
-              >
-                <ListItemIcon sx={{ width: "50px" }}>{index + 1}.</ListItemIcon>
-                <ListItemText
-                  sx={{
-                    "&::first-letter": {
-                      textTransform: "uppercase"
-                    }
-                  }}
-                >
-                  {item.title}</ListItemText>
-                <Checkbox
-                  edge="start"
-                  sx={{ paddingLeft: 2, marginRight: 1 }}
-                  checked={item.completed === true ? true : false}
-                  disableRipple={true}
-                />
-              </ListItem>
+              <ListItemText
+                primary={<b>Todos</b>}
+              />
             </ListItem>
-          ))}
-        </List>
+            {userTodos.map((item, index) => (
+              <ListItem
+                sx={{ paddingLeft: 0 }}
+                key={item.id}
+                secondaryAction={
+                  <>
+                    <Button
+                      edge="end"
+                      sx={{ padding: 0, float: "right", "&:hover": { backgroundColor: "#ffffff", padding: 0 } }}
+                      id="basic-button"
+                      aria-controls={openMenu ? 'basic-menu' : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={openMenu ? 'true' : undefined}
+                      onClick={handleClick}
+                    >
+                      <MoreVertRoundedIcon onClick={() => vertClick(item.id, item.title, item.completed)} sx={{ "&:hover": { padding: 0 } }} />
+                    </Button>
+                    <Menu
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={openMenu}
+                      onClose={TodoHandler}
+                      MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                      }}
+                      sx={{ boxShadow: "2px 2px 5px 4px lightgrey" }}
+                    >
+                      <MenuItem onClick={() => TodoUpdateHandler()} >Update</MenuItem>
+                      <MenuItem onClick={() => TodoDeleteHandler()} >Delete</MenuItem>
+                    </Menu>
+                  </>
+                }
+              >
+                <ListItem
+                  dense
+                  sx={{ "&:hover": { backgroundColor: "#ffffff" } }}
+                >
+                  <ListItemIcon sx={{ width: "50px" }}>{index + 1}.</ListItemIcon>
+                  <ListItemText
+                    sx={{
+                      "&::first-letter": {
+                        textTransform: "uppercase"
+                      }
+                    }}
+                  >
+                    {item.title}</ListItemText>
+                  <Checkbox
+                    edge="start"
+                    sx={{ paddingLeft: 2, marginRight: 1 }}
+                    checked={item.completed === true ? true : false}
+                    disableRipple={true}
+                  />
+                </ListItem>
+              </ListItem>
+            ))}
+          </List>
+          : ""}
       </Paper>
       {/* Modal => CREATE */}
       <Dialog
@@ -299,7 +264,7 @@ export default function Todos() {
       >
         <DialogTitle id="responsive-dialog-title" variant='h6'>
           New to-do
-          <Typography sx={{color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center"}}>
+          <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
             {scsMsg}
           </Typography>
           <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
@@ -361,7 +326,7 @@ export default function Todos() {
       >
         <DialogTitle id="responsive-delete-dialog-title" variant='h6'>
           Delete to-do
-          <Typography sx={{color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center"}}>
+          <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
             {scsMsg}
           </Typography>
           <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
@@ -390,8 +355,8 @@ export default function Todos() {
         >
           <DialogTitle id="responsive-update-dialog-title" variant='h6'>
             <b>Edit to-do</b>
-            <Typography sx={{color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center"}}>
-            {scsMsg}
+            <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
+              {scsMsg}
             </Typography>
           </DialogTitle>
           <Divider />
@@ -402,7 +367,8 @@ export default function Todos() {
               <ListItem
                 key="create"
                 secondaryAction={
-                  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                  <>
+                  {/* <form sx={{ m: 1, minWidth: 120 }} size="small"> */}
                     <InputLabel id="toDoStatus">Status</InputLabel>
                     <Select
                       labelId="toDoStatus"
@@ -417,7 +383,8 @@ export default function Todos() {
                       <Divider />
                       <MenuItem value={true}>Completed</MenuItem>
                     </Select>
-                  </FormControl>
+                  {/* </form> */}
+                  </>
                 }
                 disablePadding
               >
