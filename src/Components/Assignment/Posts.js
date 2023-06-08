@@ -35,7 +35,7 @@ import MenuItem from '@mui/material/MenuItem';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPostsDataAction } from './Redux/Actions/PostActions';
+import { createPost, deletedPost, updatedPosts } from './Redux/Actions/PostActions';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -51,32 +51,30 @@ const ExpandMore = styled((props) => {
 
 export default function Posts({ name, mail }) {
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.getUserData);
-  const userPosts = useSelector((state) => state.getPostsData);
-  const [expanded, setExpanded] = React.useState(false);
-  const [posts, setPosts] = useState("");
-  const [user, setUser] = useState("");
-  const [initials, setInitials] = useState("");
+  const userData = useSelector((state) => state.users.users);;
+  console.log(useSelector((state) => state.posts.posts));
+  const posts = useSelector((state) => state.posts.posts)
+  const [expanded, setExpanded] = useState(false);
+  const [postId, setPostId] = useState("");
   const [photo, setPhoto] = useState("");
   const { param } = useParams();
   var options = { year: 'numeric', month: 'long', day: 'numeric' };
   const currentDate = new Date();
   const dateFormate = currentDate.toLocaleDateString("en-US", options);
   const [scsMsg, setScsMsg] = useState('');
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const [data, setData] = useState("");
   const openMenu = Boolean(anchorEl);
 
   //post dialog
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [openP, setOpenP] = React.useState(false);
+  const [openP, setOpenP] = useState(false);
   const [inputDisabled, setInputDisabled] = useState(false);
   const [display, setDisplay] = useState("none")
   const [progress, setProgress] = useState(0);
-  const [buffer, setBuffer] = useState(10);
+  const [buffer, setBuffer] = useState(20);
   const progressRef = useRef(() => { });
-  // userPosts.length ? console.log(userPosts) : console.log("Posts");
   //create
   const postTitleRef = useRef("");
   const postBlogRef = useRef("");
@@ -86,33 +84,8 @@ export default function Posts({ name, mail }) {
 
   // eslint-disable-next-line
   useEffect(() => {
-    // fetchUser();
-    fetchPosts();
     fetchPhoto();
   }, []);
-
-  // eslint-disable-next-line
-  // const fetchUser = useCallback(async () => {
-  //   const response = await axios
-  //     .get(`http://localhost:3000/users/${param}`);
-  //   setUser(response.data.name);
-  //   setInitials(response.data.name.match(/(\b\S)?/g).join("").toUpperCase());
-  // });
-
-  useEffect(() => {
-    if (!userPosts.length) {
-      fetch(`http://localhost:3000/posts?userId=${param}`)
-        .then(res => res.json())
-        .then(data => dispatch(getPostsDataAction(data)));
-    }
-  }, [dispatch, userPosts, param]);
-
-  // eslint-disable-next-line
-  const fetchPosts = useCallback(() => {
-    return axios
-      .get(`http://localhost:3000/posts?userId=${param}`)
-      .then((response) => setPosts(response.data));
-  });
 
   // eslint-disable-next-line
   const fetchPhoto = useCallback(() => {
@@ -121,9 +94,27 @@ export default function Posts({ name, mail }) {
       .then((response) => setPhoto(response.data[0]));
   })
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const handleExpandClick = (data) => {
+    setPostId(data);
+    setExpanded(true);
   };
+
+  var str = "";
+  if (posts) {
+    (
+      // eslint-disable-next-line array-callback-return
+      posts && posts.map((data) => {
+        var str1 = "postId=" + data.id + "&";
+        str += str1;
+      })
+    )
+    var sortStr = "_sort=postId";
+    str += sortStr;
+  }
+
+  if (str !== "_sort=postId") {
+    console.log(str);
+  }
 
   //add a post style and functionality
   const blue = {
@@ -180,31 +171,6 @@ export default function Posts({ name, mail }) {
     setAnchorEl(event.currentTarget);
   };
 
-  //loader
-  // useEffect(() => {
-  //   progressRef.current = () => {
-  //     if (progress > 100) {
-  //       setProgress(0);
-  //       setBuffer(10);
-  //     } else {
-  //       const diff = Math.random() * 10;
-  //       const diff2 = Math.random() * 10;
-  //       setProgress(progress + diff);
-  //       setBuffer(progress + diff + diff2);
-  //     }
-  //   };
-  // });
-
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     progressRef.current();
-  //   }, 200);
-
-  //   return () => {
-  //     clearInterval(timer)
-  //   };
-  // }, []);
-
   //post dialog handlers
   const createPostHanlder = () => {
     const data = {
@@ -212,12 +178,13 @@ export default function Posts({ name, mail }) {
       title: postTitleRef.current.value,
       body: postBlogRef.current.value,
     }
-    data ? axios.post(`http://localhost:3000/posts?userId=${param}`, data) : console.log("User post");
+    if (data) {
+      dispatch(createPost(data));
+    };
     setInputDisabled(true);
     setTimeout(() => { setDisplay("block") }, 2000);
     setTimeout(() => {
       setDisplay("none");
-      // fetchPosts();
       setScsMsg("Successfully submitted");
     }, 4000);
     setTimeout(() => {
@@ -225,7 +192,6 @@ export default function Posts({ name, mail }) {
       setScsMsg("");
       setInputDisabled(false);
     }, 5000);
-    // setOpenP(false);
   }
 
   // VertIcon click
@@ -257,8 +223,8 @@ export default function Posts({ name, mail }) {
 
   const deletePost = () => {
     if (data) {
-      axios.delete(`http://localhost:3000/posts/${data.id}`);
-      // fetchPosts();
+      console.log(data.id)
+      dispatch(deletedPost(data.id));
     };
     setInputDisabled(true);
     setTimeout(() => { setDisplay("block") }, 1000);
@@ -288,9 +254,10 @@ export default function Posts({ name, mail }) {
       userId: param,
       title: postTitleRef.current.value,
       body: postBlogRef.current.value,
+      id: Number(data.id)
     }
     if (obj) {
-      axios.put(`http://localhost:3000/posts/${data.id}`, obj);
+      dispatch(updatedPosts(obj));
     };
     setInputDisabled(true);
     setTimeout(() => { setDisplay("block") }, 2000);
@@ -369,12 +336,13 @@ export default function Posts({ name, mail }) {
               padding: 0
             }}
           >
+            {userData.name ?
             <CardHeader
               sx={{ padding: "16px 16px 0px 16px" }}
               avatar={<Avatar sx={{ bgcolor: 'rgb(244 67 54)' }} aria-label="user">
-                {initials}
+                {userData.name.split(" ").map(string => string.charAt(0)).join('').toUpperCase()}
               </Avatar>}
-              title={<b>{user}</b>}
+              title={<b>{userData.name}</b>}
               subheader={dateFormate}
               action={
                 <>
@@ -408,7 +376,7 @@ export default function Posts({ name, mail }) {
                   </Menu>
                 </>
               }
-            />
+            /> : "" }
             <CardContent
               style={{
                 padding: "16px 16px 6px 16px",
@@ -431,16 +399,19 @@ export default function Posts({ name, mail }) {
               See all comments
               <ExpandMore
                 expand={expanded}
-                onClick={handleExpandClick}
+                onClick={() => handleExpandClick(post.id)}
                 aria-expanded={expanded}
                 aria-label="show more"
               >
                 <b><ExpandMoreIcon sx={{ "&:hover": { backgroundColor: 'transparent' } }} /></b>
               </ExpandMore>
             </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-              { (name && mail) ? <Comments commentsId={post.id} userName={name} email={mail} /> : ""}
-            </Collapse>
+            {postId === post.id ?
+              <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <Comments commentsId={post.id} />
+              </Collapse>
+              : ""
+            }
           </Card>
         ))}
       </div>

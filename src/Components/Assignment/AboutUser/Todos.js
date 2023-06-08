@@ -99,11 +99,11 @@ export default function Todos() {
 
   //Todo Delete
   const TodoDeleteHandler = () => {
+    setAnchorEl(false);
     setOpenD(true);
   };
 
   const DeleteTodos = () => {
-    setAnchorEl(false);
     if (id) {
       console.log(id)
       dispatch(deleteTodo(id));
@@ -128,6 +128,7 @@ export default function Todos() {
 
   //handler for update modal
   const TodoUpdateHandler = () => {
+    setAnchorEl(false);
     setOpenU(true);
   }
 
@@ -136,7 +137,6 @@ export default function Todos() {
   }
 
   const updateTodo = () => {
-    setAnchorEl(false);
     const obj = {
       userId: Number(param),
       id: id,
@@ -358,6 +358,7 @@ export default function Todos() {
             <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
               {scsMsg}
             </Typography>
+            <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
           </DialogTitle>
           <Divider />
           <DialogContent
@@ -368,7 +369,7 @@ export default function Todos() {
                 key="create"
                 secondaryAction={
                   <>
-                  {/* <form sx={{ m: 1, minWidth: 120 }} size="small"> */}
+                  <form sx={{ m: 1, minWidth: 120 }} size="small">
                     <InputLabel id="toDoStatus">Status</InputLabel>
                     <Select
                       labelId="toDoStatus"
@@ -383,7 +384,7 @@ export default function Todos() {
                       <Divider />
                       <MenuItem value={true}>Completed</MenuItem>
                     </Select>
-                  {/* </form> */}
+                  </form>
                   </>
                 }
                 disablePadding

@@ -22,13 +22,11 @@ import Button from '@mui/material/Button';
 import AddRoadIcon from '@mui/icons-material/AddRoad';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUsers, updateUser } from '../Redux/Actions/UserActions';
+import { updateUser } from '../Redux/Actions/UserActions';
 
 export default function Intro() {
-  const [userIntro, setUserIntro] = useState('');
   const { param } = useParams()
   const dispatch = useDispatch()
-  console.log(useSelector((state)=> state.users.users));
   const userData = useSelector((state)=> state.users.users);
   // dialog
   const theme = useTheme();
@@ -84,7 +82,7 @@ export default function Intro() {
       setTimeout(() => { 
         setEditInfo(false);
         setScsMsg("");
-        setInputDisabled(false);
+        setInputDisabled(false); 
       }, 4000);
   };
 

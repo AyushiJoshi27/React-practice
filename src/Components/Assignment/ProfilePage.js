@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { fetchUsers } from './Redux/Actions/UserActions';
 import { useParams } from 'react-router';
 import { fetchTodos } from './Redux/Actions/TodosAction';
+import { fetchPosts } from './Redux/Actions/PostActions';
 
 export default function ProfilePage() {
   const {param} = useParams()
@@ -12,11 +13,9 @@ export default function ProfilePage() {
 
   useEffect(() => {
     dispatch(fetchUsers(param));
-  }, []);
-
-  useEffect(() => {
     dispatch(fetchTodos(param));
-  }, [])
+    dispatch(fetchPosts(param));
+  }, []);
 
   return (
     <div className='fbMainContainer'>

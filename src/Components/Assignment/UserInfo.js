@@ -62,10 +62,10 @@ export default function UserInfo() {
             }}>
             <Intro />
             <Todos />
-            {/* <UserAlbum /> */}
+            <UserAlbum />
           </Box>
           <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
-            {/* <Posts name="Alpha" mail="Beta"/> */}
+            <Posts/>
           </Box>
         </Container>
       </div>

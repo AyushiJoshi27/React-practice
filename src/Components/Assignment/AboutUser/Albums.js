@@ -36,7 +36,7 @@ export default function UserAlbum() {
   const dispatch = useDispatch();
   // const [albums, setAlbums] = useState();
   const albums = useSelector((state) => state.getAlbumData);
-  // console.log(useSelector((state)=>state));
+  console.log(useSelector((state)=>state));
   // console.log(useSelector((state)=>state.getPhotoData));
   const albums2 = useSelector(state => state)
   // const [photoList, setPhotoList] = useState('');
