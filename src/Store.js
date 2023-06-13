@@ -1,6 +1,6 @@
 import thunk from 'redux-thunk';
 import { configureStore } from '@reduxjs/toolkit';
-import { getAlbumDataReducer } from './Components/Assignment/Redux/Reducers/AlbumReducer';
+import albumReducer from './Components/Assignment/Redux/Reducers/AlbumReducer';
 import { getPhotosDataReducer } from './Components/Assignment/Redux/Reducers/PhotoReducer';
 import todoReducer from './Components/Assignment/Redux/Reducers/TodosReducer';
 import userReducer from './Components/Assignment/Redux/Reducers/UserReducer';
@@ -10,7 +10,7 @@ const rootReducer = {
   todos: todoReducer,
   users: userReducer,
   posts: postReducer,
-  getAlbumData: getAlbumDataReducer,
+  albums: albumReducer,
   getPhotoData: getPhotosDataReducer,
 };
 

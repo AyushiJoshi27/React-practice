@@ -25,14 +25,14 @@ const postReducer = (state = initialState, action) => {
     case 'UPDATE_POSTS_SUCCESS':
       return {
         ...state,
-        posts: state.posts.map((todo) =>
-          todo.id === action.payload.id ? action.payload : todo
+        posts: state.posts.map((post) =>
+          post.id === action.payload.id ? action.payload : post
         ),
       };
     case 'DELETE_POST_SUCCESS':
       return {
         ...state,
-        posts: state.posts.filter((todo) => todo.id !== action.payload),
+        posts: state.posts.filter((post) => post.id !== action.payload),
       };
     case 'CREATE_POST_SUCCESS':
       return {

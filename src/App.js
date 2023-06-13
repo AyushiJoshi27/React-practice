@@ -46,9 +46,9 @@ function App() {
             <Route path='api-content' element={<ApiContent/>} />
             <Route path='badge' element={<AccessibleBadges />} />
             <Route path='albums' element={ <Albums/> } />
-            <Route path='facebook/:param' element={ <ProfilePage/> } />
+            <Route path='facebook/:userId' element={ <ProfilePage/> } />
             <Route path='user-photo' element={ <Posts /> } />
-            <Route path="user-photo/:param" element={ <Posts /> } />
+            <Route path="user-photo/:userId" element={ <Posts /> } />
             <Route path='comment' element={<Comments/>} />
             <Route path='param' element={<Params/>} />
             <Route path='route-manipulator' element={ <RoutesManipulator /> } />

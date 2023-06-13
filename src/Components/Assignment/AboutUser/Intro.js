@@ -22,10 +22,10 @@ import Button from '@mui/material/Button';
 import AddRoadIcon from '@mui/icons-material/AddRoad';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUser } from '../Redux/Actions/UserActions';
+import { updateUser } from '../Redux/Actions/UserActions.';
 
 export default function Intro() {
-  const { param } = useParams()
+  const { userId } = useParams()
   const dispatch = useDispatch()
   const userData = useSelector((state)=> state.users.users);
   // dialog
@@ -43,11 +43,10 @@ export default function Intro() {
   const [inputDisabled, setInputDisabled] = useState(false);
   const[display, setDisplay] = useState("none")
   const [progress, setProgress] = React.useState(0);
-  const [buffer, setBuffer] = React.useState(10);
+  const [buffer, setBuffer] = React.useState(50);
   const progressRef = React.useRef(() => {});
 
   const infoUpdate = () => {
-    console.log(websiteRef.current.value);
       const obj = {
         "address": {
           "city": cityRef.current.value,
@@ -60,7 +59,7 @@ export default function Intro() {
           // zipcode: userData.address.zipcode
         },
         "email": mailRef.current.value,
-        id: param,
+        id: userId,
         name: userData.name,
         "phone": phoneRef.current.value,
         username: userData.username,
@@ -73,7 +72,7 @@ export default function Intro() {
       };
 
       setInputDisabled(true);
-      dispatch(updateUser(param, obj));
+      dispatch(updateUser(obj));
       setTimeout(() => {setDisplay("block")}, 2000);
       setTimeout(() => { 
         setDisplay("none");
@@ -312,8 +311,8 @@ export default function Intro() {
           </DialogContent>
           <Divider />
           <DialogActions>
-            <Button onClick={editClose} variant="contained" color='error'><b>Cancel</b></Button>
-            <Button onClick={infoUpdate} variant="contained"><b>Save</b></Button>
+            <Button onClick={editClose} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
+            <Button onClick={infoUpdate} variant="contained" disabled={inputDisabled}><b>Save</b></Button>
           </DialogActions>
         </Dialog> 
       </Paper > : ''}

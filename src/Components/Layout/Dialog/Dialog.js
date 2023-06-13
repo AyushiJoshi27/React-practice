@@ -12,7 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import { useParams } from 'react-router';
 
 export default function ResponsiveDialog() {
-  const {param} = useParams();
+  const {userId} = useParams();
   const [createPost, setCreatePost] = React.useState(false);
   const [newTodo, setNewTodo] = useState('');
   const theme = useTheme();
@@ -27,9 +27,8 @@ export default function ResponsiveDialog() {
   };
 
   const AddNewTodos = () => {
-    // (newTodo) ? console.log(newTodo) : console.log("Hii");
 
-    // fetch(`http://localhost:3000/todos/${param}`, {
+    // fetch(`http://localhost:3000/todos/${userId}`, {
     //   method: 'POST',
     //   body: newTodo
     // })

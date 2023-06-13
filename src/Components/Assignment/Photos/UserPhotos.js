@@ -5,21 +5,7 @@ import { ImageList, Paper, Typography } from '@mui/material';
 import AlbumPhoto from '../Albums/Photo';
 
 export function Photo() {
-  const { param } = useParams();
-  const [albumId, setAlbumId] = useState('');
-
-  useEffect(() => {
-    fetchAlbums();
-  }, [])
-
-  // eslint-disable-next-line
-  const fetchAlbums = useCallback(() => {
-    return axios
-      .get(`http://localhost:3000/albums?userId=${param}`)
-      .then((response) => {
-        setAlbumId(response.data)
-      });
-  });
+  const { userId } = useParams();
 
   return (
     <>
@@ -47,10 +33,11 @@ export function Photo() {
       cols={3} 
       rowHeight={164}
     >
-    {albumId && albumId.map((item) => (
+      Albums
+    {/* {albumId && albumId.map((item) => (
         <AlbumPhoto albumId={item.id} />
       )
-    )}
+    )} */}
     </ImageList>
     </Paper>
     </>

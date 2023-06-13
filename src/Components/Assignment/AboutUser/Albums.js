@@ -28,16 +28,14 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAlbumsDataAction } from '../Redux/Actions/AlbumActions';
 import { getPhotosDataAction } from '../Redux/Actions/PhotosActions';
 
 export default function UserAlbum() {
-  const { param } = useParams();
+  const { userId } = useParams();
   const dispatch = useDispatch();
   // const [albums, setAlbums] = useState();
-  const albums = useSelector((state) => state.getAlbumData);
-  console.log(useSelector((state)=>state));
-  // console.log(useSelector((state)=>state.getPhotoData));
+  const albums = useSelector((state) => state.albums.albums);
+  console.log(useSelector((state) => state));
   const albums2 = useSelector(state => state)
   // const [photoList, setPhotoList] = useState('');
   const [combinedList, setCombinedList] = useState('');
@@ -77,36 +75,6 @@ export default function UserAlbum() {
   const edtPhotoUrlRef = useRef("");
 
   // useEffect(() => {
-  //   if (str) {
-  //     fetchPhotos();
-  //   }
-  // }, [str]);
-
-  // useEffect(() => {
-  //   progressRef.current = () => {
-  //     if (progress > 100) {
-  //       setProgress(0);
-  //       setBuffer(10);
-  //     } else {
-  //       const diff = Math.random() * 10;
-  //       const diff2 = Math.random() * 10;
-  //       setProgress(progress + diff);
-  //       setBuffer(progress + diff + diff2);
-  //     }
-  //   };
-  // });
-
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     progressRef.current();
-  //   }, 200);
-
-  //   return () => {
-  //     clearInterval(timer)
-  //   };
-  // }, []);
-
-  // useEffect(() => {
   //   if (photoList && albums) {
   //     var y = albums;
   //     let photosObj = {}
@@ -130,21 +98,6 @@ export default function UserAlbum() {
 
   // }, [albums, photoList])
 
-  // console.log(albums.length);
-
-  // useEffect(() => {
-  //   fetchAlbums2()
-  //   // fetchAlbums2();
-  // }, []);
-
-  useEffect(() => {
-    if (!albums.length) {
-      fetch(`http://localhost:3000/albums?userId=${param}`)
-        .then(res => res.json())
-        .then(data => dispatch(getAlbumsDataAction(data)));
-    }
-  }, [dispatch, albums, param]);
-
   var str = "";
   if (albums) {
     (
@@ -163,7 +116,6 @@ export default function UserAlbum() {
     if (str !== "_sort=albumId" ) {
       fetch(`http://localhost:3000/photos?${str}`)
         .then(res => res.json())
-        // .then((response) => console.log(response))
         .then((response) => dispatch(getPhotosDataAction(response)))
     }
   // eslint-disable-next-line no-use-before-define
@@ -175,15 +127,14 @@ export default function UserAlbum() {
 
   // const ImageUploader = () => {
   //   const data = {
-  //     "userId": param,
+  //     "userId": userId,
   //     "title": titleRef.current.value
   //   }
-  //   data ? axios.post(`http://localhost:3000/albums?userId=${param}`, data) : console.log("Post album");
+  //   data ? axios.post(`http://localhost:3000/albums?userId=${userId}`, data) : console.log("Post album");
   //   setInputDisabled(true);
   //   setTimeout(() => { setDisplay("block") }, 2000);
   //   setTimeout(() => {
   //     setDisplay("none");
-  //     fetchAlbums2()
   //     setScsMsg("Successfully submitted");
   //   }, 3000);
   //   setTimeout(() => {
@@ -208,7 +159,6 @@ export default function UserAlbum() {
   //     setScsMsg("Successfully deleted");
   //   }, 3000);
   //   setTimeout(() => {
-  //     fetchAlbums2();
   //     setOpenD(false);
   //     setScsMsg("");
   //   }, 5000);
@@ -226,7 +176,7 @@ export default function UserAlbum() {
   // const updateAlbumHandler = () => {
   //   setInputDisabled(false);
   //   const data = {
-  //     userId: param,
+  //     userId: userId,
   //     id: Number(updateAlbum),
   //     title: editTitleRef.current.value,
   //   }
@@ -234,7 +184,6 @@ export default function UserAlbum() {
   //   setTimeout(() => { setDisplay("block") }, 2000);
   //   setTimeout(() => {
   //     setDisplay("none");
-  //     fetchAlbums2();
   //     setScsMsg("Successfully updated");
   //   }, 4000);
   //   setTimeout(() => {
@@ -324,7 +273,6 @@ export default function UserAlbum() {
   //     id: edtPhotoId,
   //     url: edtPhotoUrlRef.current.value,
   //   }
-  //   data ? console.log(data) : console.log("data");
   //   data ? axios.put(`http://localhost:3000/photos/${edtPhotoId}`, data) : console.log("Update Photos");
   //   setInputDisabled(true);
   //   setTimeout(() => { setDisplay("block") }, 2000);

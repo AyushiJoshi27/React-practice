@@ -20,9 +20,9 @@ const fetchUsersFailure = (error) => ({
   payload: error,
 });
 
-export const updateUser = (id, userInfo) => async (dispatch) => {
+export const updateUser = (userInfo) => async (dispatch) => {
   try {
-    const response = await axios.put(`http://localhost:3000/users/${id}`, userInfo);
+    const response = await axios.put(`http://localhost:3000/users/${userInfo.id}`, userInfo);
     const updatedUserData = response.data;
     dispatch({
       type: 'UPDATE_USERS_SUCCESS',

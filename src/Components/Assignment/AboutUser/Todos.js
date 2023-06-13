@@ -34,8 +34,7 @@ import { createTodo, deleteTodo, fetchTodos, updateTodos } from '../Redux/Action
 export default function Todos() {
   const dispatch = useDispatch()
   const userTodos = useSelector((state) => state.todos.todos);
-  console.log(useSelector((state) => state.todos.todos));
-  const { param } = useParams();
+  const { userId } = useParams();
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -78,7 +77,7 @@ export default function Todos() {
     setAnchorEl(false);
     setScsMsg("");
     const data = {
-      userId: Number(param),
+      userId: Number(userId),
       title: newTodoRef.current.value,
       completed: Boolean(selectedValue)
     }
@@ -105,7 +104,6 @@ export default function Todos() {
 
   const DeleteTodos = () => {
     if (id) {
-      console.log(id)
       dispatch(deleteTodo(id));
     }
      
@@ -138,14 +136,13 @@ export default function Todos() {
 
   const updateTodo = () => {
     const obj = {
-      userId: Number(param),
+      userId: Number(userId),
       id: id,
       title: titleRef.current.value,
       completed: Boolean(todoStatus)
     };
 
     if (obj) {
-      console.log(obj);
       dispatch(updateTodos(obj));
     }
 

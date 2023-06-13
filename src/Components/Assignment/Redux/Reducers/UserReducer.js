@@ -21,8 +21,6 @@ const userReducer = (state = initialState, action) => {
         error: action.payload,
       };
     case 'UPDATE_USERS_SUCCESS':
-      console.log()
-      console.log(action.payload);
       return {
         ...state,
         users: action.payload

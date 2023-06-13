@@ -52,12 +52,11 @@ const ExpandMore = styled((props) => {
 export default function Posts({ name, mail }) {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.users.users);;
-  console.log(useSelector((state) => state.posts.posts));
   const posts = useSelector((state) => state.posts.posts)
   const [expanded, setExpanded] = useState(false);
   const [postId, setPostId] = useState("");
   const [photo, setPhoto] = useState("");
-  const { param } = useParams();
+  const { userId } = useParams();
   var options = { year: 'numeric', month: 'long', day: 'numeric' };
   const currentDate = new Date();
   const dateFormate = currentDate.toLocaleDateString("en-US", options);
@@ -90,7 +89,7 @@ export default function Posts({ name, mail }) {
   // eslint-disable-next-line
   const fetchPhoto = useCallback(() => {
     return axios
-      .get(`http://localhost:3000/photos?albumId=${param}`)
+      .get(`http://localhost:3000/photos?albumId=${userId}`)
       .then((response) => setPhoto(response.data[0]));
   })
 
@@ -113,7 +112,6 @@ export default function Posts({ name, mail }) {
   }
 
   if (str !== "_sort=postId") {
-    console.log(str);
   }
 
   //add a post style and functionality
@@ -174,7 +172,7 @@ export default function Posts({ name, mail }) {
   //post dialog handlers
   const createPostHanlder = () => {
     const data = {
-      userId: param,
+      userId: userId,
       title: postTitleRef.current.value,
       body: postBlogRef.current.value,
     }
@@ -223,7 +221,6 @@ export default function Posts({ name, mail }) {
 
   const deletePost = () => {
     if (data) {
-      console.log(data.id)
       dispatch(deletedPost(data.id));
     };
     setInputDisabled(true);
@@ -251,7 +248,7 @@ export default function Posts({ name, mail }) {
 
   const updatePost = () => {
     const obj = {
-      userId: param,
+      userId: userId,
       title: postTitleRef.current.value,
       body: postBlogRef.current.value,
       id: Number(data.id)
@@ -408,7 +405,7 @@ export default function Posts({ name, mail }) {
             </CardActions>
             {postId === post.id ?
               <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <Comments commentsId={post.id} />
+                {/* <Comments commentsId={post.id} /> */}
               </Collapse>
               : ""
             }

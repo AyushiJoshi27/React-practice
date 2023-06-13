@@ -3,10 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 export const RoutesManipulator = () => {
   const navigate = useNavigate();
-  const [param] = useState(1);
+  const [userId] = useState(1);
 
   const GoTo = () => {
-    navigate(`/layout/facebook/${param}`)
+    navigate(`/layout/facebook/${userId}`)
   }
 
   return <>

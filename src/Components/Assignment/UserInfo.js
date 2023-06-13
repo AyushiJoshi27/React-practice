@@ -1,4 +1,6 @@
 import { Avatar, Box, CardHeader, Container } from '@mui/material'
+import React, {useState} from 'react'
+import axios from 'axios';
 import UserPostsCompo from './Posts';
 import Intro from './AboutUser/Intro';
 import Todos from './AboutUser/Todos';
@@ -9,7 +11,6 @@ import Posts from './Posts';
 
 export default function UserInfo() {
   const userData = useSelector((state) => state.users.users);
-  console.log(useSelector((state) => state.users.users));
 
   return (
     <>
@@ -30,7 +31,7 @@ export default function UserInfo() {
             />
           
           <CardHeader avatar={<Avatar
-                alt="Remy Sharp"
+                alt="userName"
                 sx={{ 
                   width: 180, 
                   height: 180,
@@ -65,7 +66,7 @@ export default function UserInfo() {
             <UserAlbum />
           </Box>
           <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
-            <Posts/>
+            <Posts name="Alpha" mail="Beta"/>
           </Box>
         </Container>
       </div>
