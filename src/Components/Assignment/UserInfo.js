@@ -62,11 +62,11 @@ export default function UserInfo() {
             paddingLeft: "25px",
             }}>
             <Intro />
-            <Todos />
-            <UserAlbum />
+            {/* <Todos />
+            <UserAlbum /> */}
           </Box>
           <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
-            <Posts name="Alpha" mail="Beta"/>
+            {/* <Posts name="Alpha" mail="Beta"/> */}
           </Box>
         </Container>
       </div>

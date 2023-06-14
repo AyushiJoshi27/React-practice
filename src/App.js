@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './Components/Layout';
 import Buttons from './Components/Buttons/Buttons';
 import ButtonGroupCompo from './Components/Buttons/ButtonGroup';
@@ -23,6 +23,7 @@ import { Params } from './Components/Assignment/Params';
 import { RoutesManipulator } from './Components/Assignment/ApisExport';
 import MediaCard from './Components/Card/Card';
 import ResponsiveDialog from './Components/Layout/Dialog/Dialog';
+import { DialogComponent } from './Components/Assignment/Dialogs/Dialogs';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
             <Route path='badge' element={<AccessibleBadges />} />
             <Route path='albums' element={ <Albums/> } />
             <Route path='facebook/:userId' element={ <ProfilePage/> } />
+            <Route path="edit" element={<infoUpdate />}/>
             <Route path='user-photo' element={ <Posts /> } />
             <Route path="user-photo/:userId" element={ <Posts /> } />
             <Route path='comment' element={<Comments/>} />

@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LinkIcon from '@mui/icons-material/Link';
-import Link from '@mui/material/Link';
+import { Link } from "react-router-dom";
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import EditIcon from '@mui/icons-material/Edit';
@@ -105,10 +105,13 @@ export default function Intro() {
         }}
         elevation={2}
       >
+          
           <List sx={{ fontSize: "12px" }}>
             <ListItem
               secondaryAction={
-                <EditIcon edge="end" aria-label="edit" onClick={EditInfo}/>
+                <Link to={`edit`}>
+                  <EditIcon edge="end" aria-label="edit" onClick={EditInfo}/>
+                </Link>
               }
             >
               <ListItemText 
@@ -168,7 +171,7 @@ export default function Intro() {
                     textTransform: "uppercase"
                   }
                 }}
-                primary={<Link href={userData.website}>{userData.website}</Link>} />
+                primary={userData.website} />
             </ListItem>
           </List> 
         {/* Update dialog */}

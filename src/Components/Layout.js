@@ -58,7 +58,8 @@ const Layout = () => {
             <Link to='list_control'>List Control</Link>
           </li> */}
           <li>
-            <Link to='facebook/1'>Facebook profile page</Link>
+            <Link to='facebook/1'>Facebook profile page
+            </Link>
           </li>
         </ul>
       </nav>

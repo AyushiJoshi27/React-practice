@@ -1,22 +1,43 @@
 import React, { useEffect } from 'react'
 import FbNavBarCompo from './FbNavBar'
 import UserInfo from './UserInfo'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers } from './Redux/Actions/UserActions.';
 import { useParams, userId } from 'react-router';
 import { fetchTodos } from './Redux/Actions/TodosAction';
 import { fetchPosts } from './Redux/Actions/PostActions';
-import { fetchAlbum, fetchAlbums } from './Redux/Actions/AlbumActions';
+import { fetchAlbum } from './Redux/Actions/AlbumActions';
+import { fetchPhoto } from './Redux/Actions/PhotosActions'
+import { DialogLink } from './Dialogs/Dialogs';
 
 export default function ProfilePage() {
   const {userId} = useParams()
   const dispatch = useDispatch();
+  const albums = useSelector(state => state.albums.albums)
+
+  var str = "";
+  if (albums) {
+    (
+      // eslint-disable-next-line array-callback-return
+      albums && albums.map((data) => {
+        var str1 = "albumId=" + data.id + "&";
+        str += str1;
+      })
+    )
+    var sortStr = "_sort=albumId";
+    str = str + sortStr;
+  }
+
+  useEffect(() => {
+    if (str !== "_sort=albumId") {
+      dispatch(fetchPhoto(str));
+    }
+  }, [str, dispatch])
 
   useEffect(() => {
     dispatch(fetchUsers(userId));
     dispatch(fetchTodos(userId));
     dispatch(fetchPosts(userId));
-    // dispatch(fetchAlbums(userId));
     dispatch(fetchAlbum(userId));
   }, []);
 

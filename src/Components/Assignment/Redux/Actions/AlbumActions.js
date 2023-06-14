@@ -60,9 +60,9 @@ const deleteAlbumFailure = (error) => ({
   payload: error,
 });
 
-export const createAlbum = (newalbum) => async (dispatch) => {
+export const createAlbum = (newAlbum) => async (dispatch) => {
   try {
-    const response = await axios.album(API_BASE_URL, newalbum);
+    const response = await axios.album(API_BASE_URL, newAlbum);
     dispatch(createAlbumsSuccess(response.data));
   } catch (error) {
     dispatch(createAlbumsFailure(error.message));
