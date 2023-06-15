@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Button from '@mui/material/Button';
-import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
 import { Paper, Grid, ListItemIcon, ListItemText, ListItem, TextField, Dialog, LinearProgress, DialogContentText, Typography } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,14 +13,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PersonIcon from '@mui/icons-material/Person';
 import Divider from '@mui/material/Divider';
+import { createComment, deletedComment, fetchComments, updatedComments } from './Redux/Actions/CommentActions';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function Comments({ commentsId, userName, email }) {
-  const [commentId, setCommentId] = useState();
+export default function Comments({ comments }) {
+  const dispatch = useDispatch();
   const theme = useTheme();
+  const userData = useSelector((state) => state.users.users);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [display, setDisplay] = useState("none")
   const [inputDisabled, setInputDisabled] = useState(false);
-  const [comment, setComment] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [deleteId, setDeleteId] = useState("");
   const [scsMsg, setScsMsg] = useState('');
@@ -35,46 +36,24 @@ export default function Comments({ commentsId, userName, email }) {
   const [openU, setOpenU] = useState(false);
   //update modal
   const [data, setData] = useState("");
+  console.log(comments);
 
-  useEffect(() => {
-    fetchComments();
-  }, []);
-
-  //loader
-  useEffect(() => {
-    progressRef.current = () => {
-      if (progress > 100) {
-        setProgress(0);
-        setBuffer(10);
-      } else {
-        const diff = Math.random() * 10;
-        const diff2 = Math.random() * 10;
-        setProgress(progress + diff);
-        setBuffer(progress + diff + diff2);
-      }
-    };
-  });
-
-  const fetchComments = useCallback(() => {
-    return axios
-      .get(`http://localhost:3000/comments?postId=${commentsId}`)
-      .then((response) => setCommentId(response.data));
-  });
+  // useEffect(() => {
+  //   dispatch(fetchComments(postId))
+  // }, [postId]);
 
   // eslint-disable-next-line
   const handlePost = () => {
     const data ={
-      name: userName,
-      postId: commentsId,
+      name: userData.name,
+      // postId: postId,
       body: userComments.current.value,
-      email: email,
+      email: userData.email,
     };
 
     if (data) {
-      axios.post(`http://localhost:3000/comments?postId=${commentsId}`, data)
+      dispatch(createComment(data));
     }
-
-    fetchComments();
   }
 
   //delete handler
@@ -92,8 +71,7 @@ export default function Comments({ commentsId, userName, email }) {
   //delete comment
   const deletePost = () => {
     if (deleteId) {
-      axios.delete(`http://localhost:3000/comments/${deleteId}`);
-      fetchComments();
+      dispatch(deletedComment(deleteId));
     };
     setInputDisabled(true);
     setTimeout(() => { setDisplay("block") }, 1000);
@@ -124,19 +102,18 @@ export default function Comments({ commentsId, userName, email }) {
   const updatePost = () => {
     if (data) {
       const obj = {
-        postId: data.postId,
+        // postId: data.postId,
         id: data.id,
         name: data.name,
-        email: email,
+        email: userData.email,
         body: commentUpdate.current.value,
       }
       if (obj) {
-        axios.put(`http://localhost:3000/comments/${data.id}`, obj);
+        dispatch(updatedComments(obj));
       };
       setInputDisabled(true);
       setTimeout(() => { setDisplay("block") }, 2000);
       setTimeout(() => {
-        fetchComments();
         setDisplay("none");
         setScsMsg("updated successfully");
       }, 3000);
@@ -150,13 +127,14 @@ export default function Comments({ commentsId, userName, email }) {
 
   return (
     <>
-      {commentId && commentId.map((item, index) => (
-        <Paper key={index} style={{
+        <Paper style={{
           boxShadow: "none",
           padding: "0px 16px"
         }}>
+        {comments && comments.map((item, index) => (
           <Grid container
             wrap="nowrap"
+            key={index}
             spacing={2}
             sx={{
               margin: "8px 0",
@@ -171,10 +149,10 @@ export default function Comments({ commentsId, userName, email }) {
                 {item.name.split('').slice(0, 2).map(word => word[0]).join('')}
               </Avatar>
             </Grid>
-            <Grid justifyContent="left" item xs zeroMinWidth sx={{
+            <Grid justifyContent="left" item sx={{
               backgroundColor: "rgb(240,242,245)",
               borderRadius: "16px",
-              margin: "0 16px 0 10px"
+              margin: "0 8px 0 10px"
             }}>
               <h4 style={{ margin: 0, fontSize: "13px", textAlign: "left" }}>
                 {item.name}
@@ -183,13 +161,13 @@ export default function Comments({ commentsId, userName, email }) {
                 {item.body}
               </p>
             </Grid>
-            <Grid>
-              <EditIcon sx={{marginRight:1}} onClick={() => updateCommentHandler(item)} />
-              <DeleteIcon onClick={() => deletePhotoHandler(item.id)}/>
+            <Grid item>
+              <EditIcon sx={{marginRight:1, fontSize: "14px"}} onClick={() => updateCommentHandler(item)} />
+              <DeleteIcon sx={{fontSize: "14px"}} onClick={() => deletePhotoHandler(item.id)}/>
             </Grid>
           </Grid>
+          ))}
         </Paper>
-      ))}
         <ListItem>
           <ListItemIcon>
             <Avatar sx={{ backgroundColor: 'rgb(244 67 54)' }} aria-label="user">

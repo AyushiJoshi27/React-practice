@@ -365,8 +365,7 @@ export default function Todos() {
               <ListItem
                 key="create"
                 secondaryAction={
-                  <>
-                  <form sx={{ m: 1, minWidth: 120 }} size="small">
+                  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                     <InputLabel id="toDoStatus">Status</InputLabel>
                     <Select
                       labelId="toDoStatus"
@@ -381,8 +380,7 @@ export default function Todos() {
                       <Divider />
                       <MenuItem value={true}>Completed</MenuItem>
                     </Select>
-                  </form>
-                  </>
+                  </FormControl>
                 }
                 disablePadding
               >

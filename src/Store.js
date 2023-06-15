@@ -5,6 +5,7 @@ import todoReducer from './Components/Assignment/Redux/Reducers/TodosReducer';
 import userReducer from './Components/Assignment/Redux/Reducers/UserReducer';
 import postReducer from './Components/Assignment/Redux/Reducers/PostReducer';
 import photoReducer from './Components/Assignment/Redux/Reducers/PhotoReducer';
+import commentReducer from './Components/Assignment/Redux/Reducers/CommentReducer';
 
 const rootReducer = {
   todos: todoReducer,
@@ -12,7 +13,7 @@ const rootReducer = {
   posts: postReducer,
   albums: albumReducer,
   photos: photoReducer,
-  // getPhotoData: getPhotosDataReducer,
+  comments: commentReducer,
 };
 
 export const store = configureStore({

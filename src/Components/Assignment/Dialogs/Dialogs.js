@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 
 // Dialog component
-export const DialogComponent = ({ stateOpen, handleClose }) => {
+export const DialogComponent = () => {
   return <h1>New compo</h1>
     // <Dialog open={stateOpen} onClose={handleClose}>
     //   <DialogTitle>title</DialogTitle>

@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Layout from './Components/Layout';
 import Buttons from './Components/Buttons/Buttons';
 import ButtonGroupCompo from './Components/Buttons/ButtonGroup';
@@ -28,10 +28,9 @@ import { DialogComponent } from './Components/Assignment/Dialogs/Dialogs';
 function App() {
   return (
     <>
-      <Router>
-        <Routes>
-          {/*<Route exact path='photos' element={}*/}
-          <Route exact path='/' element={ <Checkboxes /> }></Route>
+      <Routes>
+        {/*<Route exact path='photos' element={}*/}
+        {/* 
           <Route exact path='/layout' element={<Layout />} >
             <Route index element={< ButtonGroupCompo />} />
             <Route path='group-orient' element={<GroupOrientation/>}/>
@@ -47,8 +46,7 @@ function App() {
             <Route path='api-content' element={<ApiContent/>} />
             <Route path='badge' element={<AccessibleBadges />} />
             <Route path='albums' element={ <Albums/> } />
-            <Route path='facebook/:userId' element={ <ProfilePage/> } />
-            <Route path="edit" element={<infoUpdate />}/>
+            <Route path="/edit" element={<DialogComponent />}/>
             <Route path='user-photo' element={ <Posts /> } />
             <Route path="user-photo/:userId" element={ <Posts /> } />
             <Route path='comment' element={<Comments/>} />
@@ -57,9 +55,17 @@ function App() {
             <Route path='media-card' element={ <MediaCard /> } />
             <Route path='list_control' element={< Checkboxes />} />
             <Route path='dialog' element={ <ResponsiveDialog /> } />
-          </Route>
-        </Routes>
-      </Router>
+          </Route> */}
+        {/* <Route exact path='/' element={ <Checkboxes /> }></Route>
+        <Route path='/facebook/:userId' element={<ProfilePage />}>
+        </Route>
+        <Route path="/edit" element={<DialogComponent />} /> */}
+        <Route path="/" exact element={<Checkboxes />} />
+
+        <Route path="/facebook/:userId" element={<ProfilePage />}>
+          <Route path="edit" element={<DialogComponent />} />
+        </Route>
+      </Routes>
     </>
   );
 }

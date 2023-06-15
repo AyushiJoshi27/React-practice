@@ -102,9 +102,6 @@ export default function UserAlbum() {
     }
   }, [albumsList, photosList]);
 
-  combinedList ? console.log(combinedList) : console.log("combinedList");
-
-
   //modal controllers
   const handleClickOpen = () => { setOpen(true) };
   const handleClose = () => { setOpen(false) };
@@ -417,12 +414,6 @@ export default function UserAlbum() {
                   actionPosition="right"
                 />
                 <ImageListItemBar
-                  // sx={{
-                  //   textTransform: "capitalise",
-                  //   "&::first-letter": {
-                  //     textTransform: "capitalise"
-                  //   }
-                  // }}
                   title={item.title}
                   position="below"
                 />
@@ -430,7 +421,7 @@ export default function UserAlbum() {
             ))}
           </ImageList> : ""}
       </Paper >
-      {/*                                           Modals                                            */}
+      {/*  Modals  */}
       < Dialog 
         fullScreen={fullScreen}
         open={open}

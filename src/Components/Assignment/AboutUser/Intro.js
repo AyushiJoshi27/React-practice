@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { Avatar, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material'
-import { useParams } from 'react-router';
+import { Outlet, useNavigate, useParams } from 'react-router';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LinkIcon from '@mui/icons-material/Link';
@@ -25,8 +25,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../Redux/Actions/UserActions.';
 
 export default function Intro() {
-  const { userId } = useParams()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const { userId } = useParams();
+  const dispatch = useDispatch();
   const userData = useSelector((state)=> state.users.users);
   // dialog
   const theme = useTheme();
@@ -86,6 +87,7 @@ export default function Intro() {
   };
 
   const EditInfo = () => {
+    navigate(`/facebook/${userId}/edit`);
     setEditInfo(true);
   }
 
@@ -109,9 +111,7 @@ export default function Intro() {
           <List sx={{ fontSize: "12px" }}>
             <ListItem
               secondaryAction={
-                <Link to={`edit`}>
-                  <EditIcon edge="end" aria-label="edit" onClick={EditInfo}/>
-                </Link>
+                <EditIcon edge="end" aria-label="edit" onClick={EditInfo}/>
               }
             >
               <ListItemText 
@@ -319,6 +319,7 @@ export default function Intro() {
           </DialogActions>
         </Dialog> 
       </Paper > : ''}
+      <Outlet/>
     </>
   )
 };

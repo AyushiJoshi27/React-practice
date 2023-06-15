@@ -15,7 +15,7 @@ const postReducer = (state = initialState, action) => {
       };
     case 'FETCH_POSTS_FAILURE':
     case 'DELETE_POST_FAILURE':
-    case 'UPDATE_POSTS_FAILURE':
+    case 'UPDATE_POST_FAILURE':
     case 'CREATE_POST_FAILURE':
       return {
         ...state,

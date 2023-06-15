@@ -49,10 +49,14 @@ const ExpandMore = styled((props) => {
   marginTop: '10px',
 }));
 
-export default function Posts({ name, mail }) {
+export default function Posts() {
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.users.users);;
+  const userData = useSelector((state) => state.users.users);
+  const userPhoto = useSelector((state) => state.photos.photos);
+  const commentsList = useSelector((state) => state.comments.comments);
+  console.log(useSelector((state) => state.comments.comments));
   const posts = useSelector((state) => state.posts.posts)
+  const [combinedList, setCombinedList] = useState("");
   const [expanded, setExpanded] = useState(false);
   const [postId, setPostId] = useState("");
   const [photo, setPhoto] = useState("");
@@ -81,38 +85,38 @@ export default function Posts({ name, mail }) {
   const [openD, setOpenD] = useState(false);
   const [openU, setOpenU] = useState(false);
 
-  // eslint-disable-next-line
   useEffect(() => {
-    fetchPhoto();
-  }, []);
-
-  // eslint-disable-next-line
-  const fetchPhoto = useCallback(() => {
-    return axios
-      .get(`http://localhost:3000/photos?albumId=${userId}`)
-      .then((response) => setPhoto(response.data[0]));
-  })
+    if (commentsList && posts && commentsList.length > 0 && posts.length > 0) {
+      let commentsObj = {};
+      for (let i = 0; i < commentsList.length; i++) {
+        let commentId = commentsList[i].postId;
+        if (commentsObj[commentId] && commentsObj[commentId].length > 0) {
+          commentsObj[commentId].push(commentsList[i]);
+        } else {
+          commentsObj[commentId] = [];
+          commentsObj[commentId].push(commentsList[i]);
+        }
+      }
+      var postsObj = [];
+      for (let j = 0; j < posts.length; j++) {
+        let temp = {};
+        if (commentsObj[posts[j].id]) {
+          temp["comments"] = commentsObj[posts[j].id];
+        }
+        temp["id"] = posts[j].id;
+        temp["title"] = posts[j].title;
+        temp["userId"] = posts[j].userId;
+        temp["body"] = posts[j].body;
+        postsObj.push(temp);
+      }
+      setCombinedList(postsObj);
+    }
+  }, [posts, commentsList]);
 
   const handleExpandClick = (data) => {
     setPostId(data);
     setExpanded(true);
   };
-
-  var str = "";
-  if (posts) {
-    (
-      // eslint-disable-next-line array-callback-return
-      posts && posts.map((data) => {
-        var str1 = "postId=" + data.id + "&";
-        str += str1;
-      })
-    )
-    var sortStr = "_sort=postId";
-    str += sortStr;
-  }
-
-  if (str !== "_sort=postId") {
-  }
 
   //add a post style and functionality
   const blue = {
@@ -322,7 +326,7 @@ export default function Posts({ name, mail }) {
             </ListItem>
           </List>
         </Paper>
-        {posts && posts.map((post, index) => (
+        {combinedList && combinedList.map((item, index) => (
           <Card
             key={index}
             sx={{
@@ -352,7 +356,7 @@ export default function Posts({ name, mail }) {
                     aria-expanded={openMenu ? 'true' : undefined}
                     onClick={handleClick}
                   >
-                    <MoreVertRoundedIcon onClick={() => vertClick(post)} sx={{ "&:hover": { padding: 0 } }} />
+                    <MoreVertRoundedIcon onClick={() => vertClick(item)} sx={{ "&:hover": { padding: 0 } }} />
                   </Button>
                   <Menu
                     id="basic-menu"
@@ -379,33 +383,36 @@ export default function Posts({ name, mail }) {
                 padding: "16px 16px 6px 16px",
                 fontWeight: "500"
               }}>
-              {post.title}
+              {item.title}
             </CardContent>
             <Typography sx={{
               fontSize: "13px",
               padding: "0px 16px 16px 16px",
             }}>
-              {post.body}
+              {item.body}
             </Typography>
-            <CardMedia
-              component="img"
-              image={photo.url}
-              alt={post.userId}
-            />
+            {userPhoto[index] ? 
+              <CardMedia
+                component="img"
+                image={userPhoto[index].thumbnailUrl}
+                alt={item.userId}
+                sx={{height: 500}}
+              /> 
+            : ""}
             <CardActions disableSpacing>
               See all comments
               <ExpandMore
                 expand={expanded}
-                onClick={() => handleExpandClick(post.id)}
+                onClick={() => handleExpandClick(item.id)}
                 aria-expanded={expanded}
                 aria-label="show more"
               >
                 <b><ExpandMoreIcon sx={{ "&:hover": { backgroundColor: 'transparent' } }} /></b>
               </ExpandMore>
             </CardActions>
-            {postId === post.id ?
-              <Collapse in={expanded} timeout="auto" unmountOnExit>
-                {/* <Comments commentsId={post.id} /> */}
+            {postId === item.id ?
+              <Collapse in={true} timeout="auto" unmountOnExit>
+                <Comments comments={item.comments} />
               </Collapse>
               : ""
             }
