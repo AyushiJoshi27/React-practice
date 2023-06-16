@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router';
-// import Grid from '@mui/material/Grid';
+import { useNavigate, useParams } from 'react-router';
 import Paper from '@mui/material/Paper';
 import { ImageList, Divider, TextField, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
 import AlbumPhoto from '../Albums/Photo';
@@ -11,7 +10,6 @@ import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-//import ListItemIcon from '@mui/material/ListItemIcon';
 //dialog
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -29,15 +27,13 @@ import Select from '@mui/material/Select';
 import { useDispatch, useSelector } from 'react-redux';
 import { createPhoto, deletedPhoto, updatedPhotos } from '../Redux/Actions/PhotosActions';
 import { createAlbum, deletedAlbum, updatedAlbums } from '../Redux/Actions/AlbumActions';
+import DeleteItem from '../Dialogs/DialogContents';
 
 export default function UserAlbum() {
   const { userId } = useParams();
   const dispatch = useDispatch();
-  // const [albums, setAlbums] = useState();
   const albumsList = useSelector((state) => state.albums.albums);
   const photosList = useSelector((state) => state.photos.photos);
-  const albums2 = useSelector(state => state)
-  // const [photosList, setphotosList] = useState('');
   const [combinedList, setCombinedList] = useState('');
   const [scsMsg, setScsMsg] = useState('');
   // modal state
@@ -54,7 +50,6 @@ export default function UserAlbum() {
   const [display, setDisplay] = useState("none")
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
-  const progressRef = useRef(() => { });
   const [inputDisabled, setInputDisabled] = useState(false);
   //photos
   //create
@@ -73,7 +68,8 @@ export default function UserAlbum() {
   const [edtPhotoId, setEdtPhotoId] = useState("");
   const edtPhotoTitleRef = useRef("");
   const edtPhotoUrlRef = useRef("");
-
+  const navigate = useNavigate();
+  const category = "todo"
 
   useEffect(() => {
     if (photosList && albumsList && photosList.length > 0 && albumsList.length > 0) {
@@ -131,6 +127,9 @@ export default function UserAlbum() {
   const AlbumDltHandler = (albumId) => {
     setDltAlbumId(albumId);
     setOpenD(true);
+    if (albumId) {
+      navigate(`${category}/delete/${albumId}`)
+    }
   };
 
   const DeleteAlbum = () => {
@@ -147,6 +146,7 @@ export default function UserAlbum() {
       setOpenD(false);
       setScsMsg("");
       setInputDisabled(false);
+      navigate(-1);
     }, 5000);
   };
 
@@ -463,7 +463,18 @@ export default function UserAlbum() {
         </DialogActions>
       </Dialog >
       {/* Confirmation dialog */}
-      <Dialog 
+      <DeleteItem
+        title="album"
+        inputDisabled={inputDisabled}
+        display={display} 
+        openD={openD} 
+        progress={progress} 
+        buffer={buffer} 
+        handleCloseD={handleCloseD} 
+        scsMsg={scsMsg} 
+        DeletedItem={DeleteAlbum}
+      />
+      {/* <Dialog 
         fullScreen={fullScreen}
         open={openD}
         onClose={handleCloseD}
@@ -487,7 +498,7 @@ export default function UserAlbum() {
           <Button onClick={handleCloseD} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
           <Button onClick={DeleteAlbum} variant="contained" disabled={inputDisabled}><b>Delete</b></Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
       {/* modal to update album */}
       {title ? <Dialog 
         fullScreen={fullScreen}

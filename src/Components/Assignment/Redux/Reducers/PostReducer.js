@@ -1,5 +1,5 @@
 const initialState = {
-  posts: [],
+  posts: "",
   loading: false,
   error: null,
 };

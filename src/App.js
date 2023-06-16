@@ -24,6 +24,7 @@ import { RoutesManipulator } from './Components/Assignment/ApisExport';
 import MediaCard from './Components/Card/Card';
 import ResponsiveDialog from './Components/Layout/Dialog/Dialog';
 import { DialogComponent } from './Components/Assignment/Dialogs/Dialogs';
+import DeleteTodo from './Components/Assignment/Dialogs/DialogContents';
 
 function App() {
   return (
@@ -64,6 +65,8 @@ function App() {
 
         <Route path="/facebook/:userId" element={<ProfilePage />}>
           <Route path="edit" element={<DialogComponent />} />
+          <Route path="todo/edit/:id" element={<DialogComponent />} />
+          <Route path=":category/delete/:id" element={<DialogComponent />} />
         </Route>
       </Routes>
     </>

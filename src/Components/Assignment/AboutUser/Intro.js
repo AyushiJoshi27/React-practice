@@ -45,19 +45,18 @@ export default function Intro() {
   const[display, setDisplay] = useState("none")
   const [progress, setProgress] = React.useState(0);
   const [buffer, setBuffer] = React.useState(50);
-  const progressRef = React.useRef(() => {});
 
   const infoUpdate = () => {
       const obj = {
         "address": {
           "city": cityRef.current.value,
-          // geo: {
-          //   lat:userData.address.geo.lat,
-          //   lng: userData.address.geo.lng,
-          // },
+          geo: {
+            lat:userData.address.geo.lat,
+            lng: userData.address.geo.lng,
+          },
           "street": streetRef.current.value,
           "suite": aptsRef.current.value,
-          // zipcode: userData.address.zipcode
+          zipcode: userData.address.zipcode
         },
         "email": mailRef.current.value,
         id: userId,
@@ -67,8 +66,8 @@ export default function Intro() {
         "website": websiteRef.current.value,
         "company": {
           name: companyRef.current.value,
-          // catchPhrase: userData.company.catchPhrase,
-          // bs: userData.company.bs,
+          catchPhrase: userData.company.catchPhrase,
+          bs: userData.company.bs,
         },
       };
 
@@ -87,8 +86,8 @@ export default function Intro() {
   };
 
   const EditInfo = () => {
-    navigate(`/facebook/${userId}/edit`);
     setEditInfo(true);
+    navigate(`/facebook/${userId}/edit`);
   }
 
   const editClose = () => {
@@ -97,7 +96,7 @@ export default function Intro() {
 
   return (
     <>
-    {userData.name && userData.company && userData.address ?
+    {userData.name && userData && userData ?
       <Paper
         sx={{
           borderRadius: "5px",

@@ -11,11 +11,12 @@ import Posts from './Posts';
 
 export default function UserInfo() {
   const userData = useSelector((state) => state.users.users);
+  console.log(useSelector((state) => state));
 
   return (
     <>
       <div className='bgBlock'>
-        {userData.name ?
+        {userData ?
         <Container>
           <Box sx={{height:"600px", marginBottom: 2}}>
             <img

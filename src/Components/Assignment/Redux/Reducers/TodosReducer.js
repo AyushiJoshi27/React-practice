@@ -1,5 +1,5 @@
 const initialState = {
-  todos: [],
+  todos: "",
   loading: false,
   error: null,
 };

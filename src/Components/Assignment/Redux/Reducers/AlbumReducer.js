@@ -1,5 +1,5 @@
 const initialState = {
-  albums: [],
+  albums: "",
   loading: false,
   error: null,
 };

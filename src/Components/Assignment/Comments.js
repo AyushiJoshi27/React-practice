@@ -152,18 +152,20 @@ export default function Comments({ comments }) {
             <Grid justifyContent="left" item sx={{
               backgroundColor: "rgb(240,242,245)",
               borderRadius: "16px",
-              margin: "0 8px 0 10px"
+              margin: "0 0px 0 10px",
+              paddingRight: "8px",
+              paddingLeft: "10px"
             }}>
               <h4 style={{ margin: 0, fontSize: "13px", textAlign: "left" }}>
                 {item.name}
               </h4>
-              <p style={{ fontSize: "14px", textAlign: "left", margin: "5px 0", paddingRight: "8px" }}>
+              <p style={{ fontSize: "14px", textAlign: "left", margin: "5px 0", paddingRight: "8px", width: "450px" }}>
                 {item.body}
               </p>
             </Grid>
-            <Grid item>
-              <EditIcon sx={{marginRight:1, fontSize: "14px"}} onClick={() => updateCommentHandler(item)} />
-              <DeleteIcon sx={{fontSize: "14px"}} onClick={() => deletePhotoHandler(item.id)}/>
+            <Grid item sx={{padding: "0 10px"}}>
+              <EditIcon sx={{marginRight:1, fontSize: "24px"}} onClick={() => updateCommentHandler(item)} />
+              <DeleteIcon sx={{fontSize: "24px"}} onClick={() => deletePhotoHandler(item.id)}/>
             </Grid>
           </Grid>
           ))}

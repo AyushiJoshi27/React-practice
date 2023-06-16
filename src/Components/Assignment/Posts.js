@@ -54,12 +54,10 @@ export default function Posts() {
   const userData = useSelector((state) => state.users.users);
   const userPhoto = useSelector((state) => state.photos.photos);
   const commentsList = useSelector((state) => state.comments.comments);
-  console.log(useSelector((state) => state.comments.comments));
   const posts = useSelector((state) => state.posts.posts)
   const [combinedList, setCombinedList] = useState("");
   const [expanded, setExpanded] = useState(false);
   const [postId, setPostId] = useState("");
-  const [photo, setPhoto] = useState("");
   const { userId } = useParams();
   var options = { year: 'numeric', month: 'long', day: 'numeric' };
   const currentDate = new Date();
@@ -77,7 +75,6 @@ export default function Posts() {
   const [display, setDisplay] = useState("none")
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(20);
-  const progressRef = useRef(() => { });
   //create
   const postTitleRef = useRef("");
   const postBlogRef = useRef("");

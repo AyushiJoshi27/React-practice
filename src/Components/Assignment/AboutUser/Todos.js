@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { Paper, Typography } from '@mui/material'
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -30,6 +30,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useDispatch, useSelector } from 'react-redux';
 import { createTodo, deleteTodo, fetchTodos, updateTodos } from '../Redux/Actions/TodosAction';
+import DeleteTodo from '../Dialogs/DialogContents';
+import DeleteItem from '../Dialogs/DialogContents';
 
 export default function Todos() {
   const dispatch = useDispatch()
@@ -57,6 +59,8 @@ export default function Todos() {
   const progressRef = React.useRef(() => { });
   const titleRef = useRef('');
   const newTodoRef = useRef("");
+  const navigate = useNavigate();
+  const category = "todo"
 
   function vertClick(id, title, status) {
     setId(id);
@@ -100,13 +104,15 @@ export default function Todos() {
   const TodoDeleteHandler = () => {
     setAnchorEl(false);
     setOpenD(true);
+    if (id) {
+      navigate(`${category}/delete/${id}`)
+    }
   };
 
   const DeleteTodos = () => {
     if (id) {
       dispatch(deleteTodo(id));
     }
-     
     setInputDisabled(true);
     setTimeout(() => { setDisplay("block") }, 1000);
     setTimeout(() => {
@@ -117,11 +123,13 @@ export default function Todos() {
       setScsMsg("");
       setOpenD(false);
       setInputDisabled(false);
+      navigate(-1);
     }, 5000);
   }
 
   const handleCloseD = () => {
     setOpenD(false);
+    navigate(-1);
   };
 
   //handler for update modal
@@ -278,7 +286,7 @@ export default function Todos() {
                   <InputLabel id="toDoStatus" disabled={inputDisabled}>Status</InputLabel>
                   <Select
                     labelId="toDoStatus"
-                    id="demo-simple-select"
+                    id="demo-todo-select"
                     value={selectedValue}
                     label="Status"
                     onChange={handleSelector}
@@ -315,7 +323,18 @@ export default function Todos() {
         </DialogActions>
       </Dialog>
       {/* Modal Delete */}
-      <Dialog
+      <DeleteItem
+        title="to-do"
+        inputDisabled={inputDisabled}
+        display={display} 
+        openD={openD} 
+        progress={progress} 
+        buffer={buffer} 
+        handleCloseD={handleCloseD} 
+        scsMsg={scsMsg} 
+        DeletedItem={DeleteTodos}
+      />
+      {/* <Dialog
         fullScreen={fullScreen}
         open={openD}
         onClose={handleCloseD}
@@ -341,7 +360,7 @@ export default function Todos() {
           <Button onClick={handleCloseD} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
           <Button onClick={DeleteTodos} variant="contained" disabled={inputDisabled}><b>Delete</b></Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
       {/* Modal to update */}
       {title ?
         <Dialog
