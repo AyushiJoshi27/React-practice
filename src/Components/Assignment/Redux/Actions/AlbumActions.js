@@ -41,7 +41,7 @@ const updateAlbumFailure = (error) => ({
   payload: error,
 });
 
-export const deletedAlbum = (id) => async (dispatch) => {
+export const deleteAlbum = (id) => async (dispatch) => {
   try {
     await axios.delete(`${API_BASE_URL}/${id}`);
     dispatch(deleteAlbumSuccess(id));

@@ -86,8 +86,8 @@ export default function Intro() {
   };
 
   const EditInfo = () => {
-    setEditInfo(true);
-    navigate(`/facebook/${userId}/edit`);
+    // setEditInfo(true);
+    navigate(`edit/userInfo/${userId}`);
   }
 
   const editClose = () => {
@@ -174,7 +174,7 @@ export default function Intro() {
             </ListItem>
           </List> 
         {/* Update dialog */}
-        <Dialog
+        {/* <Dialog
           fullScreen={fullScreen}
           open={editInfo}
           onClose={editClose}
@@ -316,7 +316,7 @@ export default function Intro() {
             <Button onClick={editClose} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
             <Button onClick={infoUpdate} variant="contained" disabled={inputDisabled}><b>Save</b></Button>
           </DialogActions>
-        </Dialog> 
+        </Dialog>  */}
       </Paper > : ''}
       <Outlet/>
     </>

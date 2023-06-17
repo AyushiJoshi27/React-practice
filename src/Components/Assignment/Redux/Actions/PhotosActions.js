@@ -41,7 +41,7 @@ const updatePhotoFailure = (error) => ({
   payload: error,
 });
 
-export const deletedPhoto = (id) => async (dispatch) => {
+export const deletePhoto = (id) => async (dispatch) => {
   try {
     await axios.delete(`${API_BASE_URL}/${id}`);
     dispatch(deletePhotoSuccess(id));

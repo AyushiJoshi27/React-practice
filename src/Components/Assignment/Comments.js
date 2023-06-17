@@ -15,10 +15,12 @@ import PersonIcon from '@mui/icons-material/Person';
 import Divider from '@mui/material/Divider';
 import { createComment, deletedComment, fetchComments, updatedComments } from './Redux/Actions/CommentActions';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 export default function Comments({ comments }) {
   const dispatch = useDispatch();
   const theme = useTheme();
+  const navigate = useNavigate();
   const userData = useSelector((state) => state.users.users);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [display, setDisplay] = useState("none")
@@ -36,15 +38,10 @@ export default function Comments({ comments }) {
   const [openU, setOpenU] = useState(false);
   //update modal
   const [data, setData] = useState("");
-  console.log(comments);
-
-  // useEffect(() => {
-  //   dispatch(fetchComments(postId))
-  // }, [postId]);
 
   // eslint-disable-next-line
   const handlePost = () => {
-    const data ={
+    const data = {
       name: userData.name,
       // postId: postId,
       body: userComments.current.value,
@@ -60,7 +57,8 @@ export default function Comments({ comments }) {
   const deletePhotoHandler = (item) => {
     setDeleteId(item);
     setAnchorEl(null);
-    setOpenD(true);
+    navigate(`comment/delete/${item}`);
+    // setOpenD(true);
   }
 
   //close
@@ -70,20 +68,20 @@ export default function Comments({ comments }) {
 
   //delete comment
   const deletePost = () => {
-    if (deleteId) {
-      dispatch(deletedComment(deleteId));
-    };
-    setInputDisabled(true);
-    setTimeout(() => { setDisplay("block") }, 1000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("Deleted successfully");
-    }, 4000);
-    setTimeout(() => {
-      setScsMsg("");
-      setOpenD(false);
-      setInputDisabled(false);
-    }, 5000);
+    // if (deleteId) {
+    //   dispatch(deletedComment(deleteId));
+    // };
+    // setInputDisabled(true);
+    // setTimeout(() => { setDisplay("block") }, 1000);
+    // setTimeout(() => {
+    //   setDisplay("none");
+    //   setScsMsg("Deleted successfully");
+    // }, 4000);
+    // setTimeout(() => {
+    //   setScsMsg("");
+    //   setOpenD(false);
+    //   setInputDisabled(false);
+    // }, 5000);
   };
 
   //update handler
@@ -127,10 +125,11 @@ export default function Comments({ comments }) {
 
   return (
     <>
-        <Paper style={{
-          boxShadow: "none",
-          padding: "0px 16px"
-        }}>
+      <Divider />
+      <Paper style={{
+        boxShadow: "none",
+        padding: "0px 16px"
+      }}>
         {comments && comments.map((item, index) => (
           <Grid container
             wrap="nowrap"
@@ -163,40 +162,40 @@ export default function Comments({ comments }) {
                 {item.body}
               </p>
             </Grid>
-            <Grid item sx={{padding: "0 10px"}}>
-              <EditIcon sx={{marginRight:1, fontSize: "24px"}} onClick={() => updateCommentHandler(item)} />
-              <DeleteIcon sx={{fontSize: "24px"}} onClick={() => deletePhotoHandler(item.id)}/>
+            <Grid item sx={{ padding: "0 10px" }}>
+              <EditIcon sx={{ marginRight: 1, fontSize: "24px" }} onClick={() => updateCommentHandler(item)} />
+              <DeleteIcon sx={{ fontSize: "24px" }} onClick={() => deletePhotoHandler(item.id)} />
             </Grid>
           </Grid>
-          ))}
-        </Paper>
-        <ListItem>
-          <ListItemIcon>
-            <Avatar sx={{ backgroundColor: 'rgb(244 67 54)' }} aria-label="user">
-              <PersonIcon/>
-            </Avatar>
-          </ListItemIcon>
-          <ListItemText primary={
-              <TextField
-                id="outlined-update-input"
-                label="Add a comment"
-                InputProps={{
-                  readOnly: false,
-                }}
-                sx={{
-                  marginRight: 1,
-                  width: 450
-                }}
-                inputRef={userComments}
-                multiline
-              />
-            } />
-          <ListItemIcon>
-            <SendIcon onClick={handlePost} />
-          </ListItemIcon>
-        </ListItem>
-        {/* Delete */}
-      <Dialog
+        ))}
+      </Paper>
+      <ListItem>
+        <ListItemIcon>
+          <Avatar sx={{ backgroundColor: 'rgb(244 67 54)' }} aria-label="user">
+            <PersonIcon />
+          </Avatar>
+        </ListItemIcon>
+        <ListItemText primary={
+          <TextField
+            id="outlined-update-input"
+            label="Add a comment"
+            InputProps={{
+              readOnly: false,
+            }}
+            sx={{
+              marginRight: 1,
+              width: 450
+            }}
+            inputRef={userComments}
+            multiline
+          />
+        } />
+        <ListItemIcon>
+          <SendIcon onClick={handlePost} />
+        </ListItemIcon>
+      </ListItem>
+      {/* Delete */}
+      {/* <Dialog
         fullScreen={fullScreen}
         open={openD}
         onClose={handleCloseD}
@@ -222,7 +221,7 @@ export default function Comments({ comments }) {
           <Button onClick={handleCloseD} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
           <Button onClick={deletePost} variant="contained" disabled={inputDisabled}><b>Delete</b></Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
       {/* Update modal */}
       {data ?
         <Dialog
@@ -264,6 +263,6 @@ export default function Comments({ comments }) {
           </DialogActions>
         </Dialog>
         : " "}
-      </>
+    </>
   )
 }

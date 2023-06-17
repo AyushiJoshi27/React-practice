@@ -7,7 +7,7 @@ export default function AlbumPhoto({ album, photos }) {
     <>
       <>
         {album ?
-          <LazyLoadImage
+          <img
             alt={album.url}
             src={album.thumbnailUrl}
             style={{
@@ -20,7 +20,7 @@ export default function AlbumPhoto({ album, photos }) {
       </>
       <>
         {photos ?
-            <LazyLoadImage
+            <img
               alt={photos.thumbnailUrl}
               src={photos.thumbnailUrl}
               style={{

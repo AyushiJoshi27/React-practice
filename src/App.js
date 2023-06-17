@@ -25,6 +25,7 @@ import MediaCard from './Components/Card/Card';
 import ResponsiveDialog from './Components/Layout/Dialog/Dialog';
 import { DialogComponent } from './Components/Assignment/Dialogs/Dialogs';
 import DeleteTodo from './Components/Assignment/Dialogs/DialogContents';
+import DialogCompo from './Components/Assignment/Dialogs/DialogCompo';
 
 function App() {
   return (
@@ -65,8 +66,9 @@ function App() {
 
         <Route path="/facebook/:userId" element={<ProfilePage />}>
           <Route path="edit" element={<DialogComponent />} />
-          <Route path="todo/edit/:id" element={<DialogComponent />} />
-          <Route path=":category/delete/:id" element={<DialogComponent />} />
+          {/* <Route path="todo/edit/:id" element={<DialogComponent />} />
+          <Route path=":category/delete/:id" element={<DialogComponent />} /> */}
+          <Route path=":category/:type/:id" element={<DialogCompo />} />
         </Route>
       </Routes>
     </>

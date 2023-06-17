@@ -17,18 +17,31 @@ export default function ProfilePage() {
   const albums = useSelector(state => state.albums.albums)
   const posts = useSelector(state => state.posts.posts);
 
-  var str = "";
-  if (albums) {
-    (
-      // eslint-disable-next-line array-callback-return
-      albums && albums.map((data) => {
-        let str1 = "albumId=" + data.id + "&";
-        str += str1;
-      })
-    )
-    var sortStr = "_sort=albumId";
-    str = str + sortStr;
-  }
+  useEffect(() => {
+    dispatch(fetchUsers(userId));
+    // dispatch(fetchTodos(userId));
+    dispatch(fetchPosts(userId));
+    dispatch(fetchAlbum(userId));
+  }, []);
+
+  // var str = "";
+  // if (albums) {
+  //   (
+  //     // eslint-disable-next-line array-callback-return
+  //     albums && albums.map((data) => {
+  //       let str1 = "albumId=" + data.id + "&";
+  //       str += str1;
+  //     })
+  //   )
+  //   var sortStr = "_sort=albumId";
+  //   str = str + sortStr;
+  // }
+
+  // useEffect(() => {
+  //   if (str !== "_sort=albumId") {
+  //     dispatch(fetchPhoto(str));
+  //   }
+  // }, [str, dispatch])
 
   var postStr = "";
   if (posts) {
@@ -44,23 +57,10 @@ export default function ProfilePage() {
   }
 
   useEffect(() => {
-    if (str !== "_sort=albumId") {
-      dispatch(fetchPhoto(str));
-    }
-  }, [str, dispatch])
-
-  useEffect(() => {
     if (postStr !== "_sort=postId") {
       dispatch(fetchComments(postStr));
     }
   }, [postStr, dispatch])
-
-  useEffect(() => {
-    dispatch(fetchUsers(userId));
-    dispatch(fetchTodos(userId));
-    dispatch(fetchPosts(userId));
-    dispatch(fetchAlbum(userId));
-  }, []);
 
   return (
     <div className='fbMainContainer'>

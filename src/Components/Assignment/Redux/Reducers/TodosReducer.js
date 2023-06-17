@@ -1,5 +1,5 @@
 const initialState = {
-  todos: "",
+  todos: [],
   loading: false,
   error: null,
 };
@@ -34,6 +34,7 @@ const todoReducer = (state = initialState, action) => {
       return {
         ...state,
         todos: state.todos.filter((todo) => todo.id !== action.payload),
+        // todos: state.todos
       };
     case 'CREATE_TODO_SUCCESS':
       return {

@@ -11,8 +11,7 @@ import Posts from './Posts';
 
 export default function UserInfo() {
   const userData = useSelector((state) => state.users.users);
-  console.log(useSelector((state) => state));
-
+  
   return (
     <>
       <div className='bgBlock'>
@@ -67,7 +66,7 @@ export default function UserInfo() {
             <UserAlbum />
           </Box>
           <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
-            <Posts name="Alpha" mail="Beta"/>
+            <Posts/>
           </Box>
         </Container>
       </div>

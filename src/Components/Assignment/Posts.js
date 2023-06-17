@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Button from '@mui/material/Button';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import axios from 'axios';
 //import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
@@ -35,7 +35,8 @@ import MenuItem from '@mui/material/MenuItem';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPost, deletedPost, updatedPosts } from './Redux/Actions/PostActions';
+import { createPost, deletePost, updatedPosts } from './Redux/Actions/PostActions';
+import { fetchComments } from './Redux/Actions/CommentActions';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -50,6 +51,7 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function Posts() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.users.users);
   const userPhoto = useSelector((state) => state.photos.photos);
@@ -66,6 +68,8 @@ export default function Posts() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [data, setData] = useState("");
   const openMenu = Boolean(anchorEl);
+  const photosList = useSelector((state) => state.photos.photos);
+  photosList !== "" ? console.log(photosList) :console.log("photosList");
 
   //post dialog
   const theme = useTheme();
@@ -81,6 +85,25 @@ export default function Posts() {
   //delete modal
   const [openD, setOpenD] = useState(false);
   const [openU, setOpenU] = useState(false);
+
+  var postStr = "";
+  if (photosList) {
+    (
+      // eslint-disable-next-line array-callback-return
+      photosList && photosList.map((data) => {
+        let str1 = "postId=" + data.id + "&";
+        postStr += str1;
+      })
+    )
+    let sortStr = "_sort=postId";
+    postStr += sortStr;
+  }
+
+  // useEffect(() => {
+  //   if (postStr !== "_sort=postId") {
+  //     dispatch(fetchComments(postStr));
+  //   }
+  // }, [postStr, dispatch])
 
   useEffect(() => {
     if (commentsList && posts && commentsList.length > 0 && posts.length > 0) {
@@ -112,7 +135,7 @@ export default function Posts() {
 
   const handleExpandClick = (data) => {
     setPostId(data);
-    setExpanded(true);
+    setExpanded(!expanded);
   };
 
   //add a post style and functionality
@@ -210,9 +233,11 @@ export default function Posts() {
   };
 
   //delete handler
-  const deletePhotoHandler = () => {
+  const deletePostHandler = (id) => {
+    // console.log(id)
     setAnchorEl(null);
-    setOpenD(true);
+    navigate(`post/delete/${id}`)
+    // setOpenD(true);
   }
 
   //close
@@ -222,7 +247,7 @@ export default function Posts() {
 
   const deletePost = () => {
     if (data) {
-      dispatch(deletedPost(data.id));
+      // dispatch(deletePost(data.id));
     };
     setInputDisabled(true);
     setTimeout(() => { setDisplay("block") }, 1000);
@@ -368,7 +393,7 @@ export default function Posts() {
                     <MenuItem onClick={() => editPhotoHandler()}>
                       <EditIcon sx={{ marginRight: 2 }} />Update
                     </MenuItem>
-                    <MenuItem onClick={() => deletePhotoHandler()}>
+                    <MenuItem onClick={() => deletePostHandler(item.id)}>
                       <DeleteForeverIcon sx={{ marginRight: 2 }} />Delete
                     </MenuItem>
                   </Menu>
@@ -408,7 +433,7 @@ export default function Posts() {
               </ExpandMore>
             </CardActions>
             {postId === item.id ?
-              <Collapse in={true} timeout="auto" unmountOnExit>
+              <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <Comments comments={item.comments} />
               </Collapse>
               : ""

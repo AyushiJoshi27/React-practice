@@ -60,7 +60,11 @@ export default function Todos() {
   const titleRef = useRef('');
   const newTodoRef = useRef("");
   const navigate = useNavigate();
-  const category = "todo"
+  const category = "Todo";
+
+  useEffect(() => {
+    dispatch(fetchTodos(userId));
+  }, [])
 
   function vertClick(id, title, status) {
     setId(id);
@@ -103,28 +107,26 @@ export default function Todos() {
   //Todo Delete
   const TodoDeleteHandler = () => {
     setAnchorEl(false);
-    setOpenD(true);
-    if (id) {
-      navigate(`${category}/delete/${id}`)
-    }
+    // setOpenD(true);
+    navigate(`${category}/delete/${id}`)
   };
 
   const DeleteTodos = () => {
-    if (id) {
-      dispatch(deleteTodo(id));
-    }
-    setInputDisabled(true);
-    setTimeout(() => { setDisplay("block") }, 1000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("Successfully submitted");
-    }, 4000);
-    setTimeout(() => {
-      setScsMsg("");
-      setOpenD(false);
-      setInputDisabled(false);
-      navigate(-1);
-    }, 5000);
+    // if (id) {
+    //   dispatch(deleteTodo(id));
+    // }
+    // setInputDisabled(true);
+    // setTimeout(() => { setDisplay("block") }, 1000);
+    // setTimeout(() => {
+    //   setDisplay("none");
+    //   setScsMsg("Successfully submitted");
+    // }, 4000);
+    // setTimeout(() => {
+    //   setScsMsg("");
+    //   setOpenD(false);
+    //   setInputDisabled(false);
+    //   navigate(-1);
+    // }, 5000);
   }
 
   const handleCloseD = () => {
@@ -135,7 +137,8 @@ export default function Todos() {
   //handler for update modal
   const TodoUpdateHandler = () => {
     setAnchorEl(false);
-    setOpenU(true);
+    navigate(`edit/todos/${id}`);
+    // setOpenU(true);
   }
 
   const handleCloseU = () => {
@@ -323,7 +326,7 @@ export default function Todos() {
         </DialogActions>
       </Dialog>
       {/* Modal Delete */}
-      <DeleteItem
+      {/* <DeleteItem
         title="to-do"
         inputDisabled={inputDisabled}
         display={display} 
@@ -333,7 +336,7 @@ export default function Todos() {
         handleCloseD={handleCloseD} 
         scsMsg={scsMsg} 
         DeletedItem={DeleteTodos}
-      />
+      /> */}
       {/* <Dialog
         fullScreen={fullScreen}
         open={openD}
@@ -362,7 +365,7 @@ export default function Todos() {
         </DialogActions>
       </Dialog> */}
       {/* Modal to update */}
-      {title ?
+      {/* {title ?
         <Dialog
           fullScreen={fullScreen}
           open={openU}
@@ -426,7 +429,7 @@ export default function Todos() {
             <Button onClick={updateTodo} variant="contained" disabled={inputDisabled}><b>Update</b></Button>
           </DialogActions>
         </Dialog>
-        : " "}
+        : " "} */}
     </>
   )
 }

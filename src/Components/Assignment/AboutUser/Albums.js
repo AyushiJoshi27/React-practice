@@ -25,9 +25,10 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPhoto, deletedPhoto, updatedPhotos } from '../Redux/Actions/PhotosActions';
-import { createAlbum, deletedAlbum, updatedAlbums } from '../Redux/Actions/AlbumActions';
+import { createPhoto, deletePhoto, fetchPhoto, updatedPhotos } from '../Redux/Actions/PhotosActions';
+import { createAlbum, deleteAlbum, updatedAlbums } from '../Redux/Actions/AlbumActions';
 import DeleteItem from '../Dialogs/DialogContents';
+import { fetchComments } from '../Redux/Actions/CommentActions';
 
 export default function UserAlbum() {
   const { userId } = useParams();
@@ -69,7 +70,28 @@ export default function UserAlbum() {
   const edtPhotoTitleRef = useRef("");
   const edtPhotoUrlRef = useRef("");
   const navigate = useNavigate();
-  const category = "todo"
+
+  var str = "";
+  if (albumsList) {
+    (
+      // eslint-disable-next-line array-callback-return
+      albumsList && albumsList.map((data) => {
+        let str1 = "albumId=" + data.id + "&";
+        str += str1;
+      })
+    )
+    var sortStr = "_sort=albumId";
+    str = str + sortStr;
+  }
+
+  useEffect(() => {
+    if (str !== "_sort=albumId") {
+      // console.log(str);
+      dispatch(fetchPhoto(str));
+    }
+  }, [str, dispatch, albumsList])
+
+  
 
   useEffect(() => {
     if (photosList && albumsList && photosList.length > 0 && albumsList.length > 0) {
@@ -124,31 +146,29 @@ export default function UserAlbum() {
   }
 
   //Dlt Album 
-  const AlbumDltHandler = (albumId) => {
-    setDltAlbumId(albumId);
-    setOpenD(true);
-    if (albumId) {
-      navigate(`${category}/delete/${albumId}`)
-    }
+  const AlbumDltHandler = (id) => {
+    setDltAlbumId(id);
+    // setOpenD(true);
+    navigate(`album/delete/${id}`)
   };
 
-  const DeleteAlbum = () => {
-    setInputDisabled(true);
-    if (dltAlbumId) {
-      dispatch(deletedAlbum(dltAlbumId))
-    }
-    setTimeout(() => { setDisplay("block") }, 3000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("Successfully deleted");
-    }, 4000);
-    setTimeout(() => {
-      setOpenD(false);
-      setScsMsg("");
-      setInputDisabled(false);
-      navigate(-1);
-    }, 5000);
-  };
+  // const DeleteAlbum = () => {
+  //   setInputDisabled(true);
+  //   if (dltAlbumId) {
+  //     dispatch(deleteAlbum(dltAlbumId))
+  //   }
+  //   setTimeout(() => { setDisplay("block") }, 3000);
+  //   setTimeout(() => {
+  //     setDisplay("none");
+  //     setScsMsg("Successfully deleted");
+  //   }, 4000);
+  //   setTimeout(() => {
+  //     setOpenD(false);
+  //     setScsMsg("");
+  //     setInputDisabled(false);
+  //     navigate(-1);
+  //   }, 5000);
+  // };
 
   const handleCloseD = () => { setOpenD(false) };
 
@@ -184,14 +204,16 @@ export default function UserAlbum() {
   //delete handlers 
   const PhotoDltHandler = (data) => {
     setPhotoDltId(data);
-    setOpenDltPhoto(true);
+    // setOpenDltPhoto(true);
+    // console.log(data);
+    navigate(`album/delete/${data.id}`);
   };
 
   const handleClosePhoto = () => { setOpenDltPhoto(false) };
 
   const handleDltPhoto = () => {
     if (photoDtlId) {
-      dispatch(deletedPhoto(photoDtlId));
+      dispatch(deletePhoto(photoDtlId));
     };
     setInputDisabled(true);
     setTimeout(() => { setDisplay("block") }, 1000);
@@ -273,7 +295,7 @@ export default function UserAlbum() {
 
   return (
     <>
-      {/* with img list */}
+      {/* with img list
       <Paper
         sx={{
           borderRadius: "5px",
@@ -356,7 +378,7 @@ export default function UserAlbum() {
             })}
           </ImageList> : ""}
       </Paper >
-      {/* Photos section */}
+      {/* Photos section 
       <Paper 
         sx={{
           borderRadius: "5px",
@@ -405,7 +427,7 @@ export default function UserAlbum() {
                       <IconButton
                         sx={{ color: 'white' }}
                         aria-label={`star ${item.title}`}
-                        onClick={() => PhotoDltHandler(item.id)}
+                        onClick={() => PhotoDltHandler(item)}
                       >
                         <DeleteIcon sx={{ fontSize: "15px" }} />
                       </IconButton>
@@ -421,7 +443,7 @@ export default function UserAlbum() {
             ))}
           </ImageList> : ""}
       </Paper >
-      {/*  Modals  */}
+      {/*  Modals  
       < Dialog 
         fullScreen={fullScreen}
         open={open}
@@ -463,7 +485,7 @@ export default function UserAlbum() {
         </DialogActions>
       </Dialog >
       {/* Confirmation dialog */}
-      <DeleteItem
+      {/* <DeleteItem
         title="album"
         inputDisabled={inputDisabled}
         display={display} 
@@ -473,7 +495,7 @@ export default function UserAlbum() {
         handleCloseD={handleCloseD} 
         scsMsg={scsMsg} 
         DeletedItem={DeleteAlbum}
-      />
+      /> */}
       {/* <Dialog 
         fullScreen={fullScreen}
         open={openD}
@@ -499,7 +521,7 @@ export default function UserAlbum() {
           <Button onClick={DeleteAlbum} variant="contained" disabled={inputDisabled}><b>Delete</b></Button>
         </DialogActions>
       </Dialog> */}
-      {/* modal to update album */}
+      {/* modal to update album 
       {title ? <Dialog 
         fullScreen={fullScreen}
         open={openU}
@@ -541,7 +563,7 @@ export default function UserAlbum() {
         </DialogActions>
       </Dialog> : ""}
       {/* Modals for Photos */}
-      {/* create photos */}
+      {/* create photos 
       < Dialog 
         fullScreen={fullScreen}
         open={openPhoto}
@@ -606,7 +628,7 @@ export default function UserAlbum() {
           <Button onClick={photoUploader} variant="contained"><b>Save</b></Button>
         </DialogActions>
       </Dialog >
-      {/* Delete photos */}
+      {/* Delete photos 
       <Dialog
         fullScreen={fullScreen}
         open={openDltPhoto}
@@ -632,7 +654,7 @@ export default function UserAlbum() {
           <Button onClick={handleDltPhoto} variant="contained" disabled={inputDisabled}><b>Delete</b></Button>
         </DialogActions>
       </Dialog>
-      {/* Update Photos */}
+      {/* Update Photos 
       <>
       {edtItemUrl && photoTitle ? 
         < Dialog
@@ -681,7 +703,7 @@ export default function UserAlbum() {
             <Button onClick={photoEditHanlder} variant="contained" disabled={inputDisabled}><b>Update</b></Button>
           </DialogActions>
         </Dialog > : ""} 
-        </>
+        </> */}
     </>
   );
 };

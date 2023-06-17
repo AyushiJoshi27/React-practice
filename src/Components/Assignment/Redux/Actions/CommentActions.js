@@ -7,17 +7,13 @@ export const fetchComments = (postStr) => async (dispatch) => {
     const response = await axios.get(`http://localhost:3000/comments?${postStr}`);
     dispatch({
         type: 'FETCH_COMMENTS_SUCCESS',
-        payload: response.data},
+        payload: response.data
+      }
     )
   } catch (error) {
     dispatch(fetchCommentsFailure(error.message));
   }
 };
-
-// const fetchCommentsSuccess = (comments) => ({
-//   type: 'FETCH_COMMENTS_SUCCESS',
-//   payload: comments,
-// });
 
 const fetchCommentsFailure = (error) => ({
   type: 'FETCH_COMMENTS_FAILURE',
@@ -43,17 +39,15 @@ const updateCommentFailure = (error) => ({
 
 export const deletedComment = (id) => async (dispatch) => {
   try {
-    await axios.delete(`${API_BASE_URL}/${id}`);
-    dispatch(deleteCommentSuccess(id));
+    await axios.delete(`http://localhost:3000/comments/${id}`);
+    dispatch({
+      type: 'DELETE_COMMENT_SUCCESS',
+      payload: id,
+    });
   } catch (error) {
     dispatch(deleteCommentFailure(error.message));
   }
 };
-
-const deleteCommentSuccess = (id) => ({
-  type: 'DELETE_COMMENT_SUCCESS',
-  payload: id,
-});
 
 const deleteCommentFailure = (error) => ({
   type: 'DELETE_COMMENT_FAILURE',
