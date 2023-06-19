@@ -62,7 +62,7 @@ const deleteAlbumFailure = (error) => ({
 
 export const createAlbum = (newAlbum) => async (dispatch) => {
   try {
-    const response = await axios.album(API_BASE_URL, newAlbum);
+    const response = await axios.post(API_BASE_URL, newAlbum);
     dispatch(createAlbumsSuccess(response.data));
   } catch (error) {
     dispatch(createAlbumsFailure(error.message));

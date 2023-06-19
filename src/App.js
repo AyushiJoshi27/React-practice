@@ -26,6 +26,8 @@ import ResponsiveDialog from './Components/Layout/Dialog/Dialog';
 import { DialogComponent } from './Components/Assignment/Dialogs/Dialogs';
 import DeleteTodo from './Components/Assignment/Dialogs/DialogContents';
 import DialogCompo from './Components/Assignment/Dialogs/DialogCompo';
+import CreateDialogCompo from './Components/Assignment/MessageDialog/CreateDialogCompo';
+import CreateComment from './Components/Assignment/MessageDialog/CreateComment';
 
 function App() {
   return (
@@ -65,10 +67,10 @@ function App() {
         <Route path="/" exact element={<Checkboxes />} />
 
         <Route path="/facebook/:userId" element={<ProfilePage />}>
-          <Route path="edit" element={<DialogComponent />} />
-          {/* <Route path="todo/edit/:id" element={<DialogComponent />} />
-          <Route path=":category/delete/:id" element={<DialogComponent />} /> */}
-          <Route path=":category/:type/:id" element={<DialogCompo />} />
+          {/* <Route path="edit" element={<DialogComponent />} /> */}
+          <Route path=":category/:type/:objId" element={<DialogCompo />} />
+          <Route path="create/:categoryType" element={<CreateDialogCompo />} />
+          {/* <Route path="create/comment/:postId" element={<CreateComment />} /> */}
         </Route>
       </Routes>
     </>

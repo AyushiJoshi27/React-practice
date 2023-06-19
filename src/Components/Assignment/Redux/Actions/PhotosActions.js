@@ -3,14 +3,16 @@ import axios from 'axios';
 const API_BASE_URL = 'http://localhost:3000/photos';
 
 export const fetchPhoto = (str) => async (dispatch) => {
-  try {
-    const response = await axios.get(`http://localhost:3000/photos?${str}`);
-    dispatch({
-      type: 'FETCH_PHOTOS_SUCCESS',
-      payload: response.data,
-    })
-  } catch (error) {
-    dispatch(fetchPhotosFailure(error.message));
+  if (str) {
+    try {
+      const response = await axios.get(`http://localhost:3000/photos?${str}`);
+      dispatch({
+        type: 'FETCH_PHOTOS_SUCCESS',
+        payload: response.data,
+      })
+    } catch (error) {
+      dispatch(fetchPhotosFailure(error.message));
+    }
   }
 };
 

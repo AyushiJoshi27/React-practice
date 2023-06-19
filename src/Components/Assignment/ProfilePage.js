@@ -14,34 +14,13 @@ import { fetchComments } from './Redux/Actions/CommentActions';
 export default function ProfilePage() {
   const {userId} = useParams()
   const dispatch = useDispatch();
-  const albums = useSelector(state => state.albums.albums)
   const posts = useSelector(state => state.posts.posts);
 
   useEffect(() => {
     dispatch(fetchUsers(userId));
-    // dispatch(fetchTodos(userId));
     dispatch(fetchPosts(userId));
     dispatch(fetchAlbum(userId));
   }, []);
-
-  // var str = "";
-  // if (albums) {
-  //   (
-  //     // eslint-disable-next-line array-callback-return
-  //     albums && albums.map((data) => {
-  //       let str1 = "albumId=" + data.id + "&";
-  //       str += str1;
-  //     })
-  //   )
-  //   var sortStr = "_sort=albumId";
-  //   str = str + sortStr;
-  // }
-
-  // useEffect(() => {
-  //   if (str !== "_sort=albumId") {
-  //     dispatch(fetchPhoto(str));
-  //   }
-  // }, [str, dispatch])
 
   var postStr = "";
   if (posts) {

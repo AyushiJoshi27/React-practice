@@ -8,6 +8,7 @@ import UserAlbum from './AboutUser/Albums';
 import { Photo } from './Photos/UserPhotos';
 import { useSelector } from 'react-redux';
 import Posts from './Posts';
+import PhotosSection from './AboutUser/PhotosSection';
 
 export default function UserInfo() {
   const userData = useSelector((state) => state.users.users);
@@ -64,6 +65,7 @@ export default function UserInfo() {
             <Intro />
             <Todos />
             <UserAlbum />
+            <PhotosSection />
           </Box>
           <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
             <Posts/>

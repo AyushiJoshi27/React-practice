@@ -52,7 +52,6 @@ const ExpandMore = styled((props) => {
 
 export default function Posts() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const userData = useSelector((state) => state.users.users);
   const userPhoto = useSelector((state) => state.photos.photos);
   const commentsList = useSelector((state) => state.comments.comments);
@@ -60,31 +59,14 @@ export default function Posts() {
   const [combinedList, setCombinedList] = useState("");
   const [expanded, setExpanded] = useState(false);
   const [postId, setPostId] = useState("");
-  const { userId } = useParams();
   var options = { year: 'numeric', month: 'long', day: 'numeric' };
   const currentDate = new Date();
   const dateFormate = currentDate.toLocaleDateString("en-US", options);
-  const [scsMsg, setScsMsg] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [data, setData] = useState("");
   const openMenu = Boolean(anchorEl);
   const photosList = useSelector((state) => state.photos.photos);
-  photosList !== "" ? console.log(photosList) :console.log("photosList");
-
   //post dialog
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [openP, setOpenP] = useState(false);
-  const [inputDisabled, setInputDisabled] = useState(false);
-  const [display, setDisplay] = useState("none")
-  const [progress, setProgress] = useState(0);
-  const [buffer, setBuffer] = useState(20);
-  //create
-  const postTitleRef = useRef("");
-  const postBlogRef = useRef("");
-  //delete modal
-  const [openD, setOpenD] = useState(false);
-  const [openU, setOpenU] = useState(false);
 
   var postStr = "";
   if (photosList) {
@@ -193,29 +175,6 @@ export default function Posts() {
     setAnchorEl(event.currentTarget);
   };
 
-  //post dialog handlers
-  const createPostHanlder = () => {
-    const data = {
-      userId: userId,
-      title: postTitleRef.current.value,
-      body: postBlogRef.current.value,
-    }
-    if (data) {
-      dispatch(createPost(data));
-    };
-    setInputDisabled(true);
-    setTimeout(() => { setDisplay("block") }, 2000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("Successfully submitted");
-    }, 4000);
-    setTimeout(() => {
-      setOpenP(false);
-      setScsMsg("");
-      setInputDisabled(false);
-    }, 5000);
-  }
-
   // VertIcon click
   const vertClick = (obj) => {
     setData(obj);
@@ -225,75 +184,19 @@ export default function Posts() {
   const TodoHandler = () => { setAnchorEl(null); };
 
   const postCreationHandler = () => {
-    setOpenP(true);
-  };
-
-  const postCreationClose = () => {
-    setOpenP(false);
+    navigate(`create/post`);
   };
 
   //delete handler
   const deletePostHandler = (id) => {
-    // console.log(id)
     setAnchorEl(null);
-    navigate(`post/delete/${id}`)
-    // setOpenD(true);
+    navigate(`delete/post/${id}`)
   }
-
-  //close
-  const handleCloseD = () => {
-    setOpenD(false);
-  }
-
-  const deletePost = () => {
-    if (data) {
-      // dispatch(deletePost(data.id));
-    };
-    setInputDisabled(true);
-    setTimeout(() => { setDisplay("block") }, 1000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("Deleted successfully");
-    }, 3000);
-    setTimeout(() => {
-      setScsMsg("");
-      setOpenD(false);
-      setInputDisabled(false);
-    }, 5000);
-  };
 
   //Update handler
   const editPhotoHandler = () => {
     setAnchorEl(null);
-    setOpenU(true);
-  };
-
-  const handleCloseU = () => {
-    setOpenU(false);
-  };
-
-  const updatePost = () => {
-    const obj = {
-      userId: userId,
-      title: postTitleRef.current.value,
-      body: postBlogRef.current.value,
-      id: Number(data.id)
-    }
-    if (obj) {
-      dispatch(updatedPosts(obj));
-    };
-    setInputDisabled(true);
-    setTimeout(() => { setDisplay("block") }, 2000);
-    setTimeout(() => {
-      setDisplay("none");
-      // fetchPosts();
-      setScsMsg("updated successfully");
-    }, 3000);
-    setTimeout(() => {
-      setOpenU(false);
-      setScsMsg("");
-      setInputDisabled(false);
-    }, 5000);
+    navigate(`edit/posts/${data.id}`)
   };
 
   return (
@@ -441,143 +344,6 @@ export default function Posts() {
           </Card>
         ))}
       </div>
-      {/* Modal */}
-      {/* Create posts */}
-      <Dialog
-        fullScreen={fullScreen}
-        open={openP}
-        onClose={postCreationClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title" variant='h6'>
-          Create Post
-          <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
-            {scsMsg}
-          </Typography>
-          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
-        </DialogTitle>
-        <Divider />
-        <DialogContent sx={{ width: 500 }}>
-          <TextField
-            id="outlined-update-input"
-            label="Post title"
-            InputProps={{
-              readOnly: false,
-            }}
-            sx={{
-              width: 500
-            }}
-            inputRef={postTitleRef}
-            multiline
-            disabled={inputDisabled}
-          />
-          <TextField
-            id="outlined-update-input"
-            placeholder='Write something...'
-            InputProps={{
-              readOnly: false,
-            }}
-            label="Post description"
-            sx={{
-              marginTop: "20px",
-              width: 500
-            }}
-            inputRef={postBlogRef}
-            multiline
-            disabled={inputDisabled}
-          />
-        </DialogContent>
-        <Divider />
-        <DialogActions>
-          <Button onClick={postCreationClose} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
-          <Button onClick={createPostHanlder} variant="contained" disabled={inputDisabled}><b>Create</b></Button>
-        </DialogActions>
-      </Dialog>
-      {/* Delete */}
-      <Dialog
-        fullScreen={fullScreen}
-        open={openD}
-        onClose={handleCloseD}
-        aria-labelledby="responsive-delete-dialog-title"
-      >
-        <DialogTitle id="responsive-delete-dialog-title" variant='h6'>
-          Delete Post
-          <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
-            {scsMsg}
-          </Typography>
-          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
-        </DialogTitle>
-        <Divider />
-        <DialogContent
-          sx={{ padding: "10px 24px", width: 500 }}
-        >
-          <DialogContentText>
-            Are you sure you want to delete the post?
-          </DialogContentText>
-        </DialogContent>
-        <Divider />
-        <DialogActions>
-          <Button onClick={handleCloseD} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
-          <Button onClick={deletePost} variant="contained" disabled={inputDisabled}><b>Delete</b></Button>
-        </DialogActions>
-      </Dialog>
-      {/* Update photo */}
-      {data ?
-        <Dialog
-          fullScreen={fullScreen}
-          open={openU}
-          onClose={handleCloseU}
-          aria-labelledby="responsive-update-dialog-title"
-        >
-          <DialogTitle id="responsive-update-dialog-title" variant='h6'>
-            <b>Edit posts</b>
-            <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
-              {scsMsg}
-            </Typography>
-            <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
-          </DialogTitle>
-          <Divider />
-          <DialogContent
-            sx={{ padding: "10px 24px", width: 500 }}
-          >
-            <TextField
-              id="outlined-update-input"
-              label="Post title"
-              InputProps={{
-                readOnly: false,
-              }}
-              sx={{
-                width: 500
-              }}
-              defaultValue={data.title}
-              inputRef={postTitleRef}
-              multiline
-              disabled={inputDisabled}
-            />
-            <TextField
-              id="outlined-update-input"
-              placeholder='Write something...'
-              InputProps={{
-                readOnly: false,
-              }}
-              label="Post description"
-              sx={{
-                marginTop: "20px",
-                width: 500
-              }}
-              defaultValue={data.body}
-              inputRef={postBlogRef}
-              multiline
-              disabled={inputDisabled}
-            />
-          </DialogContent>
-          <Divider />
-          <DialogActions>
-            <Button onClick={handleCloseU} variant="contained" color='error' disabled={inputDisabled}><b>Cancel</b></Button>
-            <Button onClick={updatePost} variant="contained" disabled={inputDisabled}><b>Update</b></Button>
-          </DialogActions>
-        </Dialog>
-        : " "}
     </>
   );
 }
