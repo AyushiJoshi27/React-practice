@@ -16,11 +16,6 @@ export const fetchPhoto = (str) => async (dispatch) => {
   }
 };
 
-// const fetchphotosSuccess = (photos) => ({
-//   type: 'FETCH_photoS_SUCCESS',
-//   payload: photos,
-// });
-
 const fetchPhotosFailure = (error) => ({
   type: 'FETCH_PHOTOS_FAILURE',
   payload: error,

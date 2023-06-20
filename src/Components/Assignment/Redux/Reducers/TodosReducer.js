@@ -22,6 +22,15 @@ const todoReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
+    case 'CREATE_TODO_LOADER':
+    case 'UPDATE_TODOS_LOADER':
+    case 'DELETE_TODO_LOADER':
+    case 'FETCH_TODOS_LOADER':
+      return {
+        ...state,
+        loading: true,
+        error: null
+      }
     case 'UPDATE_TODOS_SUCCESS':
       return {
         ...state,
@@ -29,12 +38,15 @@ const todoReducer = (state = initialState, action) => {
         todos: state.todos.map((todo) =>
           todo.id === action.payload.id ? action.payload : todo
         ),
+        loading: false,
       };
     case 'DELETE_TODO_SUCCESS':
       return {
         ...state,
-        todos: state.todos.filter((todo) => todo.id !== action.payload),
-        // todos: state.todos
+        // todos: state.todos.filter((todo) => todo.id === action.payload),
+        todos: state.todos,
+        loading: false,
+        error: null,
       };
     case 'CREATE_TODO_SUCCESS':
       return {

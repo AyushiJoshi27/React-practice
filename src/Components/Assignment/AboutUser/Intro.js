@@ -87,7 +87,7 @@ export default function Intro() {
 
   const EditInfo = () => {
     // setEditInfo(true);
-    navigate(`edit/userInfo/${userId}`);
+    navigate(`update/user_info`);
   }
 
   const editClose = () => {

@@ -64,11 +64,11 @@ export default function UserInfo() {
             }}>
             <Intro />
             <Todos />
-            <UserAlbum />
-            <PhotosSection />
+            {/* <UserAlbum />
+            <PhotosSection /> */}
           </Box>
           <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
-            <Posts/>
+            {/* <Posts/> */}
           </Box>
         </Container>
       </div>

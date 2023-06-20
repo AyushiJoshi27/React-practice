@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 const API_BASE_URL = 'http://localhost:3000/todos';
 
 export const fetchTodos = (id) => async (dispatch) => {
@@ -23,9 +22,10 @@ const fetchTodosFailure = (error) => ({
 
 // Action creator to update a todo
 export const updateTodos = (data) => async (dispatch) => {
+  dispatch(updateTodoLoader(true))
   try {
     const response = await axios.put(`http://localhost:3000/todos/${data.id}`, data);
-    // dispatch(updateTodoSuccess(response.data));
+    dispatch(updateTodoLoader(false))
     dispatch({
       type: 'UPDATE_TODOS_SUCCESS',
       payload: response.data,
@@ -35,10 +35,10 @@ export const updateTodos = (data) => async (dispatch) => {
   }
 };
 
-// const updateTodoSuccess = (todo) => ({
-//   type: 'UPDATE_TODOS_SUCCESS',
-//   payload: todo,
-// });
+const updateTodoLoader = (loader) => ({
+  type: 'UPDATE_TODOS_LOADER',
+  payload: loader,
+});
 
 const updateTodoFailure = (error) => ({
   type: 'UPDATE_TODOS_FAILURE',
@@ -48,16 +48,23 @@ const updateTodoFailure = (error) => ({
 // Action creator to delete a todo
 export const deleteTodo = (id) => async (dispatch) => {
   try {
-    await axios.delete(`${API_BASE_URL}/${id}`);
-    dispatch(deleteTodoSuccess(id));
+    const response = await axios.delete(`http://localhost:3000/todos/${id}`);
+    console.log(response.status)
+    response.status === 200 ? dispatch(deleteTodoSuccess(id)) : console.log("delete");
+    return id;
   } catch (error) {
     dispatch(deleteTodoFailure(error.message));
   }
 };
 
-const deleteTodoSuccess = (id) => ({
+const deleteTodoSuccess = (todoId) => ({
   type: 'DELETE_TODO_SUCCESS',
-  payload: id,
+  payload: todoId,
+});
+
+const deleteTodoLoader = (loader) => ({
+  type: 'DELETE_TODO_LOADER',
+  payload: loader,
 });
 
 const deleteTodoFailure = (error) => ({
@@ -78,6 +85,11 @@ export const createTodo = (newTodo) => async (dispatch) => {
 const createTodoSuccess = (todo) => ({
   type: 'CREATE_TODO_SUCCESS',
   payload: todo,
+});
+
+const createTodoLoader = (loader) => ({
+  type: 'CREATE_TODO_LOADER',
+  payload: loader,
 });
 
 const createTodoFailure = (error) => ({

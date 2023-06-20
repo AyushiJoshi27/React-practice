@@ -15,11 +15,10 @@ import { useNavigate } from 'react-router';
 export default function PhotosSection() {
     const navigate = useNavigate();
     const photosList = useSelector((state) => state.photos.photos);
-    console.log("photosList: ", photosList);
 
     // Edit Photos in photo section
   const PhotoEdtHandler = (obj) => {
-    navigate(`edit/photo/${obj.id}`);
+    navigate(`update/photo/${obj.id}`);
   };
 
   //delete handlers 

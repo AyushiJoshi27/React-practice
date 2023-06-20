@@ -1,4 +1,3 @@
-import thunk from 'redux-thunk';
 import { configureStore } from '@reduxjs/toolkit';
 import albumReducer from './Components/Assignment/Redux/Reducers/AlbumReducer';
 import todoReducer from './Components/Assignment/Redux/Reducers/TodosReducer';
@@ -18,5 +17,4 @@ const rootReducer = {
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: [thunk],
 })

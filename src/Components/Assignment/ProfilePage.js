@@ -4,12 +4,10 @@ import UserInfo from './UserInfo'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers } from './Redux/Actions/UserActions.';
 import { useParams, userId } from 'react-router';
-import { fetchTodos } from './Redux/Actions/TodosAction';
 import { fetchPosts } from './Redux/Actions/PostActions';
 import { fetchAlbum } from './Redux/Actions/AlbumActions';
-import { fetchPhoto } from './Redux/Actions/PhotosActions'
-import { DialogLink } from './Dialogs/Dialogs';
 import { fetchComments } from './Redux/Actions/CommentActions';
+import { fetchTodos } from './Redux/Actions/TodosAction';
 
 export default function ProfilePage() {
   const {userId} = useParams()
@@ -20,6 +18,7 @@ export default function ProfilePage() {
     dispatch(fetchUsers(userId));
     dispatch(fetchPosts(userId));
     dispatch(fetchAlbum(userId));
+    dispatch(fetchTodos(userId));
   }, []);
 
   var postStr = "";

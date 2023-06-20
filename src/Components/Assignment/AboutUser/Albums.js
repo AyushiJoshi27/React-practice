@@ -27,14 +27,12 @@ import Select from '@mui/material/Select';
 import { useDispatch, useSelector } from 'react-redux';
 import { createPhoto, deletePhoto, fetchPhoto, updatedPhotos } from '../Redux/Actions/PhotosActions';
 import { createAlbum, deleteAlbum, updatedAlbums } from '../Redux/Actions/AlbumActions';
-import DeleteItem from '../Dialogs/DialogContents';
 import { fetchComments } from '../Redux/Actions/CommentActions';
 
 export default function UserAlbum() {
   const { userId } = useParams();
   const dispatch = useDispatch();
   const albumsList = useSelector((state) => state.albums.albums);
-  console.log(useSelector((state) => state.albums.albums));
   const photosList = useSelector((state) => state.photos.photos);
   const [combinedList, setCombinedList] = useState('');
   const [scsMsg, setScsMsg] = useState('');
@@ -268,7 +266,7 @@ export default function UserAlbum() {
             })}
           </ImageList> : ""}
       </Paper >
-      < Dialog 
+      {/* < Dialog 
         fullScreen={fullScreen}
         open={openPhoto}
         onClose={handleClose}
@@ -331,7 +329,7 @@ export default function UserAlbum() {
           <Button onClick={closePhotoM} variant="contained" color='error'><b>Cancel</b></Button>
           <Button onClick={photoUploader} variant="contained"><b>Save</b></Button>
         </DialogActions>
-      </Dialog >
+      </Dialog > */}
       {/* Update Photos  */}
       <>
       {edtItemUrl && photoTitle ? 

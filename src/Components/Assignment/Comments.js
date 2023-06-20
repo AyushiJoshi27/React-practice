@@ -12,11 +12,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 export default function Comments({ comments }) {
-  console.log(comments);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((state) => state.users.users);
-  const userComments = useRef("")
+  var userComments = useRef("")
   const [scsMsg, setScsMsg] = useState('');
   const [progress, setProgress] = React.useState(0);
   const [buffer, setBuffer] = React.useState(50);
@@ -32,7 +31,6 @@ export default function Comments({ comments }) {
         email: userData.email,
       };
       if (obj) {
-        console.log(obj);
         dispatch(createComment(obj));
         setTimeout(() => { setDisplay("block") }, 2000);
         setTimeout(() => {
@@ -41,9 +39,8 @@ export default function Comments({ comments }) {
         }, 3000);
         setTimeout(() => {
           setScsMsg("");
-          userComments.current.reset();
+          userComments = ""
           setInputDisabled(false);
-          navigate(-1);
         }, 5000);
       }
   }
@@ -55,8 +52,7 @@ export default function Comments({ comments }) {
 
   //update handler
   const updateCommentHandler = (obj) => {
-    console.log(obj);
-    navigate(`edit/comment/${obj}`)
+    navigate(`update/comment/${obj}`)
   }
 
   return (

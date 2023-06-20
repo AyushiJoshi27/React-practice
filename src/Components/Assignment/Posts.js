@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
-import { useNavigate, useParams } from 'react-router';
-import axios from 'axios';
+import { useNavigate } from 'react-router';
 //import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-import { DialogContentText, LinearProgress, ListItem, Paper } from '@mui/material'
+import { ListItem, Paper } from '@mui/material'
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -21,22 +20,12 @@ import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
-//dialog for post creation
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
-import { useDispatch, useSelector } from 'react-redux';
-import { createPost, deletePost, updatedPosts } from './Redux/Actions/PostActions';
-import { fetchComments } from './Redux/Actions/CommentActions';
+import { useSelector } from 'react-redux';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -65,27 +54,6 @@ export default function Posts() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [data, setData] = useState("");
   const openMenu = Boolean(anchorEl);
-  const photosList = useSelector((state) => state.photos.photos);
-  //post dialog
-
-  var postStr = "";
-  if (photosList) {
-    (
-      // eslint-disable-next-line array-callback-return
-      photosList && photosList.map((data) => {
-        let str1 = "postId=" + data.id + "&";
-        postStr += str1;
-      })
-    )
-    let sortStr = "_sort=postId";
-    postStr += sortStr;
-  }
-
-  // useEffect(() => {
-  //   if (postStr !== "_sort=postId") {
-  //     dispatch(fetchComments(postStr));
-  //   }
-  // }, [postStr, dispatch])
 
   useEffect(() => {
     if (commentsList && posts && commentsList.length > 0 && posts.length > 0) {
@@ -196,7 +164,7 @@ export default function Posts() {
   //Update handler
   const editPhotoHandler = () => {
     setAnchorEl(null);
-    navigate(`edit/posts/${data.id}`)
+    navigate(`update/posts/${data.id}`)
   };
 
   return (

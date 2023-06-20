@@ -14,23 +14,16 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 //dialog
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchTodos } from '../Redux/Actions/TodosAction';
+import { useSelector } from 'react-redux';
 
 export default function Todos() {
-  const dispatch = useDispatch()
   const userTodos = useSelector((state) => state.todos.todos);
-  const { userId } = useParams();
   //Todos update/delete
   const [anchorEl, setAnchorEl] = useState(false);
   const openMenu = Boolean(anchorEl);
   //modal => Delete
   const [id, setId] = useState();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    dispatch(fetchTodos(userId));
-  }, [])
 
   function vertClick(id) {
     setId(id);
@@ -41,19 +34,19 @@ export default function Todos() {
   const TodoHandler = () => { setAnchorEl(false); };
 
   const handleClickOpen = () => { 
-    navigate(`create/todo`);
+    navigate('create/todo');
   };
 
   //Todo Delete
   const TodoDeleteHandler = () => {
     setAnchorEl(false);
-    navigate(`delete/todos/${id}`)
+    navigate(`delete/todo/${id}`);
   };
 
   //handler for update modal
   const TodoUpdateHandler = () => {
     setAnchorEl(false);
-    navigate(`edit/todos/${id}`);
+    navigate(`edit/todo/${id}`);
   }
 
   return (
