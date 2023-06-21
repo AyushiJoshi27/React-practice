@@ -27,7 +27,7 @@ export default function PhotosSection() {
   };
 
   // create photos
-  const handleClickOpenPhotos = () => {
+  const handleCreatorPhotos = () => {
     navigate(`create/photo`);
   };
 
@@ -49,7 +49,7 @@ export default function PhotosSection() {
         <List>
           <ListItem
             secondaryAction={
-              <AddCircleIcon aria-label="addTodo" onClick={handleClickOpenPhotos} />
+              <AddCircleIcon aria-label="addTodo" onClick={handleCreatorPhotos} />
             }
           >
             <ListItemText primary={<b>Photos</b>} />

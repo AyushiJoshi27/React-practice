@@ -1,14 +1,12 @@
 import { Avatar, Box, CardHeader, Container } from '@mui/material'
-import React, {useState} from 'react'
-import axios from 'axios';
-import UserPostsCompo from './Posts';
+import React from 'react'
 import Intro from './AboutUser/Intro';
 import Todos from './AboutUser/Todos';
 import UserAlbum from './AboutUser/Albums';
-import { Photo } from './Photos/UserPhotos';
 import { useSelector } from 'react-redux';
 import Posts from './Posts';
 import PhotosSection from './AboutUser/PhotosSection';
+import { Outlet } from 'react-router';
 
 export default function UserInfo() {
   const userData = useSelector((state) => state.users.users);
@@ -64,14 +62,15 @@ export default function UserInfo() {
             }}>
             <Intro />
             <Todos />
-            {/* <UserAlbum />
-            <PhotosSection /> */}
+            <UserAlbum />
+            <PhotosSection />
           </Box>
           <Box sx={{float: "right", marginLeft: "14px", paddingRight: "25px"}}>
-            {/* <Posts/> */}
+            <Posts/>
           </Box>
         </Container>
       </div>
+      <Outlet />
     </>
   )
 }

@@ -2,9 +2,10 @@ const initialState = {
   todos: [],
   loading: false,
   error: null,
+  msg: ""
 };
 
-const todoReducer = (state = initialState, action) => {
+export const todoReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'FETCH_TODOS_SUCCESS':
       return {
@@ -12,6 +13,7 @@ const todoReducer = (state = initialState, action) => {
         todos: action.payload,
         loading: false,
         error: null,
+        msg: "",
       };
     case 'FETCH_TODOS_FAILURE':
     case 'UPDATE_TODOS_FAILURE':
@@ -20,6 +22,7 @@ const todoReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+        msg: "",
         error: action.payload,
       };
     case 'CREATE_TODO_LOADER':
@@ -29,33 +32,36 @@ const todoReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
+        msg: "",
       }
     case 'UPDATE_TODOS_SUCCESS':
       return {
         ...state,
-        // todos: action.payload
         todos: state.todos.map((todo) =>
           todo.id === action.payload.id ? action.payload : todo
         ),
         loading: false,
+        error: null,
+        msg: "Todo sucessfully updated",
       };
     case 'DELETE_TODO_SUCCESS':
       return {
         ...state,
-        // todos: state.todos.filter((todo) => todo.id === action.payload),
-        todos: state.todos,
+        todos: state.todos.filter((data) => data.id !== action.payload),
         loading: false,
         error: null,
+        msg: "Todo sucessfully deleted",
       };
     case 'CREATE_TODO_SUCCESS':
       return {
         ...state,
         todos: [...state.todos, action.payload],
+        loading: false,
+        error: null,
+        msg: "Todo sucessfully created",
       };
     default:
       return state;
   }
 };
-
-export default todoReducer;

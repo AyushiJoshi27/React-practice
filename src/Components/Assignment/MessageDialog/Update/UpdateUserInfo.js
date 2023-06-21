@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Avatar, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemText, Paper } from '@mui/material';
+import React, { useRef, useState } from 'react'
+import { Avatar, List, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
@@ -15,20 +15,20 @@ import LinkIcon from '@mui/icons-material/Link';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 
-export default function UpdateUserInfo() {
+const UpdateUserInfo = () => {
+// export default function UpdateuserState.users() {
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const theme = useTheme();
-  const { userId, id } = useParams();
+  const { userId } = useParams();
   const [open, setOpen] = useState(true);
-  const [display, setDisplay] = useState("none")
-  const [scsMsg, setScsMsg] = useState('');
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [inputDisabled, setInputDisabled] = useState(false);
-  const [getObjData, setGetObjData] = useState("");
-  var userData = useSelector(state => state.users.users);
+  const userState = useSelector(state => state.users);
+  console.log(userState);
+  console.log(userState);
   const mailRef = useRef('');
   const websiteRef = useRef('');
   const aptsRef = useRef('')
@@ -36,53 +36,40 @@ export default function UpdateUserInfo() {
   const cityRef = useRef('');
   const phoneRef = useRef();
   const companyRef = useRef('');  
-  userData ? console.log(userData) : console.log("userData")
-
-  // useEffect(() => {
-  //   if (userData) {
-  //     const a = userData.find(obj => Number(obj.id) === Number(id))
-  //     setGetObjData(a);
-  //   }
-  // }, [id, userData]);
 
   const uploadHandler = () => {
     var data = {
       "address": {
         "city": cityRef.current.value,
         geo: {
-          lat: userData.address.geo.lat,
-          lng: userData.address.geo.lng,
+          lat: userState.users.address.geo.lat,
+          lng: userState.users.address.geo.lng,
         },
         "street": streetRef.current.value,
         "suite": aptsRef.current.value,
-        zipcode: userData.address.zipcode
+        zipcode: userState.users.address.zipcode
       },
       "email": mailRef.current.value,
       id: userId,
-      name: userData.name,
+      name: userState.users.name,
       "phone": phoneRef.current.value,
-      username: userData.username,
+      username: userState.users.username,
       "website": websiteRef.current.value,
       "company": {
         name: companyRef.current.value,
-        catchPhrase: userData.company.catchPhrase,
-        bs: userData.company.bs,
+        catchPhrase: userState.users.company.catchPhrase,
+        bs: userState.users.company.bs,
       },
     };
     setInputDisabled(true);
     dispatch(updateUser(data));
-    setTimeout(() => { setDisplay("block") }, 2000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("User updated successfully");
-    }, 3000);
-    setTimeout(() => {
-      setOpen(false);
-      setScsMsg("");
-      setInputDisabled(false);
-      navigate(-1);
-    }, 5000);
   }
+
+  if (userState.msg) {
+    setTimeout(() => {
+      navigate(-1) 
+    }, 1000)
+  } 
 
   const closeHandler = () => {
     setOpen(false)
@@ -91,19 +78,18 @@ export default function UpdateUserInfo() {
 
   return (
     <>
-      {userData ?
+      {userState.users ?
         <CommonBody
           submitHandler={uploadHandler}
           cancelHandler={closeHandler}
           openHandler={open}
-          msg={scsMsg}
-          display={display}
           progress={progress}
           buffer={buffer}
           fullscreen={fullScreen}
           inputDisabled={inputDisabled}
           title="Update user Information"
           button="Update"
+          state={userState}
           bodyContent={
             <List sx={{ fontSize: "14px" }}>
               <ListItem>
@@ -111,7 +97,7 @@ export default function UpdateUserInfo() {
                 <ListItemText primary={
                   <TextField
                     id="outlined-update-input"
-                    defaultValue={userData.phone}
+                    defaultValue={userState.users.phone}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -127,7 +113,7 @@ export default function UpdateUserInfo() {
                 <ListItemText primary={
                   <TextField
                     id="outlined-update-input"
-                    defaultValue={userData.email}
+                    defaultValue={userState.users.email}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -145,7 +131,7 @@ export default function UpdateUserInfo() {
                 <ListItemText primary={
                   <TextField
                     id="outlined-update-input"
-                    defaultValue={userData.company.name}
+                    defaultValue={userState.users.company.name}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -161,7 +147,7 @@ export default function UpdateUserInfo() {
                 <ListItemText primary={
                   <TextField
                     id="outlined-update-input"
-                    defaultValue={userData.address.suite}
+                    defaultValue={userState.users.address.suite}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -179,7 +165,7 @@ export default function UpdateUserInfo() {
                 <ListItemText primary={
                   <TextField
                     id="outlined-update-input"
-                    defaultValue={userData.address.street}
+                    defaultValue={userState.users.address.street}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -195,7 +181,7 @@ export default function UpdateUserInfo() {
                 <ListItemText primary={
                   <TextField
                     id="outlined-update-input"
-                    defaultValue={userData.address.city}
+                    defaultValue={userState.users.address.city}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -211,7 +197,7 @@ export default function UpdateUserInfo() {
                 <ListItemText primary={
                   <TextField
                     id="outlined-update-input"
-                    defaultValue={userData.website}
+                    defaultValue={userState.users.website}
                     InputProps={{
                       readOnly: false,
                     }}
@@ -225,7 +211,9 @@ export default function UpdateUserInfo() {
             </List>
           }
         />
-        : ""}
+        : ""} 
     </>
   )
 }
+
+export default UpdateUserInfo;

@@ -19,7 +19,6 @@ import TextareaAutosize from '@mui/base/TextareaAutosize';
 import List from '@mui/material/List';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -134,12 +133,13 @@ export default function Posts() {
     // firefox
     &:focus-visible {
       outline: 0;
-    }
-  `,
+    }`,
   );
 
   //select menu
-  const handleClick = (event) => {
+  const handleClick = (event, item) => {
+    console.log(event)
+    console.log(item);
     setAnchorEl(event.currentTarget);
   };
 
@@ -247,7 +247,7 @@ export default function Posts() {
                     aria-controls={openMenu ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={openMenu ? 'true' : undefined}
-                    onClick={handleClick}
+                    onClick={() => handleClick(item)}
                   >
                     <MoreVertRoundedIcon onClick={() => vertClick(item)} sx={{ "&:hover": { padding: 0 } }} />
                   </Button>

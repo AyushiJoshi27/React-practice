@@ -2,6 +2,7 @@ const initialState = {
   users: "",
   loading: false,
   error: null,
+  msg: "", 
 };
 
 const userReducer = (state = initialState, action) => {
@@ -12,6 +13,7 @@ const userReducer = (state = initialState, action) => {
         users: action.payload,
         loading: false,
         error: null,
+        msg: ""
       };
     case 'FETCH_USERS_FAILURE':
     case 'UPDATE_USERS_FAILURE':
@@ -19,12 +21,23 @@ const userReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.payload,
+        msg: "",
       };
     case 'UPDATE_USERS_SUCCESS':
       return {
         ...state,
-        users: action.payload
+        users: action.payload,
+        loading: false,
+        msg: "Data updated",
+        error: null,
       };
+      case 'UPDATE_USER_LOADER':
+        return {
+          ...state,
+          loading: true,
+          error: null,
+          msg: "",
+        };
     default:
       return state;
   }

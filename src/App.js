@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Checkboxes from './Components/CheckBox/CheckboxCompo';
 // import Layout from './Components/Layout';
 // import Buttons from './Components/Buttons/Buttons';
@@ -31,47 +31,62 @@ import DeleteAlbum from './Components/Assignment/MessageDialog/Delete/DeleteAlbu
 import DeletePhoto from './Components/Assignment/MessageDialog/Delete/DeletePhoto';
 import DeletePost from './Components/Assignment/MessageDialog/Delete/DeletePost';
 import DeleteComment from './Components/Assignment/MessageDialog/Delete/DeleteComment';
-import UpdateUserInfo from './Components/Assignment/MessageDialog/Update/UpdateUserInfo';
+// import {}
 import UpdatedTodo from './Components/Assignment/MessageDialog/Update/UpdateTodo';
 import UpdateAlbum from './Components/Assignment/MessageDialog/Update/UpdateAlbum';
 import UpdatePost from './Components/Assignment/MessageDialog/Update/UpdatePost';
 import UpdatePhoto from './Components/Assignment/MessageDialog/Update/UpdatePhoto';
 import CommentUpdate from './Components/Assignment/MessageDialog/Update/UpdateComment';
+// import BasicFormikForm from './Components/Formik/BasicFormikForm';
+// import SigUpForm from './Components/Formik/SigUpForm/SigUpForm';
+import UpdateUserInfo from './Components/Assignment/MessageDialog/Update/UpdateUserInfo';
 
 function App() {
   return (
     <>
-      <Routes>
-        {/*<Route exact path='photos' element={}*/}
-        {/* 
-          <Route exact path='/layout' element={<Layout />} >
-            <Route index element={< ButtonGroupCompo />} />
-            <Route path='group-orient' element={<GroupOrientation/>}/>
-            <Route path='button' element={ <Buttons />}></Route>
-            <Route path='form-props' element={ <FormPropsTextFields/> } />
-            <Route path='post-container' element={<PostContainer/>}></Route>
-            <Route path='img-list' element={ <StandardImageList />} />
-            <Route path='standard-title-bar-img' element={< TitlebarBelowImageList />}></Route>
-            <Route path='custom-img-list' element={ <CustomImageListCompo/> } />
-            <Route path='basic-navbar' element={ <ResponsiveAppBar /> } />
-            <Route path='menu-navbar' element={ <PrimarySearchAppBar /> } />
-            <Route path='SimpleContainer' element={<SimpleContainer/>} />
-            <Route path='api-content' element={<ApiContent/>} />
-            <Route path='badge' element={<AccessibleBadges />} />
-            <Route path='albums' element={ <Albums/> } />
-            <Route path='user-photo' element={ <Posts /> } />
-            <Route path="user-photo/:userId" element={ <Posts /> } />
-            <Route path='comment' element={<Comments/>} />
-            <Route path='param' element={<Params/>} />
-            <Route path='route-manipulator' element={ <RoutesManipulator /> } />
-            <Route path='media-card' element={ <MediaCard /> } />
-            <Route path='list_control' element={< Checkboxes />} />
-            <Route path='dialog' element={ <ResponsiveDialog /> } />
-          </Route> */}
-        {/* <Route exact path='/' element={ <Checkboxes /> }></Route>
-        <Route path='/facebook/:userId' element={<ProfilePage />}>
+      {/* <Routes>
+      <Route path="/" exact element={<Checkboxes />} />
+        {/* <Route path="/form_form" element={<BasicFormikForm />} />
+        <Route path="/sign_up_form" element={<SigUpForm />} /> */}
+      {/*<Route path="/facebook/:userId" element={<ProfilePage />}>
+          <Route path="create/album" element={<CreateAlbums />} />
+          <Route path="create/todo" element={<CreateTodos />} />
+          <Route path="create/photo" element={<CreatePhoto />} />
+          <Route path="create/post" element={<CreatePost />} />
+          <Route path="delete/todo/:id" element={<DeleteTodos />} />
+          <Route path="delete/album/:id" element={<DeleteAlbum />} />
+          <Route path="delete/photo/:id" element={<DeletePhoto />} />
+          <Route path="delete/post/:id" element={<DeletePost />} />
+          <Route path="delete/comment/:id" element={<DeleteComment />} />
+          <Route path="update/info" element={<UserDataUpdateNew />} />
+          <Route path="edit/todo/:id" element={<UpdatedTodo />} />
+          <Route path="edit/albums/:id" element={<UpdateAlbum/>} />
+          <Route path="update/photo/:id" element={<UpdatePhoto/>} />
+          <Route path="update/posts/:id" element={<UpdatePost />} />
+          <Route path="update/comment/:id" element={<CommentUpdate />} />
         </Route>
-        <Route path="/edit" element={<DialogComponent />} /> */}
+      </Routes> */}
+      <Routes>
+        <Route path="/" exact element={<Checkboxes />} />
+        <Route path="/facebook/:userId" element={<ProfilePage />}>
+          <Route path="update/info" element={<UpdateUserInfo />} />
+          <Route path="create/album" element={<CreateAlbums />} />
+          <Route path="create/todo" element={<CreateTodos />} />
+          <Route path="create/photo" element={<CreatePhoto />} />
+          <Route path="create/post" element={<CreatePost />} />
+          <Route path="delete/todo/:id" element={<DeleteTodos />} />
+          <Route path="delete/album/:id" element={<DeleteAlbum />} />
+          <Route path="delete/photo/:id" element={<DeletePhoto />} />
+          <Route path="delete/post/:id" element={<DeletePost />} />
+          <Route path="delete/comment/:id" element={<DeleteComment />} />
+          <Route path="edit/todo/:id" element={<UpdatedTodo />} />
+          <Route path="edit/albums/:id" element={<UpdateAlbum/>} />
+          <Route path="update/photo/:id" element={<UpdatePhoto/>} />
+          <Route path="update/posts/:id" element={<UpdatePost />} />
+          <Route path="update/comment/:id" element={<CommentUpdate />} />
+        </Route>
+      </Routes>
+      {/* <Routes>
         <Route path="/" exact element={<Checkboxes />} />
         <Route path="/facebook/:userId" element={<ProfilePage />}>
           <Route path="create/album" element={<CreateAlbums />} />
@@ -83,16 +98,44 @@ function App() {
           <Route path="delete/photo/:id" element={<DeletePhoto />} />
           <Route path="delete/post/:id" element={<DeletePost />} />
           <Route path="delete/comment/:id" element={<DeleteComment />} />
-          <Route path="update/user_info" element={<UpdateUserInfo />} />
+          {/* <Route path="update/user_info" element={<UpdateUserData />} /> */}
+      {/* <Route path="update/info/:id" element={<UpdateUserInfo />} /> */}
+      {/* <Route path="update/info" element={<UserDataUpdate />} />
           <Route path="edit/todo/:id" element={<UpdatedTodo />} />
-          <Route path="edit/albums/:id" element={<UpdateAlbum/>} />
-          <Route path="update/photo/:id" element={<UpdatePhoto/>} />
+          <Route path="edit/albums/:id" element={<UpdateAlbum />} />
+          <Route path="update/photo/:id" element={<UpdatePhoto />} />
           <Route path="update/posts/:id" element={<UpdatePost />} />
           <Route path="update/comment/:id" element={<CommentUpdate />} />
         </Route>
-      </Routes>
+      </Routes> */}
     </>
   );
 }
 
 export default App;
+
+
+// {/* <Route exact path='/layout' element={<Layout />} >
+//   <Route index element={< ButtonGroupCompo />} />
+//   <Route path='group-orient' element={<GroupOrientation />} />
+//   <Route path='button' element={<Buttons />}></Route>
+//   <Route path='form-props' element={<FormPropsTextFields />} />
+//   <Route path='post-container' element={<PostContainer />}></Route>
+//   <Route path='img-list' element={<StandardImageList />} />
+//   <Route path='standard-title-bar-img' element={< TitlebarBelowImageList />}></Route>
+//   <Route path='custom-img-list' element={<CustomImageListCompo />} />
+//   <Route path='basic-navbar' element={<ResponsiveAppBar />} />
+//   <Route path='menu-navbar' element={<PrimarySearchAppBar />} />
+//   <Route path='SimpleContainer' element={<SimpleContainer />} />
+//   <Route path='api-content' element={<ApiContent />} />
+//   <Route path='badge' element={<AccessibleBadges />} />
+//   <Route path='albums' element={<Albums />} />
+//   <Route path='user-photo' element={<Posts />} />
+//   <Route path="user-photo/:userId" element={<Posts />} />
+//   <Route path='comment' element={<Comments />} />
+//   <Route path='param' element={<Params />} />
+//   <Route path='route-manipulator' element={<RoutesManipulator />} />
+//   <Route path='media-card' element={<MediaCard />} />
+//   <Route path='list_control' element={< Checkboxes />} />
+//   <Route path='dialog' element={<ResponsiveDialog />} />
+// </Route> */}

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Paper } from '@mui/material'
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -8,28 +8,24 @@ import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ListItemIcon from '@mui/material/ListItemIcon';
-//Todo update/dalete
 import Menu from '@mui/material/Menu';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-//dialog
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import { useSelector } from 'react-redux';
 
 export default function Todos() {
+  const navigate = useNavigate();
   const userTodos = useSelector((state) => state.todos.todos);
-  //Todos update/delete
   const [anchorEl, setAnchorEl] = useState(false);
   const openMenu = Boolean(anchorEl);
-  //modal => Delete
   const [id, setId] = useState();
-  const navigate = useNavigate();
 
   function vertClick(id) {
     setId(id);
   }
 
-  const handleClick = (event) => { setAnchorEl(event.currentTarget); };
+  const handleClick = (event) => { setAnchorEl(event.currentTarget) };
 
   const TodoHandler = () => { setAnchorEl(false); };
 

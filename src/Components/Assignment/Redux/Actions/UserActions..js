@@ -21,12 +21,12 @@ const fetchUsersFailure = (error) => ({
 });
 
 export const updateUser = (userInfo) => async (dispatch) => {
+  dispatch(updateUserLoader(true));
   try {
     const response = await axios.put(`http://localhost:3000/users/${userInfo.id}`, userInfo);
-    const updatedUserData = response.data;
     dispatch({
       type: 'UPDATE_USERS_SUCCESS',
-      payload: updatedUserData
+      payload: response.data,
     });
   } catch (error) {
     dispatch(updateUserFailure(error.message));
@@ -36,4 +36,9 @@ export const updateUser = (userInfo) => async (dispatch) => {
 const updateUserFailure = (error) => ({
   type: 'UPDATE_USERS_FAILURE',
   payload: error,
+});
+
+const updateUserLoader = (loader) => ({
+  type: 'UPDATE_USER_LOADER',
+  payload: loader,
 });

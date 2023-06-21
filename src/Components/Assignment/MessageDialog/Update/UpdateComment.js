@@ -1,22 +1,22 @@
 import React, { useEffect, albumef, useState, useRef } from 'react'
-import { Divider, List, ListItem, ListItemText } from '@mui/material';
+// import { Divider, List, ListItem, ListItemText } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CommonBody from '../DialogBody';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+// import InputLabel from '@mui/material/InputLabel';
+// import MenuItem from '@mui/material/MenuItem';
+// import FormControl from '@mui/material/FormControl';
+// import Select from '@mui/material/Select';
 import { updatedComments } from '../../Redux/Actions/CommentActions';
 
 export default function CommentUpdate() {
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const theme = useTheme();
-  const { id, userId } = useParams();
+  const { id } = useParams();
   const [open, setOpen] = useState(true);
   const [display, setDisplay] = useState("none")
   const [scsMsg, setScsMsg] = useState('');

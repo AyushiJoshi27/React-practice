@@ -45,13 +45,13 @@ export default function UpdatedTodo() {
   }
 
   const uploadHandler = () => {
+    setInputDisabled(true);
     var data = {
       userId: Number(userId),
       id: Number(id),
       title: updateTitleRef.current.value,
       completed: Boolean(todoStatus)
     };
-    setInputDisabled(true);
     setTimeout(() => {
       dispatch(updateTodos(data));
     }, 4000);

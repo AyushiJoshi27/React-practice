@@ -53,3 +53,9 @@
 .css-f9ywoa-MuiButtonBase-root-MuiListItemButton-root.Mui-focusVisible {
   background-color:rgb(255, 255, 255);
 }
+
+/* .editButton:hover { */
+.MuiButtonBase-root.MuiButton-root:hover {
+  background-color: rgb(255, 255, 255);
+  color: rgb(255, 0, 0);
+}

@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CommonBody from '../DialogBody';
 import { createTodo } from '../../Redux/Actions/TodosAction';
 import { TextField } from '@mui/material';
@@ -19,15 +19,16 @@ export default function CreateTodos() {
   const navigate = useNavigate();
   const theme = useTheme();
   const { userId } = useParams();
-  const [open, setOpen] = useState(true);
+  var [open, setOpen] = useState(true);
   const [display, setDisplay] = useState("none")
   const [scsMsg, setScsMsg] = useState('');
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [inputDisabled, setInputDisabled] = useState(false);
+  var [inputDisabled, setInputDisabled] = useState(false);
   const [selectedValue, setSelectedValue] = useState('');
   const newTodoRef = useRef('');
+  const todoState = useSelector((state) => state.todos)
 
   const handleSelector = (event) => {
     setSelectedValue(event.target.value);
@@ -41,17 +42,18 @@ export default function CreateTodos() {
     }
     setInputDisabled(true);
     dispatch(createTodo(data));
-    setTimeout(() => { setDisplay("block") }, 2000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("Todo created successfully");
-    }, 3000);
-    setTimeout(() => {
+    todoState.error ? console.log(todoState.error) : console.log(todoState.error);
+    if (todoState.error) {
+      setTimeout(() => {
+        setOpen(false);
+        setInputDisabled(false);
+        navigate(-1);
+      }, 2000)
+    } else {
       setOpen(false);
-      setScsMsg("");
       setInputDisabled(false);
       navigate(-1);
-    }, 5000);
+    }
   }
 
   const closeHandler = () => {
@@ -65,14 +67,13 @@ export default function CreateTodos() {
         submitHandler={uploadHandler}
         cancelHandler={closeHandler}
         openHandler={open}
-        msg={scsMsg}
-        display={display}
         progress={progress}
         buffer={buffer}
         fullscreen={fullScreen}
         inputDisabled={inputDisabled}
         title="Create a todo"
-        button="create"
+        button="Create"
+        todoState={todoState}
         bodyContent={
           <List dense>
             <ListItem
