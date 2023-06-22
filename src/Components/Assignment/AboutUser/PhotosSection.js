@@ -9,25 +9,30 @@ import AlbumPhoto from '../Albums/Photo';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { createPhotoMsg, deletePhotoMsg, updatePhotosMsg } from '../Redux/Actions/PhotosActions';
 
 export default function PhotosSection() {
+  const dispatch = useDispatch();
     const navigate = useNavigate();
     const photosList = useSelector((state) => state.photos.photos);
 
     // Edit Photos in photo section
   const PhotoEdtHandler = (obj) => {
+    dispatch(updatePhotosMsg(''));
     navigate(`update/photo/${obj.id}`);
   };
 
   //delete handlers 
   const PhotoDltHandler = (data) => {
+    dispatch(deletePhotoMsg(''));
     navigate(`delete/photo/${data.id}`);
   };
 
   // create photos
   const handleCreatorPhotos = () => {
+    dispatch(createPhotoMsg(''));
     navigate(`create/photo`);
   };
 

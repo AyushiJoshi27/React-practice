@@ -31,7 +31,7 @@ export default function CommonBody({
         {state.loading === true ?
           <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} />
           : ""
-        }
+        } 
         <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
           {state.msg ? state.msg : ""}
         </Typography>

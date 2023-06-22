@@ -12,6 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPhoto } from '../Redux/Actions/PhotosActions';
+import { createAlbumMsg, deleteAlbumMsg, updateAlbumsMsg } from '../Redux/Actions/AlbumActions';
 
 export default function UserAlbum() {
   const dispatch = useDispatch();
@@ -70,17 +71,20 @@ export default function UserAlbum() {
 
   //modal controllers
   const handleCreator = () => {
+    dispatch(createAlbumMsg(''))
     navigate('create/album');
   };
 
 
   //Dlt Album 
   const AlbumDltHandler = (id) => {
+    dispatch(deleteAlbumMsg(''));
     navigate(`delete/album/${id}`)
   };
 
   //update handler
   const AlbumEdtHandler = (id) => {
+    dispatch(updateAlbumsMsg(''));
     navigate(`edit/albums/${id}`);
   }
 

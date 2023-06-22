@@ -13,28 +13,22 @@ export default function DeletePhoto() {
     const theme = useTheme();
     const { id } = useParams();
     const [open, setOpen] = useState(true);
-    const [display, setDisplay] = useState("none")
-    const [scsMsg, setScsMsg] = useState('');
     const [progress, setProgress] = useState(0);
     const [buffer, setBuffer] = useState(50);
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     const [inputDisabled, setInputDisabled] = useState(false);
+    const photoData = useSelector(state => state.photos)
   
     const DeleteHandler = () => {
       setInputDisabled(true);
       console.log(id);
       dispatch(deletePhoto(id));
-      setTimeout(() => { setDisplay("block") }, 2000);
-      setTimeout(() => {
-        setDisplay("none");
-        setScsMsg("Photo deleted successfully");
-      }, 3000);
-      setTimeout(() => {
-        setOpen(false);
-        setScsMsg("");
-        setInputDisabled(false);
-        navigate(-1);
-      }, 5000);
+    }
+
+    if (photoData.msg) {
+      navigate(-1)
+    } else if (photoData.error) {
+      navigate(-1);
     }
   
     const closeHandler = () => {
@@ -47,14 +41,13 @@ export default function DeletePhoto() {
         submitHandler={DeleteHandler}
         cancelHandler={closeHandler}
         openHandler={open}
-        msg={scsMsg}
-        display={display}
         progress={progress}
         buffer={buffer}
         fullscreen={fullScreen}
         inputDisabled={inputDisabled}
         title="Delete an photo"
         button="Delete"
+        state={photoData}
         bodyContent={
           <DialogContentText>
             Are you sure you want to delete the photo from the list?

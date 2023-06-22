@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PersonIcon from '@mui/icons-material/Person';
 import Divider from '@mui/material/Divider';
-import { createComment } from './Redux/Actions/CommentActions';
+import { createComment, createCommentMsg, deleteCommentMsg, updateCommentsMsg } from './Redux/Actions/CommentActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -15,43 +15,40 @@ export default function Comments({ comments }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((state) => state.users.users);
+  const state = useSelector(state => state.comments)
   var userComments = useRef("")
-  const [scsMsg, setScsMsg] = useState('');
   const [progress, setProgress] = React.useState(0);
   const [buffer, setBuffer] = React.useState(50);
-  const [display, setDisplay] = useState("none")
   const [inputDisabled, setInputDisabled] = useState(false);
 
   // eslint-disable-next-line
   const handleComment = () => {
-      const obj = {
-        name: userData.name,
-        postId: comments[0].postId,
-        body: userComments.current.value,
-        email: userData.email,
-      };
-      if (obj) {
-        dispatch(createComment(obj));
-        setTimeout(() => { setDisplay("block") }, 2000);
-        setTimeout(() => {
-          setDisplay("none");
-          setScsMsg("Comment created successfully");
-        }, 3000);
-        setTimeout(() => {
-          setScsMsg("");
-          userComments = ""
-          setInputDisabled(false);
-        }, 5000);
-      }
+    dispatch(deleteCommentMsg(''));
+    const obj = {
+      name: userData.name,
+      postId: comments[0].postId,
+      body: userComments.current.value,
+      email: userData.email,
+    };
+    setInputDisabled(true);
+    dispatch(createComment(obj));
   }
 
   //delete handler
   const deleteComment = (item) => {
+    dispatch(deleteCommentMsg(''));
     navigate(`delete/comment/${item}`);
+  }
+
+  if (state.msg) {
+    dispatch(createCommentMsg(''))
+  } else if (state.error) {
+    navigate(-1);
   }
 
   //update handler
   const updateCommentHandler = (obj) => {
+    dispatch(updateCommentsMsg(''));
     navigate(`update/comment/${obj}`)
   }
 
@@ -101,10 +98,16 @@ export default function Comments({ comments }) {
           </Grid>
         ))}
       </Paper>
-      <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
-          {scsMsg}
+      {state.loading === true ?
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} />
+          : ""
+        } 
+        <Typography sx={{ color: "rgb(55,125,51)", marginTop: "10px", textAlign: "center" }}>
+          {state.msg ? state.msg : ""}
         </Typography>
-        <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} sx={{ display: { display } }} />
+        <Typography color="error" sx={{ marginTop: "10px", textAlign: "center" }}>
+          {state.error ? state.error : ""}
+        </Typography>
       <ListItem>
         <ListItemIcon>
           <Avatar sx={{ backgroundColor: 'rgb(244 67 54)' }} aria-label="user">
@@ -127,7 +130,7 @@ export default function Comments({ comments }) {
           />
         } />
         <ListItemIcon>
-          <SendIcon onClick={handleComment} disabled={inputDisabled}/>
+          <SendIcon onClick={handleComment} disabled={inputDisabled} />
         </ListItemIcon>
       </ListItem>
     </>

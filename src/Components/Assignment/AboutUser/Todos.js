@@ -12,10 +12,12 @@ import Menu from '@mui/material/Menu';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createTodoMsg, deleteTodoMsg, updateTodosMsg } from '../Redux/Actions/TodosAction';
 
 export default function Todos() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const userTodos = useSelector((state) => state.todos.todos);
   const [anchorEl, setAnchorEl] = useState(false);
   const openMenu = Boolean(anchorEl);
@@ -30,18 +32,21 @@ export default function Todos() {
   const TodoHandler = () => { setAnchorEl(false); };
 
   const handleClickOpen = () => { 
+    dispatch(createTodoMsg(""));
     navigate('create/todo');
   };
 
   //Todo Delete
   const TodoDeleteHandler = () => {
     setAnchorEl(false);
+    dispatch(deleteTodoMsg(""));
     navigate(`delete/todo/${id}`);
   };
 
   //handler for update modal
   const TodoUpdateHandler = () => {
     setAnchorEl(false);
+    dispatch(updateTodosMsg(""));
     navigate(`edit/todo/${id}`);
   }
 

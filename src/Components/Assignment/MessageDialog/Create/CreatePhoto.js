@@ -6,28 +6,27 @@ import { useTheme } from '@mui/material/styles';
 import CommonBody from '../DialogBody';
 import { InputLabel, ListItemText, MenuList, TextField } from '@mui/material';
 import { createPhoto } from '../../Redux/Actions/PhotosActions';
-import { FormControl, MenuItem, Select } from '@mui/base';
+import { FormControl } from '@mui/base';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 export default function CreatePhoto() {
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = useState(true);
-  const [display, setDisplay] = useState("none")
-  const [scsMsg, setScsMsg] = useState('');
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(50);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [inputDisabled, setInputDisabled] = useState(false);
   const albumData = useSelector(state => state.albums.albums)
-  albumData ? console.log(albumData) : console.log("albumData");
+  const photoData = useSelector(state => state.photos);
   const [selectedAlbum, setSelectedAlbum] = useState("");
   const photUrlRef = useRef('')
   const photoTitleRef = useRef('')
 
   const selectAlbum = (e) => {
-    setSelectedAlbum(e.target.value)
-    console.log("data");
+    setSelectedAlbum(e.target.value);
   }
 
   const uploadHandler = () => {
@@ -37,20 +36,14 @@ export default function CreatePhoto() {
       url: photUrlRef.current.value,
       thumbnailUrl: photUrlRef.current.value,
     }
-    console.log(data);
     setInputDisabled(true);
-    // dispatch(createPhoto(data));
-    setTimeout(() => { setDisplay("block") }, 2000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("Photo created successfully");
-    }, 3000);
-    setTimeout(() => {
-      setOpen(false);
-      setScsMsg("");
-      setInputDisabled(false);
-      navigate(-1);
-    }, 5000);
+    dispatch(createPhoto(data));
+  }
+
+  if (photoData.msg) {
+    navigate(-1)
+  } else if (photoData.error) {
+    // navigate(-1);
   }
 
   const closeHandler = () => {
@@ -63,38 +56,35 @@ export default function CreatePhoto() {
       submitHandler={uploadHandler}
       cancelHandler={closeHandler}
       openHandler={open}
-      msg={scsMsg}
-      display={display}
       progress={progress}
       buffer={buffer}
       fullscreen={fullScreen}
       inputDisabled={inputDisabled}
       title="Create a photo"
       button="create"
-      selectedAlbum={selectedAlbum}
+      state={photoData}
       bodyContent={
         <>
-        {albumData ? 
-        <FormControl>
-          <InputLabel id="SelectAnAlbumLabel" >Select an album</InputLabel>
-          <Select
-          labelid="SelectAnAlbumLabel"
-          id="SelectAnAlbum"
-          value={selectedAlbum}
-          // onChange={selectAlbum}
-          label="album"
-        >
-          <MenuItem value={10}>Twenty</MenuItem>
-          <MenuItem value={21}>Twenty one</MenuItem>
-          <MenuItem value={22}>Twenty one and a half</MenuItem>
-            {/* {albumData && albumData.map((item) => (
-              <MenuItem value={item.id} key={item.id}>
-                {item.title}
-              </MenuItem>
-            ))} */}
-          </Select>
-          </FormControl>
-           : ""}
+          {albumData ?
+            <FormControl>
+              <InputLabel id="SelectAnAlbumLabel" >Select an album</InputLabel>
+              <Select
+                labelid="SelectAnAlbumLabel"
+                id="Select-an-album"
+                value={selectedAlbum}
+                onChange={selectAlbum}
+                label="album"
+                disabled={inputDisabled}
+                sx={{width: 475}}
+              >
+                {albumData && albumData.map((item) => (
+                  <MenuItem value={item.id} key={item.id} sx={{width: 475}}>
+                    {item.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            : ""}
           <TextField
             id="outlinedPhotoInput"
             InputProps={{

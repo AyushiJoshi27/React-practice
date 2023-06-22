@@ -1,15 +1,10 @@
-import React, { useEffect, albumef, useState, useRef } from 'react'
-import { Divider, List, ListItem, ListItemText } from '@mui/material';
+import React, { useEffect, useState, useRef } from 'react'
 import TextField from '@mui/material/TextField';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CommonBody from '../DialogBody';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import { updatedPhotos } from '../../Redux/Actions/PhotosActions';
 
 export default function UpdatePhoto() {
@@ -18,25 +13,21 @@ export default function UpdatePhoto() {
   const theme = useTheme();
   const { id, userId } = useParams();
   const [open, setOpen] = useState(true);
-  const [display, setDisplay] = useState("none")
-  const [scsMsg, setScsMsg] = useState('');
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [inputDisabled, setInputDisabled] = useState(false);
   const [getObjData, setGetObjData] = useState("");
-  const photoData = useSelector(state => state.photos.photos)
+  const photoData = useSelector(state => state.photos)
   const edtPhotoTitleRef = useRef('');
   const edtPhotoUrlRef = useRef('');
 
   useEffect(() => {
-    if (photoData) {
-      const data = photoData.find(obj => (obj.id) === Number(id))
+    if (photoData.photos) {
+      const data = photoData.photos.find(obj => (obj.id) === Number(id))
       setGetObjData(data);
     }
-  }, [id, photoData]);
-
-  getObjData ? console.log(getObjData) : console.log("getObjData");
+  }, [id, photoData.photos]);
 
   const uploadHandler = () => {
     const data = {
@@ -47,19 +38,13 @@ export default function UpdatePhoto() {
       thumbnailUrl: edtPhotoUrlRef.current.value,
     }
     setInputDisabled(true);
-    console.log(data);
     dispatch(updatedPhotos(data));
-    setTimeout(() => { setDisplay("block") }, 2000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("Photo updated successfully");
-    }, 3000);
-    setTimeout(() => {
-      setOpen(false);
-      setScsMsg("");
-      setInputDisabled(false);
-      navigate(-1);
-    }, 5000);
+  }
+
+  if (photoData.msg) {
+    navigate(-1)
+  } else if (photoData.error) {
+    navigate(-1);
   }
 
   const closeHandler = () => {
@@ -68,18 +53,19 @@ export default function UpdatePhoto() {
   }
 
   return (
+    <>
+    {photoData && getObjData ? 
     <CommonBody
       submitHandler={uploadHandler}
       cancelHandler={closeHandler}
       openHandler={open}
-      msg={scsMsg}
-      display={display}
       progress={progress}
       buffer={buffer}
       fullscreen={fullScreen}
       inputDisabled={inputDisabled}
       title="Update photo"
       button="Update"
+      state={photoData}
       bodyContent={
         <>
           {getObjData ?
@@ -113,5 +99,7 @@ export default function UpdatePhoto() {
         </>
       }
     />
+    : ""}
+    </>
   )
 }

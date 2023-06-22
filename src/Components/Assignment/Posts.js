@@ -24,7 +24,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { UpdatePostMsg, createPostMsg, deletePostMsg } from './Redux/Actions/PostActions';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -39,6 +40,7 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function Posts() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((state) => state.users.users);
   const userPhoto = useSelector((state) => state.photos.photos);
@@ -137,14 +139,13 @@ export default function Posts() {
   );
 
   //select menu
-  const handleClick = (event, item) => {
-    console.log(event)
-    console.log(item);
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   // VertIcon click
   const vertClick = (obj) => {
+    setAnchorEl(true);
     setData(obj);
   }
 
@@ -152,17 +153,20 @@ export default function Posts() {
   const TodoHandler = () => { setAnchorEl(null); };
 
   const postCreationHandler = () => {
+    dispatch(createPostMsg(''));
     navigate(`create/post`);
   };
 
   //delete handler
   const deletePostHandler = (id) => {
+    dispatch(deletePostMsg(''));
     setAnchorEl(null);
     navigate(`delete/post/${id}`)
   }
 
   //Update handler
   const editPhotoHandler = () => {
+    dispatch(UpdatePostMsg(''));
     setAnchorEl(null);
     navigate(`update/posts/${data.id}`)
   };
@@ -247,7 +251,7 @@ export default function Posts() {
                     aria-controls={openMenu ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={openMenu ? 'true' : undefined}
-                    onClick={() => handleClick(item)}
+                    onClick={handleClick}
                   >
                     <MoreVertRoundedIcon onClick={() => vertClick(item)} sx={{ "&:hover": { padding: 0 } }} />
                   </Button>

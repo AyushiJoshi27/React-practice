@@ -10,7 +10,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { updateTodos } from '../../Redux/Actions/TodosAction';
+import { fetchTodosMsg, todoMsg, updateTodos, updateTodosMsg } from '../../Redux/Actions/TodosAction';
 
 export default function UpdatedTodo() {
   const dispatch = useDispatch()
@@ -18,26 +18,22 @@ export default function UpdatedTodo() {
   const theme = useTheme();
   const { id, userId } = useParams();
   const [open, setOpen] = useState(true);
-  const [display, setDisplay] = useState("none")
   const [scsMsg, setScsMsg] = useState('');
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [inputDisabled, setInputDisabled] = useState(false);
   const [getObjData, setGetObjData] = useState("");
-  var todosData = useSelector(state => state.todos.todos);
-  console.log(useSelector(state => state.todos))
+  var todosData = useSelector(state => state.todos);
   const updateTitleRef = useRef('');
   const [todoStatus, setTodoStatus] = useState(false);
-  const loader = useSelector((state) => state.todos.loading);
-  const error = useSelector((state) => state.todos.error);
 
   useEffect(() => {
-    if (todosData) {
-      const a = todosData.find(obj => Number(obj.id) === Number(id))
+    if (todosData.todos) {
+      const a = todosData.todos.find(obj => Number(obj.id) === Number(id))
       setGetObjData(a);
     }
-  }, [id, todosData]);
+  }, [id, todosData.todos]);
 
   //updated select value
   const CheckboxHandler = (event) => {
@@ -52,20 +48,16 @@ export default function UpdatedTodo() {
       title: updateTitleRef.current.value,
       completed: Boolean(todoStatus)
     };
-    setTimeout(() => {
-      dispatch(updateTodos(data));
-    }, 4000);
-    setTimeout(() => {
-      setOpen(false);
-      setScsMsg("");
-      setInputDisabled(false);
-      navigate(-1);
-    }, 7000);
+    dispatch(updateTodos(data));
+  }
+
+  if (todosData.msg) {
+    navigate(-1) 
   }
 
   const closeHandler = () => {
-    setOpen(false)
     navigate(-1)
+    setOpen(false)
   }
 
   return (
@@ -74,15 +66,13 @@ export default function UpdatedTodo() {
           submitHandler={uploadHandler}
           cancelHandler={closeHandler}
           openHandler={open}
-          display={display}
           progress={progress}
           buffer={buffer}
           fullscreen={fullScreen}
           inputDisabled={inputDisabled}
-          title="Update todo Information"
-          loader={loader}
+          title="Update todo"
           button="Update"
-          error={error}
+          state={todosData}
           bodyContent={
             <List dense>
               {getObjData ?
@@ -93,8 +83,8 @@ export default function UpdatedTodo() {
                     <InputLabel id="toDoStatus">Status</InputLabel>
                     <Select
                       labelId="toDoStatus"
-                      id="demo-simple-select"
-                      defaultValue={getObjData.completed}
+                      id="toDoStatus"
+                      value={getObjData.completed}
                       name="toDoStatus"
                       label="status"
                       onChange={CheckboxHandler}

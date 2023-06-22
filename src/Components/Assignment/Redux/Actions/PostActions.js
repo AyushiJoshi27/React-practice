@@ -21,7 +21,13 @@ const fetchPostsFailure = (error) => ({
   payload: error,
 });
 
+export const fetchPostsMsg = (msg) => ({
+  type: 'FETCH_POSTS_MSG',
+  payload: msg,
+});
+
 export const updatedPosts = (data) => async (dispatch) => {
+  dispatch(updatePostLoader(true))
   try {
     const response = await axios.put(`http://localhost:3000/posts/${data.id}`, data);
     dispatch({
@@ -38,7 +44,18 @@ const updatePostFailure = (error) => ({
   payload: error,
 });
 
+const updatePostLoader = (loader) => ({
+  type: 'UPDATE_POSTS_LOADER',
+  payload: loader,
+});
+
+export const UpdatePostMsg = (msg) => ({
+  type: 'UPDATE_POST_MSG',
+  payload: msg,
+});
+
 export const deletePost = (id) => async (dispatch) => {
+  dispatch(deletePostUpdate(true));
   try {
     await axios.delete(`${API_BASE_URL}/${id}`);
     dispatch(deletePostSuccess(id));
@@ -57,7 +74,18 @@ const deletePostFailure = (error) => ({
   payload: error,
 });
 
+const deletePostUpdate = (loader) => ({
+  type: 'DELETE_POST_LOADER',
+  payload: loader,
+});
+
+export const deletePostMsg = (msg) => ({
+  type: 'DELETE_POST_MSG',
+  payload: msg,
+});
+
 export const createPost = (newPost) => async (dispatch) => {
+  dispatch(createPostLoader(true));
   try {
     const response = await axios.post(API_BASE_URL, newPost);
     dispatch(createPostsSuccess(response.data));
@@ -74,4 +102,14 @@ const createPostsSuccess = (post) => ({
 const createPostsFailure = (error) => ({
   type: 'CREATE_POST_FAILURE',
   payload: error,
+});
+
+const createPostLoader = (loader) => ({
+  type: 'CREATE_POST_LOADER',
+  payload: loader,
+});
+
+export const createPostMsg = (msg) => ({
+  type: 'CREATE_POST_MSG',
+  payload: msg,
 });

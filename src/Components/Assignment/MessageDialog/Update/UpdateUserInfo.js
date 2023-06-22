@@ -16,7 +16,6 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 
 const UpdateUserInfo = () => {
-// export default function UpdateuserState.users() {
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const theme = useTheme();
@@ -27,15 +26,13 @@ const UpdateUserInfo = () => {
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [inputDisabled, setInputDisabled] = useState(false);
   const userState = useSelector(state => state.users);
-  console.log(userState);
-  console.log(userState);
   const mailRef = useRef('');
   const websiteRef = useRef('');
   const aptsRef = useRef('')
   const streetRef = useRef('');
   const cityRef = useRef('');
   const phoneRef = useRef();
-  const companyRef = useRef('');  
+  const companyRef = useRef('');
 
   const uploadHandler = () => {
     var data = {
@@ -66,10 +63,10 @@ const UpdateUserInfo = () => {
   }
 
   if (userState.msg) {
-    setTimeout(() => {
-      navigate(-1) 
-    }, 1000)
-  } 
+    navigate(-1)
+  } else if (userState.error) {
+    navigate(-1);
+  }
 
   const closeHandler = () => {
     setOpen(false)
@@ -78,7 +75,7 @@ const UpdateUserInfo = () => {
 
   return (
     <>
-      {userState.users ?
+      {userState ?
         <CommonBody
           submitHandler={uploadHandler}
           cancelHandler={closeHandler}
@@ -211,7 +208,7 @@ const UpdateUserInfo = () => {
             </List>
           }
         />
-        : ""} 
+        : ""}
     </>
   )
 }

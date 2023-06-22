@@ -21,7 +21,13 @@ const fetchPhotosFailure = (error) => ({
   payload: error,
 });
 
+export const fetchPhotosMsg = (msg) => ({
+  type: 'FETCH_PhotoS_MSG',
+  payload: msg,
+});
+
 export const updatedPhotos = (data) => async (dispatch) => {
+  dispatch(updatePhotoLoader(true))
   try {
     const response = await axios.put(`http://localhost:3000/photos/${data.id}`, data);
     dispatch({
@@ -38,7 +44,18 @@ const updatePhotoFailure = (error) => ({
   payload: error,
 });
 
+const updatePhotoLoader = (loader) => ({
+  type: 'UPDATE_PhotoS_LOADER',
+  payload: loader,
+});
+
+export const updatePhotosMsg = (msg) => ({
+  type: 'UPDATE_PhotoS_MSG',
+  payload: msg,
+})
+
 export const deletePhoto = (id) => async (dispatch) => {
+  dispatch(deletePhotoUpdate(true))
   try {
     await axios.delete(`${API_BASE_URL}/${id}`);
     dispatch(deletePhotoSuccess(id));
@@ -57,9 +74,20 @@ const deletePhotoFailure = (error) => ({
   payload: error,
 });
 
+const deletePhotoUpdate = (loader) => ({
+  type: 'DELETE_Photo_LOADER',
+  payload: loader,
+});
+
+export const deletePhotoMsg = (msg) => ({
+  type: 'DELETE_Photo_MSG',
+  payload: msg,
+});
+
 export const createPhoto = (newphoto) => async (dispatch) => {
+  dispatch(createPhotoLoader(true))
   try {
-    const response = await axios.photo(API_BASE_URL, newphoto);
+    const response = await axios.post(API_BASE_URL, newphoto);
     dispatch(createPhotosSuccess(response.data));
   } catch (error) {
     dispatch(createPhotosFailure(error.message));
@@ -74,4 +102,14 @@ const createPhotosSuccess = (photo) => ({
 const createPhotosFailure = (error) => ({
   type: 'CREATE_PHOTO_FAILURE',
   payload: error,
+});
+
+const createPhotoLoader = (loader) => ({
+  type: 'CREATE_Photo_LOADER',
+  payload: loader,
+});
+
+export const createPhotoMsg = (msg) => ({
+  type: 'CREATE_Photo_MSG',
+  payload: msg,
 });

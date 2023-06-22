@@ -14,17 +14,23 @@ export const fetchAlbum = (id) => async (dispatch) => {
   }
 };
 
-// const fetchAlbumsSuccess = (albums) => ({
-//   type: 'FETCH_ALBUMS_SUCCESS',
-//   payload: albums,
-// });
-
 const fetchAlbumsFailure = (error) => ({
   type: 'FETCH_ALBUMS_FAILURE',
   payload: error,
 });
 
+const fetchAlbumsLoader = (loader) => ({
+  type: 'FETCH_ALBUMS_LOADER',
+  payload: loader,
+});
+
+export const fetchAlbumsMsg = (msg) => ({
+  type: 'FETCH_ALBUMS_MSG',
+  payload: msg,
+});
+
 export const updatedAlbums = (data) => async (dispatch) => {
+  dispatch(updateAlbumLoader(true));
   try {
     const response = await axios.put(`http://localhost:3000/albums/${data.id}`, data);
     dispatch({
@@ -41,7 +47,18 @@ const updateAlbumFailure = (error) => ({
   payload: error,
 });
 
+const updateAlbumLoader = (loader) => ({
+  type: 'UPDATE_ALBUMS_LOADER',
+  payload: loader,
+});
+
+export const updateAlbumsMsg = (msg) => ({
+  type: 'UPDATE_ALBUMS_MSG',
+  payload: msg,
+})
+
 export const deleteAlbum = (id) => async (dispatch) => {
+  dispatch(deleteAlbumLoader(true));
   try {
     await axios.delete(`${API_BASE_URL}/${id}`);
     dispatch(deleteAlbumSuccess(id));
@@ -60,7 +77,18 @@ const deleteAlbumFailure = (error) => ({
   payload: error,
 });
 
+const deleteAlbumLoader = (loader) => ({
+  type: 'DELETE_ALBUM_LOADER',
+  payload: loader,
+});
+
+export const deleteAlbumMsg = (msg) => ({
+  type: 'DELETE_ALBUM_MSG',
+  payload: msg,
+});
+
 export const createAlbum = (newAlbum) => async (dispatch) => {
+  dispatch(createAlbumLoader(true));
   try {
     const response = await axios.post(API_BASE_URL, newAlbum);
     dispatch(createAlbumsSuccess(response.data));
@@ -77,4 +105,14 @@ const createAlbumsSuccess = (album) => ({
 const createAlbumsFailure = (error) => ({
   type: 'CREATE_ALBUM_FAILURE',
   payload: error,
+});
+
+const createAlbumLoader = (loader) => ({
+  type: 'CREATE_ALBUM_LOADER',
+  payload: loader,
+});
+
+export const createAlbumMsg = (msg) => ({
+  type: 'CREATE_ALBUM_MSG',
+  payload: msg,
 });

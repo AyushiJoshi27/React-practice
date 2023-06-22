@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import CommonBody from '../DialogBody';
-import { createTodo } from '../../Redux/Actions/TodosAction';
+import { createTodo, createTodoMsg, todoMsg } from '../../Redux/Actions/TodosAction';
 import { TextField } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -20,8 +20,6 @@ export default function CreateTodos() {
   const theme = useTheme();
   const { userId } = useParams();
   var [open, setOpen] = useState(true);
-  const [display, setDisplay] = useState("none")
-  const [scsMsg, setScsMsg] = useState('');
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -35,25 +33,19 @@ export default function CreateTodos() {
   }
 
   const uploadHandler = () => {
+    setInputDisabled(true);
     const data = {
       userId: Number(userId),
       title: newTodoRef.current.value,
       completed: Boolean(selectedValue)
     }
-    setInputDisabled(true);
     dispatch(createTodo(data));
-    todoState.error ? console.log(todoState.error) : console.log(todoState.error);
-    if (todoState.error) {
-      setTimeout(() => {
-        setOpen(false);
-        setInputDisabled(false);
-        navigate(-1);
-      }, 2000)
-    } else {
-      setOpen(false);
-      setInputDisabled(false);
-      navigate(-1);
-    }
+  }
+
+  if (todoState.msg) {
+    setTimeout(() => {
+      navigate(-1) 
+    }, 1000)
   }
 
   const closeHandler = () => {
@@ -73,7 +65,7 @@ export default function CreateTodos() {
         inputDisabled={inputDisabled}
         title="Create a todo"
         button="Create"
-        todoState={todoState}
+        state={todoState}
         bodyContent={
           <List dense>
             <ListItem

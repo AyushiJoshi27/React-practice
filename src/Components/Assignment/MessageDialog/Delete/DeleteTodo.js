@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import CommonBody from '../DialogBody';
-import { deleteTodo } from '../../Redux/Actions/TodosAction';
+import { deleteTodo, deleteTodoMsg, todoMsg } from '../../Redux/Actions/TodosAction';
 
 export default function DeleteTodos() {
   const dispatch = useDispatch()
@@ -21,27 +21,17 @@ export default function DeleteTodos() {
 
   const DeleteHandler = () => {
     setInputDisabled(true);
-    console.log(id)
     dispatch(deleteTodo(id));
-    if (todoState.loading === true) { 
-     if (todoState.loading === false) {
-      setOpen(false);
-      setInputDisabled(false);
-      navigate(-1);
-      } 
-    } else if (todoState.error !== null) {
-      setOpen(false);
-      setInputDisabled(false);
-      navigate(-1);
-    }
+  }
+
+  if (todoState.msg) {
+    navigate(-1) 
   }
 
   const closeHandler = () => {
     setOpen(false);
     navigate(-1)
   }
-
-  console.log(todoState)
 
   return (
     <CommonBody
@@ -54,7 +44,7 @@ export default function DeleteTodos() {
       inputDisabled={inputDisabled}
       title="Delete a todo"
       button="Delete"
-      todoState={todoState}
+      state={todoState}
       bodyContent={
         <DialogContentText>
           Are you sure you want to delete the todo from the list?

@@ -20,15 +20,15 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: action.payload,
         msg: "",
+        error: action.payload,
       };
     case 'UPDATE_USERS_SUCCESS':
       return {
         ...state,
         users: action.payload,
         loading: false,
-        msg: "Data updated",
+        msg: "User data successfully updated",
         error: null,
       };
       case 'UPDATE_USER_LOADER':

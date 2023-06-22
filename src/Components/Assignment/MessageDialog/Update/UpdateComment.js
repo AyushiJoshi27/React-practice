@@ -6,10 +6,6 @@ import { useNavigate, useParams } from 'react-router';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CommonBody from '../DialogBody';
-// import InputLabel from '@mui/material/InputLabel';
-// import MenuItem from '@mui/material/MenuItem';
-// import FormControl from '@mui/material/FormControl';
-// import Select from '@mui/material/Select';
 import { updatedComments } from '../../Redux/Actions/CommentActions';
 
 export default function CommentUpdate() {
@@ -18,8 +14,6 @@ export default function CommentUpdate() {
   const theme = useTheme();
   const { id } = useParams();
   const [open, setOpen] = useState(true);
-  const [display, setDisplay] = useState("none")
-  const [scsMsg, setScsMsg] = useState('');
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(10);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -27,14 +21,15 @@ export default function CommentUpdate() {
   const [getObjData, setGetObjData] = useState("");
   const commentUpdateRef = useRef('');
   const userData = useSelector(state => state.users.users)
-  const commentData = useSelector(state => state.comments.comments)
+  const commentData = useSelector(state => state.comments)
+  console.log(commentData);
 
   useEffect(() => {
-    if (commentData) {
-      const data = commentData.find(obj => (obj.id) === Number(id))
+    if (commentData.comments) {
+      const data = commentData.comments.find(obj => (obj.id) === Number(id))
       setGetObjData(data);
     }
-  }, [commentData, id]);
+  }, [commentData.comments, id]);
 
   const uploadHandler = () => {
     const data = {
@@ -46,17 +41,12 @@ export default function CommentUpdate() {
     }
     setInputDisabled(true);
     dispatch(updatedComments(data));
-    setTimeout(() => { setDisplay("block") }, 2000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("Comment updated successfully");
-    }, 3000);
-    setTimeout(() => {
-      setOpen(false);
-      setScsMsg("");
-      setInputDisabled(false);
-      navigate(-1);
-    }, 5000);
+  }
+
+  if (commentData.msg) {
+    navigate(-1);
+  } else if (commentData.error) {
+    navigate(-1);
   }
 
   const closeHandler = () => {
@@ -65,18 +55,19 @@ export default function CommentUpdate() {
   }
 
   return (
+    <>
+    {commentData && getObjData ? 
     <CommonBody
       submitHandler={uploadHandler}
       cancelHandler={closeHandler}
       openHandler={open}
-      msg={scsMsg}
-      display={display}
       progress={progress}
       buffer={buffer}
       fullscreen={fullScreen}
       inputDisabled={inputDisabled}
       title="Update comment"
       button="Update"
+      state={commentData}
       bodyContent={
         <>
           {getObjData ?
@@ -98,5 +89,7 @@ export default function CommentUpdate() {
         </>
       }
     />
+    : ""}
+    </>
   )
 }

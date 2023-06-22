@@ -2,7 +2,7 @@ const initialState = {
   todos: [],
   loading: false,
   error: null,
-  msg: ""
+  msg: ''
 };
 
 export const todoReducer = (state = initialState, action) => {
@@ -25,6 +25,16 @@ export const todoReducer = (state = initialState, action) => {
         msg: "",
         error: action.payload,
       };
+    case 'CREATE_TODO_MSG':
+    case 'DELETE_TODO_MSG':
+    case 'UPDATE_TODOS_MSG':
+    case 'FETCH_TODOS_MSG':
+      return {
+        ...state,
+        loading: false,
+        msg: "",
+        error: null,
+      }
     case 'CREATE_TODO_LOADER':
     case 'UPDATE_TODOS_LOADER':
     case 'DELETE_TODO_LOADER':

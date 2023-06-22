@@ -2,6 +2,7 @@ import axios from 'axios';
 const API_BASE_URL = 'http://localhost:3000/todos';
 
 export const fetchTodos = (id) => async (dispatch) => {
+  dispatch(fetchTodosLoader(true))
   try {
     const response = await axios.get(`http://localhost:3000/todos?userId=${id}`);
     dispatch(fetchTodosSuccess(response.data));
@@ -18,6 +19,16 @@ const fetchTodosSuccess = (todos) => ({
 const fetchTodosFailure = (error) => ({
   type: 'FETCH_TODOS_FAILURE',
   payload: error,
+});
+
+const fetchTodosLoader = (loader) => ({
+  type: 'FETCH_TODOS_LOADER',
+  payload: loader,
+});
+
+export const fetchTodosMsg = (msg) => ({
+  type: 'FETCH_TODOS_MSG',
+  payload: msg,
 });
 
 // Action creator to update a todo
@@ -44,9 +55,14 @@ const updateTodoLoader = (loader) => ({
   payload: loader,
 });
 
+export const updateTodosMsg = (msg) => ({
+  type: 'UPDATE_TODOS_MSG',
+  payload: msg,
+})
+
 // Action creator to delete a todo
 export const deleteTodo = (id) => async (dispatch) => {
-  dispatch(deleteTodoUpdate(true))
+  dispatch(deleteTodoUpdate(true));
   try {
     await axios.delete(`http://localhost:3000/todos/${id}`);
     dispatch(deleteTodoSuccess(id))
@@ -69,6 +85,11 @@ const deleteTodoFailure = (error) => ({
 const deleteTodoUpdate = (loader) => ({
   type: 'DELETE_TODO_LOADER',
   payload: loader,
+});
+
+export const deleteTodoMsg = (msg) => ({
+  type: 'DELETE_TODO_MSG',
+  payload: msg,
 });
 
 // Action creator to create a new todo
@@ -95,4 +116,9 @@ const createTodoFailure = (error) => ({
 const createTodoLoader = (loader) => ({
   type: 'CREATE_TODO_LOADER',
   payload: loader,
+});
+
+export const createTodoMsg = (msg) => ({
+  type: 'CREATE_TODO_MSG',
+  payload: msg,
 });

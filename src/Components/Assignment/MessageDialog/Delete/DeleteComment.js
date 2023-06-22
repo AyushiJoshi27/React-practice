@@ -19,21 +19,17 @@ export default function DeleteComment() {
   const [buffer, setBuffer] = useState(50);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [inputDisabled, setInputDisabled] = useState(false);
+  const commentData = useSelector(state => state.comments)
 
   const DeleteHandler = () => {
     setInputDisabled(true);
     dispatch(deletedComment(id));
-    setTimeout(() => { setDisplay("block") }, 2000);
-    setTimeout(() => {
-      setDisplay("none");
-      setScsMsg("Comment deleted successfully");
-    }, 3000);
-    setTimeout(() => {
-      setOpen(false);
-      setScsMsg("");
-      setInputDisabled(false);
-      navigate(-1);
-    }, 5000);
+  }
+
+  if (commentData.msg) {
+    navigate(-1);
+  } else if (commentData.error) {
+    navigate(-1);
   }
 
   const closeHandler = () => {
@@ -54,6 +50,7 @@ export default function DeleteComment() {
       inputDisabled={inputDisabled}
       title="Delete a comment"
       button="Delete"
+      state={commentData}
       bodyContent={
         <DialogContentText>
           Are you sure you want to delete the comment from the list?
