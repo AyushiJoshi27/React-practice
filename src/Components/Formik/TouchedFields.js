@@ -4,10 +4,10 @@ import { useFormik } from 'formik';
 const validate = values => {
   const errors = {};
 
-  if (!values.firstName) {
-    errors.firstName = 'Required';
-  } else if (values.firstName.length > 15) {
+  if (values.firstName.length > 15) {
     errors.firstName = 'Must be 15 characters or less';
+  } else if (!values.firstName) {
+    errors.firstName = 'Required';
   }
 
   if (!values.lastName) {
@@ -28,12 +28,13 @@ const validate = values => {
 export const TouchedFieldsCompo = () => {
   const formik = useFormik({
     initialValues: {
-      firstName: '',
+      firstName: 'Alpha',
       lastName: '',
       email: '',
     },
     validate,
     onSubmit: values => {
+      console.log(values.email);
       alert(JSON.stringify(values, null, 2));
     },
   });

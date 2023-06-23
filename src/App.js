@@ -22,16 +22,30 @@ import UpdateUserInfo from './Components/Assignment/MessageDialog/Update/UpdateU
 import DatePickerParent from './Components/Formik/Fields/DatePickerParent';
 import { JobApplicationForm } from './Components/Formik/JobApplicationForm';
 import { TouchedFieldsCompo } from './Components/Formik/TouchedFields';
+import TextareaFormik from './Components/Formik/Fields/TextareaFormik';
+import { FormikCompo } from './Components/Formik/FormikCompo';
+import FormikDropdown from './Components/Formik/FormikDropdown';
+import { Checkbox } from './Components/Formik/Checkbox';
+import AutoComplete from './Components/Formik/AutoComplete';
+import FileUpload from './Components/Formik/FileUpload';
+import FileUploadWithPreview from './Components/Formik/FileUploadWithPreview';
 
 function App() {
   return (
     <Routes>
       <Route path="/" exact element={<Checkboxes />} />
+      <Route path="/textarea_formik" element={<TextareaFormik />} />
       <Route path="/form_form" element={<BasicFormikForm />} />
       <Route path="/sign_up_form" element={<SigUpForm />} />
       <Route path="datePickerParent" element={<DatePickerParent />} />
       <Route path="jobApplicationForm" element={<JobApplicationForm />} />
       <Route path="touchedFields" element={<TouchedFieldsCompo />} />
+      <Route path="formik_compo" element={<FormikCompo />} />
+      <Route path="formik_dropdown" element={<FormikDropdown/>} />
+      <Route path="Checkbox" element={<Checkbox/>} />
+      <Route path="AutoComplete" element={<AutoComplete/>} />
+      <Route path="FileUpload" element={<FileUpload />} />
+      <Route path="FileUploadWithPreview" element={<FileUploadWithPreview />} />
       <Route path="/facebook/:userId" element={<ProfilePage />}>
         <Route path="update/info" element={<UpdateUserInfo />} />
         <Route path="create/album" element={<CreateAlbums />} />
