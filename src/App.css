@@ -59,3 +59,37 @@
   background-color: rgb(255, 255, 255);
   color: rgb(255, 0, 0);
 }
+
+.formContainer {
+  border-radius: 8px;
+  box-shadow: 0px 4px 9px 1px lightgray;
+  margin:0 auto;
+  width: 390px;
+  padding: 40px;
+}
+
+.ui.form {
+  margin: 10px 0;
+}
+
+.field {
+  margin: 10px 0;
+}
+
+.labelWrapper {
+  display: inline-block;
+  margin-right: 10px;
+  text-align: end;
+  width: 50%
+}
+
+.submitBtnWrapper {
+  margin: 10px;
+  text-align: center;
+}
+
+.formContainer input {
+  margin: 15px 0;
+  width: 100%;
+}
+

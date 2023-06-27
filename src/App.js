@@ -29,6 +29,11 @@ import { Checkbox } from './Components/Formik/Checkbox';
 import AutoComplete from './Components/Formik/AutoComplete';
 import FileUpload from './Components/Formik/FileUpload';
 import FileUploadWithPreview from './Components/Formik/FileUploadWithPreview';
+import RegisterValues from './Components/FormHook/RegisterValues';
+import FormHook from './Components/FormHook/FormHook';
+import RegisterFields from './Components/FormHook/RegisterFields';
+import { IntegrateForm } from './Components/FormHook/IntegrateForm';
+import ErrorHandlingForm from './Components/FormHook/ErrorHandling';
 
 function App() {
   return (
@@ -46,6 +51,11 @@ function App() {
       <Route path="AutoComplete" element={<AutoComplete/>} />
       <Route path="FileUpload" element={<FileUpload />} />
       <Route path="FileUploadWithPreview" element={<FileUploadWithPreview />} />
+      <Route path="RegisterValues" element={<RegisterValues />} />
+      <Route path="FormHook" element={<FormHook />} />
+      <Route path="Integrate_Form" element={<IntegrateForm />} />
+      <Route path="RegisterFields" element={<RegisterFields />} />
+      <Route path="ErrorHandlingForm" element={<ErrorHandlingForm />} />
       <Route path="/facebook/:userId" element={<ProfilePage />}>
         <Route path="update/info" element={<UpdateUserInfo />} />
         <Route path="create/album" element={<CreateAlbums />} />
