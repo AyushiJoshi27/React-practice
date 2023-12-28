@@ -4,14 +4,31 @@ import * as ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
+import { ChakraProvider, theme } from '@chakra-ui/react';
+import { BrowserRouter } from 'react-router-dom';
+// import theme from './theme';
+import { extendTheme } from '@chakra-ui/react'
+
+const config = {
+  initialColorMode: 'light',
+  useSystemColorMode: false,
+}
+
+const theme2 = extendTheme({ config })
+
+// export default theme
 
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
 
 root.render(
   <StrictMode>
-    <ColorModeScript />
-    <App />
+    <BrowserRouter>
+      <ChakraProvider theme={theme}>
+        <ColorModeScript initialColorMode={theme2.config.initialColorMode} />
+        <App />
+      </ChakraProvider>
+    </BrowserRouter>
   </StrictMode>
 );
 
